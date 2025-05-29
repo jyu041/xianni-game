@@ -1,0 +1,238 @@
+.stageSelection {
+  padding: 2rem;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.8rem;
+  color: #2d1b69;
+  margin: 0 0 0.5rem 0;
+  font-weight: bold;
+}
+
+.subtitle {
+  color: #666;
+  margin: 0;
+  font-style: italic;
+}
+
+.stageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.stageCard {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(247, 250, 252, 0.9));
+  border: 2px solid rgba(138, 43, 226, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stageCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.stageCard:hover::before {
+  left: 100%;
+}
+
+.stageCard:hover {
+  transform: translateY(-5px);
+  border-color: rgba(138, 43, 226, 0.4);
+  box-shadow: 0 8px 25px rgba(138, 43, 226, 0.2);
+}
+
+.current {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 223, 0, 0.05));
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.current::after {
+  content: '当前';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ffd700;
+  color: #333;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.locked {
+  opacity: 0.6;
+  pointer-events: none;
+  position: relative;
+}
+
+.lockOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+
+.lockOverlay .lockIcon {
+  font-size: 3rem;
+  opacity: 0.7;
+}
+
+.stageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.stageNumber {
+  background: linear-gradient(45deg, #8a2be2, #9370db);
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: 0 3px 8px rgba(138, 43, 226, 0.3);
+}
+
+.stageName {
+  flex: 1;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0 1rem;
+}
+
+.difficulty {
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stageContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stageInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(138, 43, 226, 0.1);
+}
+
+.infoRow:last-child {
+  border-bottom: none;
+}
+
+.infoLabel {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.infoValue {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.stageActions {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.stageButton {
+  min-width: 100px;
+  font-weight: bold;
+}
+
+.lockedInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #999;
+  font-style: italic;
+}
+
+.lockIcon {
+  font-size: 1.2rem;
+}
+
+.lockText {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .stageSelection {
+    padding: 1rem;
+  }
+  
+  .stageGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .stageCard {
+    padding: 1rem;
+  }
+  
+  .stageHeader {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .stageName {
+    margin: 0.5rem 0;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+  }
+}

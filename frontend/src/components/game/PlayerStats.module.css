@@ -1,0 +1,201 @@
+.playerStats {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(147, 112, 219, 0.3);
+  color: #333;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.avatar {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #9370db, #8a2be2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(147, 112, 219, 0.4);
+}
+
+.avatarIcon {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.levelBadge {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  background: #ffd700;
+  color: #333;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  min-width: 20px;
+  text-align: center;
+}
+
+.nameInfo {
+  flex: 1;
+}
+
+.playerName {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.cultivation {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.expSection {
+  margin-bottom: 1.5rem;
+}
+
+.expHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.expLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #666;
+}
+
+.expValue {
+  font-size: 0.8rem;
+  color: #9370db;
+  font-weight: 600;
+}
+
+.expBar {
+  height: 8px;
+  background: rgba(147, 112, 219, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.expFill {
+  height: 100%;
+  background: linear-gradient(90deg, #9370db, #8a2be2);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.expFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.resources {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.resource {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(147, 112, 219, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(147, 112, 219, 0.2);
+}
+
+.resourceIcon {
+  font-size: 1.2rem;
+}
+
+.resourceInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.resourceLabel {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.resourceValue {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(147, 112, 219, 0.1);
+}
+
+.statRow:last-child {
+  border-bottom: none;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.statValue {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #9370db;
+}
+
+@media (max-width: 768px) {
+  .playerStats {
+    padding: 1rem;
+  }
+  
+  .resources {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

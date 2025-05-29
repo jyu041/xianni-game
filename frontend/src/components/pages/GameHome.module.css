@@ -1,0 +1,205 @@
+.gameHomePage {
+  min-height: 100vh;
+  position: relative;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b69 100%);
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.cultivationAura {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.auraRing {
+  position: absolute;
+  border: 1px solid rgba(138, 43, 226, 0.3);
+  border-radius: 50%;
+  animation: rotate 20s infinite linear;
+}
+
+.auraRing:nth-child(1) {
+  width: 300px;
+  height: 300px;
+  top: -150px;
+  left: -150px;
+  animation-delay: 0s;
+}
+
+.auraRing:nth-child(2) {
+  width: 500px;
+  height: 500px;
+  top: -250px;
+  left: -250px;
+  animation-delay: 7s;
+}
+
+.auraRing:nth-child(3) {
+  width: 700px;
+  height: 700px;
+  top: -350px;
+  left: -350px;
+  animation-delay: 14s;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  padding: 1rem;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(138, 43, 226, 0.3);
+}
+
+.backButton {
+  color: #9370db;
+  border: 1px solid #9370db;
+  background: rgba(147, 112, 219, 0.1);
+}
+
+.backButton:hover {
+  background: rgba(147, 112, 219, 0.2);
+}
+
+.playerInfo {
+  text-align: center;
+  flex: 1;
+}
+
+.playerName {
+  font-size: 1.8rem;
+  color: #dda0dd;
+  margin: 0;
+  text-shadow: 0 0 15px rgba(221, 160, 221, 0.5);
+  font-family: serif;
+}
+
+.cultivation {
+  margin: 0.5rem 0 0 0;
+  color: #9370db;
+  font-size: 1rem;
+  font-style: italic;
+}
+
+.debugButton {
+  color: #ff6b6b;
+  border: 1px solid #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  font-size: 0.8rem;
+}
+
+.debugButton:hover {
+  background: rgba(255, 107, 107, 0.2);
+}
+
+.gameLayout {
+  display: flex;
+  gap: 1.5rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.leftPanel {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mainPanel {
+  flex: 1;
+  min-height: 0;
+}
+
+.mainContent {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(138, 43, 226, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.menuContent {
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.menuContent h3 {
+  color: #2d1b69;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.menuContent p {
+  color: #666;
+  text-align: center;
+  font-style: italic;
+}
+
+@media (max-width: 1200px) {
+  .gameLayout {
+    flex-direction: column;
+  }
+  
+  .leftPanel {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  
+  .leftPanel > * {
+    min-width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .playerInfo {
+    order: -1;
+  }
+  
+  .leftPanel {
+    flex-direction: column;
+  }
+  
+  .leftPanel > * {
+    min-width: auto;
+  }
+}

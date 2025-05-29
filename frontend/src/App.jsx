@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import HomePage from "./components/pages/HomePage";
+import CreateSaveSlot from "./components/pages/CreateSaveSlot";
+import GameHome from "./components/pages/GameHome";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentPage, setCurrentPage] = useState("home");
+  const [currentSave, setCurrentSave] = useState(null);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  const navigateTo = (page) => {
+    setCurrentPage(page);
+  };
+
+  const selectSave = (saveData) => {
+    setCurrentSave(saveData);
+    setCurrentPage("gameHome");
+  };
+
+  const renderCurrentPage = () => {
+    switch (currentPage) {
+      case "home":
+        return <HomePage onNavigate={navigateTo} />;
+      case "createSave":
+        return (
+          <CreateSaveSlot onNavigate={navigateTo} onSaveCreated={selectSave} />
+        );
+      case "gameHome":
+        return <GameHome saveData={currentSave} onNavigate={navigateTo} />;
+      default:
+        return <HomePage onNavigate={navigateTo} />;
+    }
+  };
+
+  return <div className="app">{renderCurrentPage()}</div>;
 }
 
-export default App
+export default App;

@@ -1,0 +1,58 @@
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Variants */
+.default {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.dark {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.primary {
+  background: linear-gradient(135deg, rgba(102, 125, 182, 0.1), rgba(0, 130, 200, 0.1));
+  border: 1px solid rgba(102, 125, 182, 0.3);
+}
+
+.secondary {
+  background: linear-gradient(135deg, rgba(147, 112, 219, 0.1), rgba(138, 43, 226, 0.1));
+  border: 1px solid rgba(147, 112, 219, 0.3);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Elevation levels */
+.elevation1 {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.elevation2 {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.elevation3 {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.elevation4 {
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.18);
+}
