@@ -2,7 +2,7 @@
   min-height: 100vh;
   position: relative;
   background: linear-gradient(135deg, #2c1810 0%, #8b4513 50%, #daa520 100%);
-  padding: 2rem;
+  padding: 1rem;
   overflow-x: hidden;
 }
 
@@ -79,21 +79,23 @@
 .content {
   position: relative;
   z-index: 1;
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
 .header {
   display: flex;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .backButton {
   color: #daa520;
   border: 1px solid #daa520;
   background: rgba(218, 165, 32, 0.1);
+  white-space: nowrap;
 }
 
 .backButton:hover {
@@ -101,11 +103,13 @@
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #daa520;
   margin: 0;
   text-shadow: 0 0 20px rgba(218, 165, 32, 0.5);
   font-family: serif;
+  flex: 1;
+  text-align: center;
 }
 
 .formCard {
@@ -116,21 +120,22 @@
 }
 
 .form {
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .formSection {
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid rgba(218, 165, 32, 0.2);
 }
 
 .formSection:last-of-type {
   border-bottom: none;
+  margin-bottom: 1rem;
 }
 
 .sectionTitle {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: #8b4513;
   margin-bottom: 1rem;
   display: flex;
@@ -170,6 +175,7 @@
   padding: 1rem;
   border-radius: 8px;
   border: 1px solid rgba(218, 165, 32, 0.2);
+  flex-wrap: wrap;
 }
 
 .avatar {
@@ -181,6 +187,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(218, 165, 32, 0.3);
+  flex-shrink: 0;
 }
 
 .avatarIcon {
@@ -188,6 +195,11 @@
   font-weight: bold;
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.previewInfo {
+  flex: 1;
+  min-width: 200px;
 }
 
 .previewInfo h4 {
@@ -206,9 +218,10 @@
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
   border-top: 1px solid rgba(218, 165, 32, 0.2);
+  flex-wrap: wrap;
 }
 
 .createButton {
@@ -217,10 +230,11 @@
   color: white;
   font-weight: bold;
   padding: 0.75rem 2rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .createButton:hover:not(:disabled) {
@@ -233,25 +247,111 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
+/* Tablet Styles */
+@media (min-width: 768px) {
   .createSavePage {
-    padding: 1rem;
+    padding: 2rem;
+  }
+  
+  .content {
+    max-width: 800px;
   }
   
   .title {
-    font-size: 2rem;
+    font-size: 2.5rem;
+    text-align: left;
+  }
+  
+  .header {
+    flex-wrap: nowrap;
+    margin-bottom: 2rem;
   }
   
   .form {
-    padding: 1.5rem;
+    padding: 2rem;
+  }
+  
+  .formSection {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .sectionTitle {
+    font-size: 1.3rem;
+  }
+  
+  .previewCard {
+    flex-wrap: nowrap;
   }
   
   .actions {
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+  }
+  
+  .createButton {
+    font-size: 1.1rem;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 1024px) {
+  .content {
+    max-width: 1000px;
+  }
+  
+  .form {
+    padding: 2.5rem;
+  }
+  
+  .title {
+    font-size: 2.8rem;
+  }
+}
+
+/* Large Desktop Styles */
+@media (min-width: 1440px) {
+  .content {
+    max-width: 1200px;
+  }
+  
+  .title {
+    font-size: 3rem;
+  }
+  
+  .form {
+    padding: 3rem;
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 767px) {
+  .header {
     flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+    order: -1;
   }
   
   .previewCard {
     flex-direction: column;
     text-align: center;
+  }
+  
+  .previewInfo {
+    min-width: auto;
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .actions button {
+    width: 100%;
   }
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
 import SaveSlotList from "../game/SaveSlotList";
+import ResponsiveLayout from "../layout/ResponsiveLayout";
 import styles from "./HomePage.module.css";
 
 const HomePage = ({ onNavigate }) => {
@@ -64,7 +65,7 @@ const HomePage = ({ onNavigate }) => {
   };
 
   return (
-    <div className={styles.homePage}>
+    <ResponsiveLayout className={styles.homePage}>
       <div className={styles.background}>
         <div className={styles.celestialElements}>
           <div className={styles.star}></div>
@@ -122,7 +123,7 @@ const HomePage = ({ onNavigate }) => {
           </div>
         </Card>
       </div>
-    </div>
+    </ResponsiveLayout>
   );
 };
 

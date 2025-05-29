@@ -6,6 +6,7 @@
   justify-content: center;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   overflow: hidden;
+  padding: 1rem;
 }
 
 .background {
@@ -91,18 +92,18 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 600px;
-  padding: 2rem;
+  max-width: 500px; /* Mobile first */
+  padding: 0;
 }
 
 .title {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   color: #fff;
 }
 
 .gameTitle {
-  font-size: 3.5rem;
+  font-size: 2.5rem;
   font-weight: bold;
   margin: 0;
   background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4);
@@ -114,7 +115,7 @@
 }
 
 .subtitle {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin: 1rem 0 0 0;
   color: #b8c6db;
   font-style: italic;
@@ -128,14 +129,14 @@
 }
 
 .mainMenu {
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .newGameButton {
   width: 100%;
-  margin-bottom: 2rem;
-  font-size: 1.2rem;
-  padding: 1rem 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  padding: 0.875rem 1.5rem;
   background: linear-gradient(45deg, #667db6, #0082c8, #0052a3);
   border: none;
   color: white;
@@ -151,11 +152,11 @@
 }
 
 .saveSection {
-  margin: 2rem 0;
+  margin: 1.5rem 0;
 }
 
 .sectionTitle {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   margin-bottom: 1rem;
   color: #333;
   border-bottom: 2px solid #667db6;
@@ -165,7 +166,7 @@
 .otherOptions {
   display: flex;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .otherOptions button {
@@ -173,20 +174,97 @@
   font-size: 0.9rem;
 }
 
-@media (max-width: 768px) {
-  .gameTitle {
-    font-size: 2.5rem;
+/* Tablet Styles */
+@media (min-width: 768px) {
+  .content {
+    max-width: 700px;
   }
   
-  .content {
-    padding: 1rem;
+  .gameTitle {
+    font-size: 3.2rem;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
   }
   
   .mainMenu {
-    padding: 1.5rem;
+    padding: 2rem;
+  }
+  
+  .newGameButton {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+  }
+  
+  .sectionTitle {
+    font-size: 1.3rem;
   }
   
   .otherOptions {
-    flex-direction: column;
+    flex-direction: row;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 1024px) {
+  .homePage {
+    padding: 2rem;
+  }
+  
+  .content {
+    max-width: 900px;
+  }
+  
+  .gameTitle {
+    font-size: 4rem;
+  }
+  
+  .subtitle {
+    font-size: 1.3rem;
+  }
+  
+  .title {
+    margin-bottom: 3rem;
+  }
+  
+  .mainMenu {
+    padding: 2.5rem;
+  }
+  
+  .newGameButton {
+    margin-bottom: 2rem;
+  }
+  
+  .saveSection {
+    margin: 2rem 0;
+  }
+  
+  .otherOptions {
+    margin-top: 2rem;
+  }
+}
+
+/* Large Desktop Styles */
+@media (min-width: 1440px) {
+  .content {
+    max-width: 1200px;
+  }
+  
+  .gameTitle {
+    font-size: 4.5rem;
+  }
+  
+  .subtitle {
+    font-size: 1.4rem;
+  }
+  
+  .mainMenu {
+    padding: 3rem;
+  }
+  
+  .newGameButton {
+    font-size: 1.3rem;
+    padding: 1.2rem 2.5rem;
   }
 }

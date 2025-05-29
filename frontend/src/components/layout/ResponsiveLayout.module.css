@@ -1,0 +1,179 @@
+.responsiveLayout {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Mobile Layout */
+.mobile {
+  padding: 1rem;
+  font-size: 14px;
+}
+
+.mobile .container {
+  max-width: 100%;
+  padding: 0;
+}
+
+.mobile .grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mobile .sidebar {
+  order: 2;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.mobile .main-content {
+  order: 1;
+  width: 100%;
+}
+
+.mobile .header {
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+}
+
+.mobile .navigation {
+  display: flex;
+  overflow-x: auto;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+.mobile .navigation > * {
+  flex-shrink: 0;
+  min-width: 120px;
+}
+
+/* Tablet Layout */
+.tablet {
+  padding: 1.5rem;
+  font-size: 15px;
+}
+
+.tablet .container {
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.tablet .grid {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.tablet .sidebar {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.tablet .main-content {
+  flex: 1;
+}
+
+.tablet .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tablet .navigation {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Desktop Layout */
+.desktop {
+  padding: 2rem;
+  font-size: 16px;
+}
+
+.desktop .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.desktop .grid {
+  display: flex;
+  gap: 2rem;
+}
+
+.desktop .sidebar {
+  width: 320px;
+  flex-shrink: 0;
+}
+
+.desktop .main-content {
+  flex: 1;
+}
+
+.desktop .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.desktop .navigation {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* Large Desktop Layout */
+@media (min-width: 1440px) {
+  .desktop {
+    padding: 2.5rem;
+    font-size: 17px;
+  }
+  
+  .desktop .container {
+    max-width: 1400px;
+  }
+  
+  .desktop .grid {
+    gap: 2.5rem;
+  }
+  
+  .desktop .sidebar {
+    width: 360px;
+  }
+  
+  .desktop .header {
+    gap: 2.5rem;
+  }
+}
+
+/* Responsive Utilities */
+.mobile-only {
+  display: block;
+}
+
+.tablet-only,
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+  
+  .tablet-only {
+    display: block;
+  }
+}
+
+@media (min-width: 1024px) {
+  .tablet-only {
+    display: none;
+  }
+  
+  .desktop-only {
+    display: block;
+  }
+}

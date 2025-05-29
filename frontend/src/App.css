@@ -19,10 +19,12 @@ html, body {
 
 #root {
   height: 100%;
+  width: 100%;
 }
 
 .app {
   min-height: 100vh;
+  width: 100%;
   position: relative;
 }
 
@@ -46,14 +48,31 @@ html, body {
   background: linear-gradient(135deg, #5a6fa8, #0074b7);
 }
 
-/* Typography */
+/* Typography - Responsive Font Sizes */
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
   font-weight: 600;
 }
 
+h1 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+}
+
+h3 {
+  font-size: clamp(1.2rem, 3vw, 2rem);
+}
+
+h4 {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+}
+
 p {
   line-height: 1.6;
+  font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 /* Focus Styles */
@@ -121,7 +140,7 @@ p {
   }
 }
 
-/* Utility Classes */
+/* Utility Classes - Responsive */
 .text-center {
   text-align: center;
 }
@@ -149,51 +168,51 @@ p {
 }
 
 .gap-1 {
-  gap: 0.5rem;
+  gap: clamp(0.25rem, 1vw, 0.5rem);
 }
 
 .gap-2 {
-  gap: 1rem;
+  gap: clamp(0.5rem, 2vw, 1rem);
 }
 
 .gap-3 {
-  gap: 1.5rem;
+  gap: clamp(0.75rem, 3vw, 1.5rem);
 }
 
 .mb-1 {
-  margin-bottom: 0.5rem;
+  margin-bottom: clamp(0.25rem, 1vw, 0.5rem);
 }
 
 .mb-2 {
-  margin-bottom: 1rem;
+  margin-bottom: clamp(0.5rem, 2vw, 1rem);
 }
 
 .mb-3 {
-  margin-bottom: 1.5rem;
+  margin-bottom: clamp(0.75rem, 3vw, 1.5rem);
 }
 
 .mt-1 {
-  margin-top: 0.5rem;
+  margin-top: clamp(0.25rem, 1vw, 0.5rem);
 }
 
 .mt-2 {
-  margin-top: 1rem;
+  margin-top: clamp(0.5rem, 2vw, 1rem);
 }
 
 .mt-3 {
-  margin-top: 1.5rem;
+  margin-top: clamp(0.75rem, 3vw, 1.5rem);
 }
 
 .p-1 {
-  padding: 0.5rem;
+  padding: clamp(0.25rem, 1vw, 0.5rem);
 }
 
 .p-2 {
-  padding: 1rem;
+  padding: clamp(0.5rem, 2vw, 1rem);
 }
 
 .p-3 {
-  padding: 1.5rem;
+  padding: clamp(0.75rem, 3vw, 1.5rem);
 }
 
 .rounded {
@@ -208,23 +227,136 @@ p {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
+/* Container Classes for Different Screen Sizes */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.container-sm {
+  max-width: 540px;
+}
+
+.container-md {
+  max-width: 720px;
+}
+
+.container-lg {
+  max-width: 960px;
+}
+
+.container-xl {
+  max-width: 1140px;
+}
+
+/* Responsive Grid System */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -0.5rem;
+}
+
+.col {
+  flex: 1;
+  padding: 0 0.5rem;
+}
+
+.col-auto {
+  flex: 0 0 auto;
+}
+
 /* Responsive Utilities */
-@media (max-width: 768px) {
-  .hide-mobile {
-    display: none;
+.d-none {
+  display: none !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+/* Mobile First Responsive Breakpoints */
+@media (min-width: 576px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+  
+  .d-sm-none {
+    display: none !important;
+  }
+  
+  .d-sm-block {
+    display: block !important;
+  }
+  
+  .d-sm-flex {
+    display: flex !important;
   }
 }
 
-@media (min-width: 769px) {
-  .hide-desktop {
-    display: none;
+@media (min-width: 768px) {
+  .container {
+    padding: 0 2rem;
+  }
+  
+  .d-md-none {
+    display: none !important;
+  }
+  
+  .d-md-block {
+    display: block !important;
+  }
+  
+  .d-md-flex {
+    display: flex !important;
+  }
+  
+  .row {
+    margin: 0 -1rem;
+  }
+  
+  .col {
+    padding: 0 1rem;
   }
 }
 
-/* Loading Spinner */
+@media (min-width: 1024px) {
+  .d-lg-none {
+    display: none !important;
+  }
+  
+  .d-lg-block {
+    display: block !important;
+  }
+  
+  .d-lg-flex {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .d-xl-none {
+    display: none !important;
+  }
+  
+  .d-xl-block {
+    display: block !important;
+  }
+  
+  .d-xl-flex {
+    display: flex !important;
+  }
+}
+
+/* Loading Spinner - Responsive */
 .loading-spinner {
-  width: 40px;
-  height: 40px;
+  width: clamp(30px, 8vw, 40px);
+  height: clamp(30px, 8vw, 40px);
   border: 4px solid #f3f3f3;
   border-top: 4px solid #667db6;
   border-radius: 50%;
@@ -237,17 +369,19 @@ p {
   100% { transform: rotate(360deg); }
 }
 
-/* Toast/Notification Styles */
+/* Toast/Notification Styles - Responsive */
 .toast {
   position: fixed;
   top: 20px;
   right: 20px;
-  padding: 1rem 1.5rem;
+  padding: clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem);
   border-radius: 8px;
   color: white;
   font-weight: 500;
   z-index: 1000;
   animation: slideInRight 0.3s ease-out;
+  max-width: calc(100vw - 40px);
+  word-wrap: break-word;
 }
 
 .toast.success {
@@ -277,7 +411,7 @@ p {
   }
 }
 
-/* Debug Menu Styles */
+/* Debug Menu Styles - Responsive */
 .debug-overlay {
   position: fixed;
   top: 0;
@@ -289,14 +423,35 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
 }
 
 .debug-panel {
   background: white;
   border-radius: 12px;
-  padding: 2rem;
+  padding: clamp(1rem, 4vw, 2rem);
   max-width: 500px;
-  width: 90%;
+  width: 100%;
   max-height: 80vh;
   overflow-y: auto;
+}
+
+/* Responsive Text Sizes */
+@media (max-width: 767px) {
+  .hide-mobile {
+    display: none !important;
+  }
+  
+  .toast {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .hide-desktop {
+    display: none !important;
+  }
 }
