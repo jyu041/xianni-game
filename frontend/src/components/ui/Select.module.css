@@ -1,3 +1,5 @@
+/* frontend/src/components/ui/Select.module.css */
+
 .selectWrapper {
   position: relative;
   width: 100%;
@@ -6,21 +8,43 @@
 .select {
   width: 100%;
   padding: 0.75rem 2.5rem 0.75rem 1rem;
-  border: 2px solid #e1e5e9;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   font-size: 1rem;
   font-family: inherit;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
   outline: none;
   appearance: none;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .select:focus {
-  border-color: #667db6;
-  box-shadow: 0 0 0 3px rgba(102, 125, 182, 0.1);
-  background: rgba(255, 255, 255, 1);
+  border-color: rgba(138, 43, 226, 0.6);
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 
+              0 0 20px rgba(138, 43, 226, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.select option {
+  background: rgba(0, 0, 0, 0.95);
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem;
+}
+
+.select option:hover {
+  background: rgba(138, 43, 226, 0.3);
+}
+
+.select option:checked {
+  background: rgba(138, 43, 226, 0.5);
+  color: #ffffff;
 }
 
 .selectArrow {
@@ -28,23 +52,69 @@
   right: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #667db6;
+  color: rgba(255, 255, 255, 0.6);
   pointer-events: none;
   font-size: 0.8rem;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
 .select:focus + .selectArrow {
   transform: translateY(-50%) rotate(180deg);
+  color: rgba(138, 43, 226, 0.8);
+  text-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+}
+
+.select:hover + .selectArrow {
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
 .disabled {
-  background: #f5f7fa;
-  color: #a0a6b0;
+  background: rgba(20, 20, 20, 0.6);
+  color: rgba(255, 255, 255, 0.3);
   cursor: not-allowed;
-  border-color: #e1e5e9;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .disabled + .selectArrow {
-  color: #a0a6b0;
+  color: rgba(255, 255, 255, 0.2);
+  text-shadow: none;
+}
+
+/* Special immortal cultivation select variant */
+.immortal {
+  border: 1px solid rgba(138, 43, 226, 0.4);
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 
+              0 0 15px rgba(138, 43, 226, 0.2);
+}
+
+.immortal:focus {
+  border-color: rgba(138, 43, 226, 0.8);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7), 
+              0 0 30px rgba(138, 43, 226, 0.4);
+}
+
+.immortal + .selectArrow {
+  color: rgba(138, 43, 226, 0.7);
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+}
+
+/* Glowing effect for special selects */
+.glow {
+  animation: selectGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes selectGlow {
+  from {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 
+                0 0 10px rgba(255, 255, 255, 0.1);
+  }
+  to {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 
+                0 0 20px rgba(255, 255, 255, 0.2),
+                0 0 30px rgba(138, 43, 226, 0.15);
+  }
 }

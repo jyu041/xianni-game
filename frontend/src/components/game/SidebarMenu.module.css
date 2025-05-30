@@ -1,0 +1,372 @@
+/* frontend/src/components/game/SidebarMenu.module.css */
+
+.sidebarMenu {
+  width: 280px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6),
+              0 0 30px rgba(255, 255, 255, 0.1),
+              0 0 50px rgba(138, 43, 226, 0.2);
+  position: relative;
+}
+
+.sidebarMenu::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.05) 0%, 
+    transparent 50%, 
+    rgba(138, 43, 226, 0.05) 100%);
+  pointer-events: none;
+}
+
+.menuHeader {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.menuTitle {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0;
+  text-align: center;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.menuTitleIcon {
+  font-size: 1.5rem;
+  color: rgba(138, 43, 226, 0.9);
+  filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.5));
+}
+
+.menuList {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 1.2rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.menuItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.1), 
+    transparent);
+  transition: left 0.5s ease;
+}
+
+.menuItem:hover::before {
+  left: 100%;
+}
+
+.menuItem:hover {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6),
+              0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.menuItem.active {
+  background: rgba(138, 43, 226, 0.3);
+  border-color: rgba(138, 43, 226, 0.6);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6),
+              0 0 25px rgba(138, 43, 226, 0.4);
+}
+
+.menuItem.active::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, 
+    rgba(138, 43, 226, 0.8), 
+    rgba(147, 112, 219, 0.8));
+  box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+.itemIcon {
+  font-size: 1.3rem;
+  min-width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.itemLabel {
+  flex: 1;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.itemArrow {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+.menuItem:hover .itemArrow {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+.menuItem.active .itemArrow {
+  opacity: 1;
+  color: rgba(138, 43, 226, 0.9);
+}
+
+/* Special styling for different menu categories */
+.menuItem.stages .itemIcon {
+  color: rgba(76, 175, 80, 0.9);
+}
+
+.menuItem.inventory .itemIcon {
+  color: rgba(255, 193, 7, 0.9);
+}
+
+.menuItem.store .itemIcon {
+  color: rgba(33, 150, 243, 0.9);
+}
+
+.menuItem.upgrades .itemIcon {
+  color: rgba(156, 39, 176, 0.9);
+}
+
+.menuItem.gacha .itemIcon {
+  color: rgba(255, 87, 34, 0.9);
+}
+
+.menuItem.achievements .itemIcon {
+  color: rgba(255, 215, 0, 0.9);
+}
+
+/* Hover effects for different categories */
+.menuItem.stages:hover {
+  border-color: rgba(76, 175, 80, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6),
+              0 0 20px rgba(76, 175, 80, 0.2);
+}
+
+.menuItem.inventory:hover {
+  border-color: rgba(255, 193, 7, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6),
+              0 0 20px rgba(255, 193, 7, 0.2);
+}
+
+.menuItem.store:hover {
+  border-color: rgba(33, 150, 243, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6),
+              0 0 20px rgba(33, 150, 243, 0.2);
+}
+
+.menuItem.upgrades:hover {
+  border-color: rgba(156, 39, 176, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6),
+              0 0 20px rgba(156, 39, 176, 0.2);
+}
+
+.menuItem.gacha:hover {
+  border-color: rgba(255, 87, 34, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6),
+              0 0 20px rgba(255, 87, 34, 0.2);
+}
+
+.menuItem.achievements:hover {
+  border-color: rgba(255, 215, 0, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6),
+              0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.menuFooter {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.playerStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.statusIcon {
+  font-size: 1.2rem;
+  color: rgba(138, 43, 226, 0.9);
+  filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.5));
+}
+
+.statusInfo {
+  flex: 1;
+}
+
+.statusLabel {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusValue {
+  font-size: 0.9rem;
+  color: #ffffff;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+/* Mobile Styles */
+@media (max-width: 767px) {
+  .sidebarMenu {
+    width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+  }
+
+  .menuList {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .menuItem {
+    min-width: 140px;
+    flex-shrink: 0;
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .menuItem:hover {
+    transform: translateY(-2px);
+  }
+
+  .itemLabel {
+    font-size: 0.8rem;
+  }
+
+  .menuFooter {
+    display: none;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .sidebarMenu {
+    width: 250px;
+  }
+
+  .menuItem {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .itemIcon {
+    font-size: 1.2rem;
+  }
+}
+
+/* Large Desktop Styles */
+@media (min-width: 1440px) {
+  .sidebarMenu {
+    width: 320px;
+  }
+
+  .menuItem {
+    padding: 1.2rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .itemIcon {
+    font-size: 1.4rem;
+  }
+
+  .menuTitle {
+    font-size: 1.4rem;
+  }
+}
+
+/* Custom Scrollbar for Mobile Menu */
+.menuList::-webkit-scrollbar {
+  height: 6px;
+}
+
+.menuList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.menuList::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, 
+    rgba(138, 43, 226, 0.6), 
+    rgba(147, 112, 219, 0.6));
+  border-radius: 3px;
+  box-shadow: 0 0 5px rgba(138, 43, 226, 0.3);
+}
+
+.menuList::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, 
+    rgba(138, 43, 226, 0.8), 
+    rgba(147, 112, 219, 0.8));
+}

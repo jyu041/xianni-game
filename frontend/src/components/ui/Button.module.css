@@ -1,8 +1,10 @@
+/* frontend/src/components/ui/Button.module.css */
+
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   font-weight: 600;
   text-decoration: none;
@@ -13,6 +15,11 @@
   font-family: inherit;
   position: relative;
   overflow: hidden;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 
+              0 0 10px rgba(255, 255, 255, 0.05);
 }
 
 .button:before {
@@ -22,7 +29,10 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent);
   transition: left 0.5s ease;
 }
 
@@ -30,52 +40,87 @@
   left: 100%;
 }
 
+.button:hover:not(.disabled) {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 
+              0 0 20px rgba(255, 255, 255, 0.1);
+}
+
 /* Variants */
 .primary {
-  background: linear-gradient(45deg, #667db6, #0082c8);
+  background: linear-gradient(45deg, 
+    rgba(138, 43, 226, 0.8), 
+    rgba(147, 112, 219, 0.8));
+  border: 1px solid rgba(138, 43, 226, 0.6);
   color: white;
-  box-shadow: 0 4px 12px rgba(0, 130, 200, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 
+              0 0 20px rgba(138, 43, 226, 0.3);
 }
 
 .primary:hover:not(.disabled) {
-  background: linear-gradient(45deg, #5a6fa8, #0074b7);
+  background: linear-gradient(45deg, 
+    rgba(138, 43, 226, 0.9), 
+    rgba(147, 112, 219, 0.9));
+  border-color: rgba(138, 43, 226, 0.8);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 130, 200, 0.4);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 
+              0 0 30px rgba(138, 43, 226, 0.4),
+              0 0 50px rgba(147, 112, 219, 0.2);
 }
 
 .secondary {
-  background: linear-gradient(45deg, #9370db, #8a2be2);
+  background: linear-gradient(45deg, 
+    rgba(147, 112, 219, 0.8), 
+    rgba(186, 85, 211, 0.8));
+  border: 1px solid rgba(147, 112, 219, 0.6);
   color: white;
-  box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 
+              0 0 20px rgba(147, 112, 219, 0.3);
 }
 
 .secondary:hover:not(.disabled) {
-  background: linear-gradient(45deg, #8366cc, #7b1fa2);
+  background: linear-gradient(45deg, 
+    rgba(147, 112, 219, 0.9), 
+    rgba(186, 85, 211, 0.9));
+  border-color: rgba(147, 112, 219, 0.8);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 
+              0 0 30px rgba(147, 112, 219, 0.4);
 }
 
 .ghost {
   background: transparent;
-  color: #667db6;
-  border: 1px solid #667db6;
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .ghost:hover:not(.disabled) {
-  background: rgba(102, 125, 182, 0.1);
-  color: #5a6fa8;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 
+              0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .danger {
-  background: linear-gradient(45deg, #ff6b6b, #e74c3c);
+  background: linear-gradient(45deg, 
+    rgba(244, 67, 54, 0.8), 
+    rgba(211, 47, 47, 0.8));
+  border: 1px solid rgba(244, 67, 54, 0.6);
   color: white;
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 
+              0 0 20px rgba(244, 67, 54, 0.3);
 }
 
 .danger:hover:not(.disabled) {
-  background: linear-gradient(45deg, #ff5252, #d32f2f);
+  background: linear-gradient(45deg, 
+    rgba(244, 67, 54, 0.9), 
+    rgba(211, 47, 47, 0.9));
+  border-color: rgba(244, 67, 54, 0.8);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 
+              0 0 30px rgba(244, 67, 54, 0.4);
 }
 
 /* Sizes */
@@ -98,23 +143,63 @@
 
 /* States */
 .disabled {
-  opacity: 0.6;
+  opacity: 0.4;
   cursor: not-allowed;
   transform: none !important;
+  background: rgba(20, 20, 20, 0.8) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
 }
 
 .disabled:hover {
   transform: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Focus states */
 .button:focus-visible {
-  outline: 2px solid #667db6;
+  outline: 2px solid rgba(255, 255, 255, 0.5);
   outline-offset: 2px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
 /* Active state */
 .button:active:not(.disabled) {
   transform: translateY(1px);
+}
+
+/* Special immortal cultivation button variant */
+.immortal {
+  background: linear-gradient(45deg, 
+    rgba(138, 43, 226, 0.6), 
+    rgba(75, 0, 130, 0.6));
+  border: 2px solid rgba(138, 43, 226, 0.8);
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 
+              0 0 25px rgba(138, 43, 226, 0.4);
+  animation: immortalButtonGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes immortalButtonGlow {
+  from {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 
+                0 0 20px rgba(138, 43, 226, 0.3);
+  }
+  to {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 
+                0 0 40px rgba(138, 43, 226, 0.5),
+                0 0 60px rgba(147, 112, 219, 0.3);
+  }
+}
+
+.immortal:hover:not(.disabled) {
+  background: linear-gradient(45deg, 
+    rgba(138, 43, 226, 0.8), 
+    rgba(75, 0, 130, 0.8));
+  border-color: rgba(138, 43, 226, 1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7), 
+              0 0 50px rgba(138, 43, 226, 0.6),
+              0 0 80px rgba(147, 112, 219, 0.4);
 }

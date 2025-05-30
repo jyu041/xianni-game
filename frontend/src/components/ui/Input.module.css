@@ -1,43 +1,108 @@
+/* frontend/src/components/ui/Input.module.css */
+
 .input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 2px solid #e1e5e9;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   font-size: 1rem;
   font-family: inherit;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
   transition: all 0.3s ease;
   outline: none;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .input:focus {
-  border-color: #667db6;
-  box-shadow: 0 0 0 3px rgba(102, 125, 182, 0.1);
-  background: rgba(255, 255, 255, 1);
+  border-color: rgba(138, 43, 226, 0.6);
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 
+              0 0 20px rgba(138, 43, 226, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .input::placeholder {
-  color: #a0a6b0;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+.input::-webkit-input-placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+.input::-moz-placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  opacity: 1;
+}
+
+.input:-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.4);
   font-style: italic;
 }
 
 .error {
-  border-color: #ff6b6b;
+  border-color: rgba(244, 67, 54, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 
+              0 0 15px rgba(244, 67, 54, 0.2);
 }
 
 .error:focus {
-  border-color: #ff6b6b;
-  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+  border-color: rgba(244, 67, 54, 0.8);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 
+              0 0 25px rgba(244, 67, 54, 0.4);
 }
 
 .disabled {
-  background: #f5f7fa;
-  color: #a0a6b0;
+  background: rgba(20, 20, 20, 0.6);
+  color: rgba(255, 255, 255, 0.3);
   cursor: not-allowed;
-  border-color: #e1e5e9;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .disabled:focus {
-  border-color: #e1e5e9;
-  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.disabled::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* Special immortal cultivation input variant */
+.immortal {
+  border: 1px solid rgba(138, 43, 226, 0.4);
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 
+              0 0 15px rgba(138, 43, 226, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.immortal:focus {
+  border-color: rgba(138, 43, 226, 0.8);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7), 
+              0 0 30px rgba(138, 43, 226, 0.4),
+              0 0 50px rgba(147, 112, 219, 0.2);
+}
+
+/* Glowing effect for special inputs */
+.glow {
+  animation: inputGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes inputGlow {
+  from {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 
+                0 0 10px rgba(255, 255, 255, 0.1);
+  }
+  to {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 
+                0 0 20px rgba(255, 255, 255, 0.2),
+                0 0 30px rgba(138, 43, 226, 0.15);
+  }
 }

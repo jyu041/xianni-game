@@ -1,3 +1,5 @@
+/* frontend/src/components/game/LevelSelector.module.css */
+
 .levelSelector {
   display: flex;
   flex-direction: column;
@@ -21,9 +23,9 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(45deg, rgba(138, 43, 226, 0.8), rgba(147, 112, 219, 0.8));
-  border: 2px solid rgba(138, 43, 226, 1);
-  color: white;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
@@ -32,31 +34,40 @@
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5),
+              0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .navButton:hover:not(.disabled) {
-  background: linear-gradient(45deg, rgba(138, 43, 226, 1), rgba(147, 112, 219, 1));
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
   transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(138, 43, 226, 0.5);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6),
+              0 0 30px rgba(255, 255, 255, 0.2);
 }
 
 .navButton.disabled {
   opacity: 0.3;
   cursor: not-allowed;
   transform: none;
+  background: rgba(20, 20, 20, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .stageDisplay {
   flex: 1;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(247, 250, 252, 0.95));
-  border: 2px solid rgba(138, 43, 226, 0.3);
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   padding: 2rem;
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6),
+              0 0 30px rgba(255, 255, 255, 0.1),
+              0 0 50px rgba(138, 43, 226, 0.2);
   min-height: 300px;
   display: flex;
   flex-direction: column;
@@ -70,7 +81,10 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.1), transparent);
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.05), 
+    transparent);
   animation: slideShimmer 3s infinite;
 }
 
@@ -88,7 +102,7 @@
 
 .stageLabel {
   font-size: 0.9rem;
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
   margin-bottom: 0.5rem;
 }
@@ -96,8 +110,9 @@
 .number {
   font-size: 3rem;
   font-weight: bold;
-  color: #8a2be2;
-  text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+               0 0 40px rgba(138, 43, 226, 0.3);
 }
 
 .stageInfo {
@@ -109,9 +124,9 @@
 .stageName {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #2d1b69;
+  color: #ffffff;
   margin: 0 0 1rem 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 .stageDetails {
@@ -128,9 +143,11 @@
   font-weight: 600;
   padding: 0.5rem 1rem;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(138, 43, 226, 0.2);
-  color: #333;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .difficulty {
@@ -149,20 +166,23 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(138, 43, 226, 0.1);
+  background: rgba(0, 0, 0, 0.6);
   padding: 0.75rem 1rem;
   border-radius: 12px;
-  border: 1px solid rgba(138, 43, 226, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5),
+              0 0 15px rgba(138, 43, 226, 0.1);
 }
 
 .rewardIcon {
   font-size: 1.2rem;
+  filter: drop-shadow(0 0 5px currentColor);
 }
 
 .rewardText {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #333;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .lockOverlay {
@@ -171,26 +191,29 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(5px);
   border-radius: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .lockOverlay .lockIcon {
   font-size: 4rem;
   margin-bottom: 1rem;
   opacity: 0.8;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
 }
 
 .lockOverlay .lockText {
   font-size: 1.2rem;
   font-weight: bold;
   color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5),
+               0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .stageActions {
@@ -204,17 +227,21 @@
   padding: 1rem 2.5rem;
   font-size: 1.2rem;
   font-weight: bold;
-  background: linear-gradient(45deg, #4caf50, #45a049);
+  background: linear-gradient(45deg, 
+    rgba(76, 175, 80, 0.8), 
+    rgba(69, 160, 73, 0.8));
   color: white;
-  border: none;
+  border: 1px solid rgba(76, 175, 80, 0.6);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5),
+              0 0 25px rgba(76, 175, 80, 0.3);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(10px);
 }
 
 .startButton::before {
@@ -224,7 +251,10 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent);
   transition: left 0.5s ease;
 }
 
@@ -233,20 +263,31 @@
 }
 
 .startButton:hover {
-  background: linear-gradient(45deg, #45a049, #4caf50);
+  background: linear-gradient(45deg, 
+    rgba(76, 175, 80, 0.9), 
+    rgba(69, 160, 73, 0.9));
+  border-color: rgba(76, 175, 80, 0.8);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6),
+              0 0 35px rgba(76, 175, 80, 0.4);
 }
 
 .startButton.current {
-  background: linear-gradient(45deg, #ffd700, #ffed4e);
-  color: #333;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+  background: linear-gradient(45deg, 
+    rgba(255, 215, 0, 0.8), 
+    rgba(255, 193, 7, 0.8));
+  border-color: rgba(255, 215, 0, 0.6);
+  color: #000000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5),
+              0 0 25px rgba(255, 215, 0, 0.4);
 }
 
 .startButton.current:hover {
-  background: linear-gradient(45deg, #ffed4e, #ffd700);
-  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+  background: linear-gradient(45deg, 
+    rgba(255, 215, 0, 0.9), 
+    rgba(255, 193, 7, 0.9));
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6),
+              0 0 35px rgba(255, 215, 0, 0.5);
 }
 
 .lockedButton {
@@ -254,10 +295,10 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 2rem;
-  background: rgba(0, 0, 0, 0.1);
-  border: 2px dashed rgba(0, 0, 0, 0.3);
+  background: rgba(20, 20, 20, 0.8);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.5);
   font-size: 1rem;
   font-weight: 600;
   cursor: not-allowed;
@@ -277,10 +318,11 @@
 
 .progressBar {
   height: 12px;
-  background: rgba(138, 43, 226, 0.2);
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   overflow: hidden;
-  border: 1px solid rgba(138, 43, 226, 0.3);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .progressFill {
@@ -289,6 +331,7 @@
   border-radius: 6px;
   transition: width 0.8s ease;
   position: relative;
+  box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
 }
 
 .progressFill::after {
@@ -298,7 +341,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.4), 
+    transparent);
   animation: progressShimmer 2s infinite;
 }
 
@@ -310,8 +356,9 @@
 .progressText {
   text-align: center;
   font-size: 0.9rem;
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 600;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
 /* Mobile Styles */
