@@ -14,113 +14,6 @@ const StageModal = ({
   const [currentPage, setCurrentPage] = useState(0);
 
   const stagesPerPage = 6; // 3x2 grid per page
-
-  // Use backend stages data or fallback to hardcoded data
-  const defaultStages = [
-    {
-      stageId: 1,
-      name: "青云山脉",
-      difficulty: "简单",
-      enemies: "野兽",
-      rewards: ["灵石 x50"],
-      boss: "山林虎王",
-      description: "修仙路上的第一步，山林间充满了野兽的咆哮。",
-      background: "mountains",
-    },
-    {
-      stageId: 2,
-      name: "幽暗森林",
-      difficulty: "简单",
-      enemies: "妖兽",
-      rewards: ["灵石 x75"],
-      boss: "黑狼妖王",
-      description: "阴暗的森林中潜伏着危险的妖兽。",
-      background: "forest",
-    },
-    {
-      stageId: 3,
-      name: "迷雾沼泽",
-      difficulty: "普通",
-      enemies: "毒虫",
-      rewards: ["灵石 x100"],
-      boss: "毒蛛女王",
-      description: "迷雾缭绕的沼泽地，充满了毒虫和陷阱。",
-      background: "swamp",
-    },
-    {
-      stageId: 4,
-      name: "烈焰峡谷",
-      difficulty: "普通",
-      enemies: "火灵",
-      rewards: ["灵石 x150"],
-      boss: "炎龙",
-      description: "炽热的峡谷中居住着强大的火系生物。",
-      background: "volcano",
-    },
-    {
-      stageId: 5,
-      name: "冰霜雪域",
-      difficulty: "困难",
-      enemies: "冰妖",
-      rewards: ["灵石 x200"],
-      boss: "冰霜巨人",
-      description: "永恒的冰雪之地，考验着修仙者的意志。",
-      background: "ice",
-    },
-    {
-      stageId: 6,
-      name: "雷电高原",
-      difficulty: "困难",
-      enemies: "雷兽",
-      rewards: ["灵石 x300"],
-      boss: "雷鸟",
-      description: "雷电不断的高原，蕴含着天地之力。",
-      background: "thunder",
-    },
-    {
-      stageId: 7,
-      name: "暗影深渊",
-      difficulty: "地狱",
-      enemies: "魔物",
-      rewards: ["灵石 x500"],
-      boss: "深渊领主",
-      description: "无底的深渊中潜伏着来自地狱的魔物。",
-      background: "abyss",
-    },
-    {
-      stageId: 8,
-      name: "天界云海",
-      difficulty: "地狱",
-      enemies: "天兵",
-      rewards: ["灵石 x750"],
-      boss: "天将",
-      description: "云雾缭绕的天界，守护着神圣的力量。",
-      background: "heaven",
-    },
-    {
-      stageId: 9,
-      name: "混沌虚空",
-      difficulty: "噩梦",
-      enemies: "虚空生物",
-      rewards: ["灵石 x1000"],
-      boss: "虚空君主",
-      description: "混沌的虚空中存在着超越理解的生物。",
-      background: "void",
-    },
-    {
-      stageId: 10,
-      name: "仙界禁地",
-      difficulty: "噩梦",
-      enemies: "仙人",
-      rewards: ["灵石 x1500"],
-      boss: "仙帝",
-      description: "仙界的最高禁地，只有最强者才能踏足。",
-      background: "immortal",
-    },
-  ];
-
-  const stageList = stages.length > 0 ? stages : defaultStages;
-
   const totalPages = Math.ceil(stages.length / stagesPerPage);
   const startIndex = currentPage * stagesPerPage;
   const endIndex = Math.min(startIndex + stagesPerPage, stages.length);
@@ -232,64 +125,68 @@ const StageModal = ({
 
         <div className={styles.modalBody}>
           {/* Page Navigation */}
-          <div className={styles.pageNavigation}>
-            <button
-              className={`${styles.pageNavButton} ${
-                currentPage === 0 ? styles.disabled : ""
-              }`}
-              onClick={handlePreviousPage}
-              disabled={currentPage === 0}
-            >
-              ← 上一页
-            </button>
+          {totalPages > 1 && (
+            <div className={styles.pageNavigation}>
+              <button
+                className={`${styles.pageNavButton} ${
+                  currentPage === 0 ? styles.disabled : ""
+                }`}
+                onClick={handlePreviousPage}
+                disabled={currentPage === 0}
+              >
+                ← 上一页
+              </button>
 
-            <div className={styles.pageIndicators}>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  className={`${styles.pageIndicator} ${
-                    currentPage === index ? styles.active : ""
-                  }`}
-                  onClick={() => handlePageClick(index)}
-                >
-                  {index + 1}
-                </button>
-              ))}
+              <div className={styles.pageIndicators}>
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index}
+                    className={`${styles.pageIndicator} ${
+                      currentPage === index ? styles.active : ""
+                    }`}
+                    onClick={() => handlePageClick(index)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                className={`${styles.pageNavButton} ${
+                  currentPage === totalPages - 1 ? styles.disabled : ""
+                }`}
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages - 1}
+              >
+                下一页 →
+              </button>
             </div>
-
-            <button
-              className={`${styles.pageNavButton} ${
-                currentPage === totalPages - 1 ? styles.disabled : ""
-              }`}
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages - 1}
-            >
-              下一页 →
-            </button>
-          </div>
+          )}
 
           {/* Stage Grid */}
           <div className={styles.stageGrid}>
             {currentStages.map((stage) => {
-              const isUnlocked = isStageUnlocked(stage.id);
-              const isCurrent = stage.id === currentStage;
-              const isSelected = stage.id === selectedStage;
+              const isUnlocked = isStageUnlocked(stage.stageId);
+              const isCurrent = stage.stageId === currentStage;
+              const isSelected = stage.stageId === selectedStage;
 
               return (
                 <div
-                  key={stage.id}
+                  key={stage.stageId}
                   className={`${styles.stageCard} ${
                     !isUnlocked ? styles.locked : ""
                   } ${isCurrent ? styles.current : ""} ${
                     isSelected ? styles.selected : ""
                   }`}
-                  onClick={() => handleStageClick(stage.id)}
+                  onClick={() => handleStageClick(stage.stageId)}
                 >
                   <div className={styles.stageHeader}>
                     <div className={styles.stageIcon}>
-                      {getStageIcon(stage.id)}
+                      {getStageIcon(stage.stageId)}
                     </div>
-                    <div className={styles.stageNumber}>第{stage.id}关</div>
+                    <div className={styles.stageNumber}>
+                      第{stage.stageId}关
+                    </div>
                     <div
                       className={styles.difficulty}
                       style={{ color: getDifficultyColor(stage.difficulty) }}
@@ -317,7 +214,9 @@ const StageModal = ({
                       </div>
                       <div className={styles.infoRow}>
                         <span className={styles.infoLabel}>奖励:</span>
-                        <span className={styles.infoValue}>{stage.reward}</span>
+                        <span className={styles.infoValue}>
+                          {stage.rewards ? stage.rewards.join(", ") : "未知"}
+                        </span>
                       </div>
                     </div>
                   </div>

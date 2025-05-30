@@ -1,3 +1,4 @@
+// frontend/src/components/pages/CreateSaveSlot.jsx
 import { useState } from "react";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
@@ -53,53 +54,11 @@ const CreateSaveSlot = ({ onNavigate, onSaveCreated }) => {
 
     setIsCreating(true);
     try {
-      const saveData = {
-        ...formData,
-        id: Date.now(),
-        level: 1,
-        experience: 0,
-        gold: 100,
-        createdAt: new Date().toISOString(),
-        lastPlayed: new Date().toISOString(),
-        playtime: 0,
-        currentStage: 1,
-        unlockedStages: [1],
-        inventory: [],
-        equipment: {},
-        skills: [],
-        achievements: [],
-      };
-
-      // API call to create save
-      const response = await fetch("/api/saves", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(saveData),
-      });
-
-      if (response.ok) {
-        const createdSave = await response.json();
-        onSaveCreated(createdSave);
-      } else {
-        // Fallback for offline mode
-        onSaveCreated(saveData);
-      }
+      const createdPlayer = await playerService.createPlayer(formData);
+      onSaveCreated(createdPlayer);
     } catch (error) {
       console.error("Failed to create save:", error);
-      // Fallback for offline mode
-      const saveData = {
-        ...formData,
-        id: Date.now(),
-        level: 1,
-        experience: 0,
-        gold: 100,
-        createdAt: new Date().toISOString(),
-        lastPlayed: new Date().toISOString(),
-        playtime: 0,
-      };
-      onSaveCreated(saveData);
+      alert("创建存档失败，请检查修士名称是否已存在");
     } finally {
       setIsCreating(false);
     }

@@ -13,25 +13,28 @@ const GameHome = ({ saveData, onNavigate }) => {
   const [activeMenu, setActiveMenu] = useState("stages");
   const [playerData, setPlayerData] = useState(saveData);
   const [showAllStages, setShowAllStages] = useState(false);
+  const [stageList, setStageList] = useState([]);
 
   useEffect(() => {
-    // Update last played time
     updateLastPlayed();
+    loadStages();
   }, []);
 
   const updateLastPlayed = async () => {
     try {
-      await fetch(`/api/saves/${playerData.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          lastPlayed: new Date().toISOString(),
-        }),
-      });
+      await playerService.updateLastPlayed(playerData.id);
     } catch (error) {
       console.error("Failed to update last played:", error);
+    }
+  };
+
+  const loadStages = async () => {
+    try {
+      const stages = await stageService.getAllStages();
+      setStageList(stages);
+    } catch (error) {
+      console.error("Failed to load stages:", error);
+      setStageList([]);
     }
   };
 
@@ -40,9 +43,14 @@ const GameHome = ({ saveData, onNavigate }) => {
   };
 
   const handleStageSelect = (stageId) => {
-    // Navigate to game level
-    console.log("Starting stage:", stageId);
-    // onNavigate('gameLevel', { stageId })
+    const selectedStage = stageList.find((stage) => stage.stageId === stageId);
+    if (selectedStage) {
+      // Navigate to game level with stage data and player data
+      onNavigate("gameLevel", {
+        stageData: selectedStage,
+        playerData: playerData,
+      });
+    }
   };
 
   const handleShowAllStages = () => {
@@ -82,11 +90,12 @@ const GameHome = ({ saveData, onNavigate }) => {
       case "stages":
         return (
           <LevelSelector
-            unlockedStages={playerData.unlockedStages || [1, 2, 3]}
+            unlockedStages={playerData.unlockedStages || [1]}
             currentStage={playerData.currentStage || 1}
             onStageSelect={handleStageSelect}
             onShowAllStages={handleShowAllStages}
-            totalStages={10}
+            totalStages={stageList.length}
+            stages={stageList}
           />
         );
       case "inventory":
@@ -147,11 +156,12 @@ const GameHome = ({ saveData, onNavigate }) => {
       default:
         return (
           <LevelSelector
-            unlockedStages={playerData.unlockedStages || [1, 2, 3]}
+            unlockedStages={playerData.unlockedStages || [1]}
             currentStage={playerData.currentStage || 1}
             onStageSelect={handleStageSelect}
             onShowAllStages={handleShowAllStages}
-            totalStages={10}
+            totalStages={stageList.length}
+            stages={stageList}
           />
         );
     }
@@ -202,9 +212,10 @@ const GameHome = ({ saveData, onNavigate }) => {
       <StageModal
         isOpen={showAllStages}
         onClose={handleCloseStageModal}
-        unlockedStages={playerData.unlockedStages || [1, 2, 3]}
+        unlockedStages={playerData.unlockedStages || [1]}
         currentStage={playerData.currentStage || 1}
         onStageSelect={handleStageSelect}
+        stages={stageList}
       />
     </div>
   );

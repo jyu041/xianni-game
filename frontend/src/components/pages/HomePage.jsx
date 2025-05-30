@@ -1,3 +1,4 @@
+// frontend/src/components/pages/HomePage.jsx
 import { useState, useEffect } from "react";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
@@ -16,52 +17,28 @@ const HomePage = ({ onNavigate }) => {
 
   const loadSaveSlots = async () => {
     try {
-      // API call to backend to get save slots
-      const response = await fetch("/api/saves");
-      if (response.ok) {
-        const saves = await response.json();
-        setSaveSlots(saves);
-      }
+      setLoading(true);
+      const saves = await playerService.getAllPlayers();
+      setSaveSlots(saves);
     } catch (error) {
       console.error("Failed to load save slots:", error);
-      // For now, use mock data
-      setSaveSlots([
-        {
-          id: 1,
-          playerName: "逆天修士",
-          level: 15,
-          cultivation: "筑基期",
-          lastPlayed: "2024-01-20T10:30:00Z",
-          playtime: 7200,
-        },
-        {
-          id: 2,
-          playerName: "仙道至尊",
-          level: 8,
-          cultivation: "练气期",
-          lastPlayed: "2024-01-19T14:20:00Z",
-          playtime: 3600,
-        },
-      ]);
+      setSaveSlots([]);
     } finally {
       setLoading(false);
     }
   };
 
   const handleContinueGame = (saveData) => {
-    onNavigate("gameHome");
+    onNavigate("gameHome", saveData);
   };
 
   const handleDeleteSave = async (saveId) => {
     try {
-      const response = await fetch(`/api/saves/${saveId}`, {
-        method: "DELETE",
-      });
-      if (response.ok) {
-        setSaveSlots((prev) => prev.filter((save) => save.id !== saveId));
-      }
+      await playerService.deletePlayer(saveId);
+      setSaveSlots((prev) => prev.filter((save) => save.id !== saveId));
     } catch (error) {
       console.error("Failed to delete save:", error);
+      alert("删除存档失败");
     }
   };
 

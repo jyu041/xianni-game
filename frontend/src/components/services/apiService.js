@@ -7,22 +7,32 @@ class ApiService {
     const config = {
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
         ...options.headers,
       },
+      mode: 'cors',
+      // Remove credentials to match CORS config
       ...options,
     };
 
     try {
+      console.log(`Making API request to: ${url}`);
       const response = await fetch(url, config);
       
+      console.log(`Response status: ${response.status}`);
+      
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error(`API Error: ${response.status} - ${errorText}`);
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
       }
 
       // Handle empty responses
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
-        return await response.json();
+        const data = await response.json();
+        console.log('API Response:', data);
+        return data;
       }
       
       return null;

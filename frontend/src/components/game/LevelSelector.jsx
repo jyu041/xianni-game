@@ -12,23 +12,10 @@ const LevelSelector = ({
 }) => {
   const [selectedStage, setSelectedStage] = useState(currentStage);
 
-  // Use backend stages data or fallback to hardcoded data
-  const defaultStages = [
-    { stageId: 1, name: "青云山脉", difficulty: "简单", boss: "山林虎王" },
-    { stageId: 2, name: "幽暗森林", difficulty: "简单", boss: "黑狼妖王" },
-    { stageId: 3, name: "迷雾沼泽", difficulty: "普通", boss: "毒蛛女王" },
-    { stageId: 4, name: "烈焰峡谷", difficulty: "普通", boss: "炎龙" },
-    { stageId: 5, name: "冰霜雪域", difficulty: "困难", boss: "冰霜巨人" },
-    { stageId: 6, name: "雷电高原", difficulty: "困难", boss: "雷鸟" },
-    { stageId: 7, name: "暗影深渊", difficulty: "地狱", boss: "深渊领主" },
-    { stageId: 8, name: "天界云海", difficulty: "地狱", boss: "天将" },
-    { stageId: 9, name: "混沌虚空", difficulty: "噩梦", boss: "虚空君主" },
-    { stageId: 10, name: "仙界禁地", difficulty: "噩梦", boss: "仙帝" },
-  ];
-
-  const stageList = stages.length > 0 ? stages : defaultStages;
   const currentStageData =
-    stageList.find((s) => s.stageId === selectedStage) || stageList[0];
+    stages.find((s) => s.stageId === selectedStage) || stages[0];
+  const isUnlocked = unlockedStages.includes(selectedStage);
+  const isCurrent = currentStage === selectedStage;
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
@@ -64,6 +51,20 @@ const LevelSelector = ({
       onStageSelect(selectedStage);
     }
   };
+
+  if (!currentStageData) {
+    return (
+      <div className={styles.levelSelector}>
+        <div className={styles.menuContent}>
+          <div className={styles.comingSoon}>
+            <div className={styles.comingSoonIcon}>⚔️</div>
+            <h3>加载关卡中...</h3>
+            <p>正在从服务器获取关卡信息...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.levelSelector}>
@@ -108,18 +109,15 @@ const LevelSelector = ({
             </div>
 
             <div className={styles.rewards}>
-              <div className={styles.rewardItem}>
-                <span className={styles.rewardIcon}>💰</span>
-                <span className={styles.rewardText}>
-                  灵石 x{50 * selectedStage}
-                </span>
-              </div>
-              <div className={styles.rewardItem}>
-                <span className={styles.rewardIcon}>⭐</span>
-                <span className={styles.rewardText}>
-                  经验 x{25 * selectedStage}
-                </span>
-              </div>
+              {currentStageData.rewards &&
+                currentStageData.rewards.map((reward, index) => (
+                  <div key={index} className={styles.rewardItem}>
+                    <span className={styles.rewardIcon}>
+                      {reward.includes("灵石") ? "💰" : "⭐"}
+                    </span>
+                    <span className={styles.rewardText}>{reward}</span>
+                  </div>
+                ))}
             </div>
           </div>
 
@@ -158,6 +156,18 @@ const LevelSelector = ({
             <span>需要通过关卡 {selectedStage - 1}</span>
           </div>
         )}
+      </div>
+
+      <div className={styles.progressIndicator}>
+        <div className={styles.progressBar}>
+          <div
+            className={styles.progressFill}
+            style={{ width: `${(unlockedStages.length / totalStages) * 100}%` }}
+          />
+        </div>
+        <div className={styles.progressText}>
+          已解锁: {unlockedStages.length} / {totalStages} 关卡
+        </div>
       </div>
     </div>
   );
