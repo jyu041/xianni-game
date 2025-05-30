@@ -1,3 +1,4 @@
+// frontend/src/components/game/LevelSelector.jsx
 import { useState } from "react";
 import styles from "./LevelSelector.module.css";
 
@@ -5,6 +6,7 @@ const LevelSelector = ({
   unlockedStages,
   currentStage,
   onStageSelect,
+  onShowAllStages,
   totalStages = 10,
 }) => {
   const [selectedStage, setSelectedStage] = useState(currentStage);
@@ -64,6 +66,13 @@ const LevelSelector = ({
 
   return (
     <div className={styles.levelSelector}>
+      <div className={styles.levelSelectorHeader}>
+        <h3 className={styles.selectorTitle}>选择关卡</h3>
+        <button className={styles.allLevelsButton} onClick={onShowAllStages}>
+          全部关卡
+        </button>
+      </div>
+
       <div className={styles.stageNavigation}>
         <button
           className={`${styles.navButton} ${
@@ -148,20 +157,6 @@ const LevelSelector = ({
             <span>需要通过关卡 {selectedStage - 1}</span>
           </div>
         )}
-      </div>
-
-      <div className={styles.progressIndicator}>
-        <div className={styles.progressBar}>
-          <div
-            className={styles.progressFill}
-            style={{
-              width: `${(Math.max(...unlockedStages) / totalStages) * 100}%`,
-            }}
-          />
-        </div>
-        <div className={styles.progressText}>
-          进度: {Math.max(...unlockedStages)}/{totalStages}
-        </div>
       </div>
     </div>
   );

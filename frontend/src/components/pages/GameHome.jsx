@@ -1,6 +1,8 @@
+// frontend/src/components/pages/GameHome.jsx
 import { useState, useEffect } from "react";
 import Card from "../ui/Card";
 import GameHeader from "../game/GameHeader";
+import SidebarMenu from "../game/SidebarMenu";
 import LevelSelector from "../game/LevelSelector";
 import StageModal from "../game/StageModal";
 import styles from "./GameHome.module.css";
@@ -49,6 +51,30 @@ const GameHome = ({ saveData, onNavigate }) => {
     setShowAllStages(false);
   };
 
+  const getMenuTitle = (menuId) => {
+    const menuTitles = {
+      stages: "关卡选择",
+      inventory: "法宝背包",
+      store: "修仙商店",
+      upgrades: "功法升级",
+      gacha: "天机抽取",
+      achievements: "修仙成就",
+    };
+    return menuTitles[menuId] || "功能菜单";
+  };
+
+  const getMenuIcon = (menuId) => {
+    const menuIcons = {
+      stages: "⚔️",
+      inventory: "🎒",
+      store: "🏪",
+      upgrades: "📚",
+      gacha: "🎲",
+      achievements: "🏆",
+    };
+    return menuIcons[menuId] || "⚡";
+  };
+
   const renderActiveMenu = () => {
     switch (activeMenu) {
       case "stages":
@@ -57,6 +83,7 @@ const GameHome = ({ saveData, onNavigate }) => {
             unlockedStages={playerData.unlockedStages || [1, 2, 3]}
             currentStage={playerData.currentStage || 1}
             onStageSelect={handleStageSelect}
+            onShowAllStages={handleShowAllStages}
             totalStages={10}
           />
         );
@@ -121,6 +148,7 @@ const GameHome = ({ saveData, onNavigate }) => {
             unlockedStages={playerData.unlockedStages || [1, 2, 3]}
             currentStage={playerData.currentStage || 1}
             onStageSelect={handleStageSelect}
+            onShowAllStages={handleShowAllStages}
             totalStages={10}
           />
         );
@@ -140,13 +168,32 @@ const GameHome = ({ saveData, onNavigate }) => {
       <div className={styles.content}>
         <GameHeader
           playerData={playerData}
-          onMenuSelect={handleMenuSelect}
-          onShowAllLevels={handleShowAllStages}
           onBackToHome={() => onNavigate("home")}
         />
 
-        <div className={styles.mainPanel}>
-          <Card className={styles.mainContent}>{renderActiveMenu()}</Card>
+        <div className={styles.gameLayout}>
+          <div className={styles.sidebarSection}>
+            <SidebarMenu
+              activeMenu={activeMenu}
+              onMenuSelect={handleMenuSelect}
+              playerData={playerData}
+            />
+          </div>
+
+          <div className={styles.mainPanel}>
+            <Card className={styles.mainContent}>
+              <div className={styles.contentHeader}>
+                <h2 className={styles.contentTitle}>
+                  <span className={styles.contentIcon}>
+                    {getMenuIcon(activeMenu)}
+                  </span>
+                  {getMenuTitle(activeMenu)}
+                </h2>
+              </div>
+
+              <div className={styles.contentBody}>{renderActiveMenu()}</div>
+            </Card>
+          </div>
         </div>
       </div>
 

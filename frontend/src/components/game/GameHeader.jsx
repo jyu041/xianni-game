@@ -1,14 +1,8 @@
+// frontend/src/components/game/GameHeader.jsx
 import { useState } from "react";
 import styles from "./GameHeader.module.css";
 
-const GameHeader = ({
-  playerData,
-  onMenuSelect,
-  onShowAllLevels,
-  onBackToHome,
-}) => {
-  const [showMenuDropdown, setShowMenuDropdown] = useState(false);
-
+const GameHeader = ({ playerData, onBackToHome }) => {
   const getCultivationLevel = (level) => {
     if (level <= 10) return { name: "练气期", color: "#8fbc8f" };
     if (level <= 20) return { name: "筑基期", color: "#4682b4" };
@@ -31,15 +25,6 @@ const GameHeader = ({
   };
 
   const cultivation = getCultivationLevel(playerData.level);
-
-  const menuItems = [
-    { id: "stages", label: "关卡选择", icon: "⚔️" },
-    { id: "inventory", label: "法宝背包", icon: "🎒" },
-    { id: "store", label: "修仙商店", icon: "🏪" },
-    { id: "upgrades", label: "功法升级", icon: "📚" },
-    { id: "gacha", label: "天机抽取", icon: "🎲" },
-    { id: "achievements", label: "修仙成就", icon: "🏆" },
-  ];
 
   return (
     <div className={styles.gameHeader}>
@@ -79,36 +64,7 @@ const GameHeader = ({
       </div>
 
       <div className={styles.centerSection}>
-        <div className={styles.menuDropdown}>
-          <button
-            className={styles.menuButton}
-            onClick={() => setShowMenuDropdown(!showMenuDropdown)}
-          >
-            功能菜单 ▼
-          </button>
-
-          {showMenuDropdown && (
-            <div className={styles.dropdownMenu}>
-              {menuItems.map((item) => (
-                <button
-                  key={item.id}
-                  className={styles.dropdownItem}
-                  onClick={() => {
-                    onMenuSelect(item.id);
-                    setShowMenuDropdown(false);
-                  }}
-                >
-                  <span className={styles.itemIcon}>{item.icon}</span>
-                  <span className={styles.itemLabel}>{item.label}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <button className={styles.allLevelsButton} onClick={onShowAllLevels}>
-          全部关卡
-        </button>
+        {/* Center section can be used for game title or status indicators */}
       </div>
 
       <div className={styles.rightSection}>
