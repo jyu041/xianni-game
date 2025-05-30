@@ -8,26 +8,27 @@ const LevelSelector = ({
   onStageSelect,
   onShowAllStages,
   totalStages = 10,
+  stages = [],
 }) => {
   const [selectedStage, setSelectedStage] = useState(currentStage);
 
-  const stages = [
-    { id: 1, name: "青云山脉", difficulty: "简单", boss: "山林虎王" },
-    { id: 2, name: "幽暗森林", difficulty: "简单", boss: "黑狼妖王" },
-    { id: 3, name: "迷雾沼泽", difficulty: "普通", boss: "毒蛛女王" },
-    { id: 4, name: "烈焰峡谷", difficulty: "普通", boss: "炎龙" },
-    { id: 5, name: "冰霜雪域", difficulty: "困难", boss: "冰霜巨人" },
-    { id: 6, name: "雷电高原", difficulty: "困难", boss: "雷鸟" },
-    { id: 7, name: "暗影深渊", difficulty: "地狱", boss: "深渊领主" },
-    { id: 8, name: "天界云海", difficulty: "地狱", boss: "天将" },
-    { id: 9, name: "混沌虚空", difficulty: "噩梦", boss: "虚空君主" },
-    { id: 10, name: "仙界禁地", difficulty: "噩梦", boss: "仙帝" },
+  // Use backend stages data or fallback to hardcoded data
+  const defaultStages = [
+    { stageId: 1, name: "青云山脉", difficulty: "简单", boss: "山林虎王" },
+    { stageId: 2, name: "幽暗森林", difficulty: "简单", boss: "黑狼妖王" },
+    { stageId: 3, name: "迷雾沼泽", difficulty: "普通", boss: "毒蛛女王" },
+    { stageId: 4, name: "烈焰峡谷", difficulty: "普通", boss: "炎龙" },
+    { stageId: 5, name: "冰霜雪域", difficulty: "困难", boss: "冰霜巨人" },
+    { stageId: 6, name: "雷电高原", difficulty: "困难", boss: "雷鸟" },
+    { stageId: 7, name: "暗影深渊", difficulty: "地狱", boss: "深渊领主" },
+    { stageId: 8, name: "天界云海", difficulty: "地狱", boss: "天将" },
+    { stageId: 9, name: "混沌虚空", difficulty: "噩梦", boss: "虚空君主" },
+    { stageId: 10, name: "仙界禁地", difficulty: "噩梦", boss: "仙帝" },
   ];
 
+  const stageList = stages.length > 0 ? stages : defaultStages;
   const currentStageData =
-    stages.find((s) => s.id === selectedStage) || stages[0];
-  const isUnlocked = unlockedStages.includes(selectedStage);
-  const isCurrent = selectedStage === currentStage;
+    stageList.find((s) => s.stageId === selectedStage) || stageList[0];
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {

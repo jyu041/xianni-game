@@ -3,6 +3,7 @@ import Button from "../ui/Button";
 import Card from "../ui/Card";
 import SaveSlotList from "../game/SaveSlotList";
 import ResponsiveLayout from "../layout/ResponsiveLayout";
+import playerService from "../services/playerService";
 import styles from "./HomePage.module.css";
 
 const HomePage = ({ onNavigate }) => {

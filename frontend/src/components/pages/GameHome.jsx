@@ -5,6 +5,8 @@ import GameHeader from "../game/GameHeader";
 import SidebarMenu from "../game/SidebarMenu";
 import LevelSelector from "../game/LevelSelector";
 import StageModal from "../game/StageModal";
+import playerService from "../services/playerService";
+import stageService from "../services/stageService";
 import styles from "./GameHome.module.css";
 
 const GameHome = ({ saveData, onNavigate }) => {

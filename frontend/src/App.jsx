@@ -8,8 +8,11 @@ function App() {
   const [currentPage, setCurrentPage] = useState("home");
   const [currentSave, setCurrentSave] = useState(null);
 
-  const navigateTo = (page) => {
+  const navigateTo = (page, data = null) => {
     setCurrentPage(page);
+    if (data) {
+      setCurrentSave(data);
+    }
   };
 
   const selectSave = (saveData) => {
