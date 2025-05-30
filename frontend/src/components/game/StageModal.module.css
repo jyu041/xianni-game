@@ -1,0 +1,407 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modalContent {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(247, 250, 252, 0.95));
+  border-radius: 20px;
+  border: 2px solid rgba(138, 43, 226, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid rgba(138, 43, 226, 0.2);
+  background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(147, 112, 219, 0.1));
+}
+
+.modalTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2d1b69;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.closeButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  color: #ff6b6b;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  background: rgba(255, 107, 107, 0.2);
+  transform: scale(1.1);
+}
+
+.stageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.stageCard {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(247, 250, 252, 0.9));
+  border: 2px solid rgba(138, 43, 226, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.stageCard:hover:not(.locked) {
+  transform: translateY(-3px);
+  border-color: rgba(138, 43, 226, 0.4);
+  box-shadow: 0 8px 25px rgba(138, 43, 226, 0.2);
+}
+
+.stageCard.selected {
+  border-color: #4caf50;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(69, 160, 73, 0.1));
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+}
+
+.stageCard.current {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 223, 0, 0.05));
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.stageCard.locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.stageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.stageNumber {
+  background: linear-gradient(45deg, #8a2be2, #9370db);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.85rem;
+  box-shadow: 0 3px 8px rgba(138, 43, 226, 0.3);
+  flex-shrink: 0;
+}
+
+.stageName {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0 0.75rem;
+  text-align: center;
+}
+
+.difficulty {
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+.stageContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.stageInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(138, 43, 226, 0.1);
+}
+
+.infoRow:last-child {
+  border-bottom: none;
+}
+
+.infoLabel {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.infoValue {
+  font-size: 0.8rem;
+  color: #333;
+  font-weight: 600;
+  text-align: right;
+}
+
+.lockOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+  border-radius: 10px;
+}
+
+.lockOverlay .lockIcon {
+  font-size: 2.5rem;
+  opacity: 0.7;
+}
+
+.currentBadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ffd700;
+  color: #333;
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 0.15rem 0.4rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.selectedIndicator {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #4caf50;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 2px solid rgba(138, 43, 226, 0.2);
+  background: linear-gradient(135deg, rgba(138, 43, 226, 0.05), rgba(147, 112, 219, 0.05));
+}
+
+.cancelButton {
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: #666;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.cancelButton:hover {
+  background: rgba(0, 0, 0, 0.2);
+  color: #333;
+}
+
+.confirmButton {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, #4caf50, #45a049);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.confirmButton:hover:not(.disabled) {
+  background: linear-gradient(45deg, #45a049, #4caf50);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.confirmButton.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Custom Scrollbar for Stage Grid */
+.stageGrid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.stageGrid::-webkit-scrollbar-track {
+  background: rgba(138, 43, 226, 0.1);
+  border-radius: 4px;
+}
+
+.stageGrid::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #8a2be2, #9370db);
+  border-radius: 4px;
+}
+
+.stageGrid::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #9370db, #8a2be2);
+}
+
+/* Mobile Styles */
+@media (max-width: 767px) {
+  .modalContent {
+    margin: 0.5rem;
+    max-height: 95vh;
+  }
+
+  .modalHeader {
+    padding: 1rem;
+  }
+
+  .modalTitle {
+    font-size: 1.2rem;
+  }
+
+  .stageGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 1rem;
+    max-height: 50vh;
+  }
+
+  .stageCard {
+    padding: 0.75rem;
+  }
+
+  .stageHeader {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .stageName {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+
+  .modalActions {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .cancelButton,
+  .confirmButton {
+    width: 100%;
+    padding: 0.875rem 1rem;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .stageGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .modalContent {
+    max-width: 800px;
+  }
+}
+
+/* Large Desktop Styles */
+@media (min-width: 1440px) {
+  .modalContent {
+    max-width: 1200px;
+  }
+
+  .stageGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding: 2rem;
+  }
+
+  .stageCard {
+    padding: 1.5rem;
+  }
+
+  .modalHeader,
+  .modalActions {
+    padding: 2rem;
+  }
+}

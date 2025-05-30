@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import Button from "../ui/Button";
 import Card from "../ui/Card";
-import PlayerStats from "../game/PlayerStats";
-import StageSelection from "../game/StageSelection";
-import MenuNavigation from "../game/MenuNavigation";
+import GameHeader from "../game/GameHeader";
+import LevelSelector from "../game/LevelSelector";
+import StageModal from "../game/StageModal";
 import styles from "./GameHome.module.css";
 
 const GameHome = ({ saveData, onNavigate }) => {
   const [activeMenu, setActiveMenu] = useState("stages");
   const [playerData, setPlayerData] = useState(saveData);
+  const [showAllStages, setShowAllStages] = useState(false);
 
   useEffect(() => {
     // Update last played time
@@ -41,57 +41,87 @@ const GameHome = ({ saveData, onNavigate }) => {
     // onNavigate('gameLevel', { stageId })
   };
 
+  const handleShowAllStages = () => {
+    setShowAllStages(true);
+  };
+
+  const handleCloseStageModal = () => {
+    setShowAllStages(false);
+  };
+
   const renderActiveMenu = () => {
     switch (activeMenu) {
       case "stages":
         return (
-          <StageSelection
-            unlockedStages={playerData.unlockedStages || [1]}
+          <LevelSelector
+            unlockedStages={playerData.unlockedStages || [1, 2, 3]}
             currentStage={playerData.currentStage || 1}
             onStageSelect={handleStageSelect}
+            totalStages={10}
           />
         );
       case "inventory":
         return (
           <div className={styles.menuContent}>
-            <h3>背包系统</h3>
-            <p>背包功能开发中...</p>
+            <div className={styles.comingSoon}>
+              <div className={styles.comingSoonIcon}>🎒</div>
+              <h3>法宝背包</h3>
+              <p>背包系统正在开发中...</p>
+              <p>敬请期待更多精彩内容！</p>
+            </div>
           </div>
         );
       case "store":
         return (
           <div className={styles.menuContent}>
-            <h3>修仙商店</h3>
-            <p>商店功能开发中...</p>
+            <div className={styles.comingSoon}>
+              <div className={styles.comingSoonIcon}>🏪</div>
+              <h3>修仙商店</h3>
+              <p>商店功能正在开发中...</p>
+              <p>敬请期待更多精彩内容！</p>
+            </div>
           </div>
         );
       case "upgrades":
         return (
           <div className={styles.menuContent}>
-            <h3>功法升级</h3>
-            <p>升级系统开发中...</p>
+            <div className={styles.comingSoon}>
+              <div className={styles.comingSoonIcon}>📚</div>
+              <h3>功法升级</h3>
+              <p>升级系统正在开发中...</p>
+              <p>敬请期待更多精彩内容！</p>
+            </div>
           </div>
         );
       case "gacha":
         return (
           <div className={styles.menuContent}>
-            <h3>天机抽取</h3>
-            <p>抽取系统开发中...</p>
+            <div className={styles.comingSoon}>
+              <div className={styles.comingSoonIcon}>🎲</div>
+              <h3>天机抽取</h3>
+              <p>抽取系统正在开发中...</p>
+              <p>敬请期待更多精彩内容！</p>
+            </div>
           </div>
         );
       case "achievements":
         return (
           <div className={styles.menuContent}>
-            <h3>成就系统</h3>
-            <p>成就功能开发中...</p>
+            <div className={styles.comingSoon}>
+              <div className={styles.comingSoonIcon}>🏆</div>
+              <h3>修仙成就</h3>
+              <p>成就系统正在开发中...</p>
+              <p>敬请期待更多精彩内容！</p>
+            </div>
           </div>
         );
       default:
         return (
-          <StageSelection
-            unlockedStages={playerData.unlockedStages || [1]}
+          <LevelSelector
+            unlockedStages={playerData.unlockedStages || [1, 2, 3]}
             currentStage={playerData.currentStage || 1}
             onStageSelect={handleStageSelect}
+            totalStages={10}
           />
         );
     }
@@ -108,62 +138,27 @@ const GameHome = ({ saveData, onNavigate }) => {
       </div>
 
       <div className={styles.content}>
-        <div className={styles.header}>
-          <Button
-            variant="ghost"
-            onClick={() => onNavigate("home")}
-            className={styles.backButton}
-          >
-            ← 返回主菜单
-          </Button>
+        <GameHeader
+          playerData={playerData}
+          onMenuSelect={handleMenuSelect}
+          onShowAllLevels={handleShowAllStages}
+          onBackToHome={() => onNavigate("home")}
+        />
 
-          <div className={styles.playerInfo}>
-            <h2 className={styles.playerName}>{playerData.playerName}</h2>
-            <p className={styles.cultivation}>
-              修为: {getCultivationLevel(playerData.level)}
-            </p>
-          </div>
-
-          <div className={styles.debugMenu}>
-            <Button
-              variant="ghost"
-              onClick={() => setActiveMenu("debug")}
-              className={styles.debugButton}
-            >
-              调试菜单
-            </Button>
-          </div>
-        </div>
-
-        <div className={styles.gameLayout}>
-          <div className={styles.leftPanel}>
-            <PlayerStats playerData={playerData} />
-            <MenuNavigation
-              activeMenu={activeMenu}
-              onMenuSelect={handleMenuSelect}
-            />
-          </div>
-
-          <div className={styles.mainPanel}>
-            <Card className={styles.mainContent}>{renderActiveMenu()}</Card>
-          </div>
+        <div className={styles.mainPanel}>
+          <Card className={styles.mainContent}>{renderActiveMenu()}</Card>
         </div>
       </div>
+
+      <StageModal
+        isOpen={showAllStages}
+        onClose={handleCloseStageModal}
+        unlockedStages={playerData.unlockedStages || [1, 2, 3]}
+        currentStage={playerData.currentStage || 1}
+        onStageSelect={handleStageSelect}
+      />
     </div>
   );
-};
-
-// Helper function to get cultivation level name
-const getCultivationLevel = (level) => {
-  if (level <= 10) return "练气期";
-  if (level <= 20) return "筑基期";
-  if (level <= 30) return "金丹期";
-  if (level <= 40) return "元婴期";
-  if (level <= 50) return "化神期";
-  if (level <= 60) return "炼虚期";
-  if (level <= 70) return "合体期";
-  if (level <= 80) return "大乘期";
-  return "渡劫期";
 };
 
 export default GameHome;
