@@ -57,6 +57,13 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
     onDebugChange("playerAttackSpeed", limitedValue);
   };
 
+  const handleAttackRangeChange = (e) => {
+    const value = parseInt(e.target.value);
+    // Ensure minimum attack range of 1
+    const limitedValue = Math.max(1, value);
+    onDebugChange("playerAttackRange", limitedValue);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -103,41 +110,42 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
           <div className={styles.debugSection}>
             <h4 className="game-text-large">Player Settings</h4>
 
-            <div className={styles.inputGroup}>
-              <label className="game-text-small">Attack Speed (ms):</label>
+            <div className={styles.sliderGroup}>
+              <label className="game-text-small">
+                Attack Speed: {debugSettings.playerAttackSpeed}ms
+              </label>
               <input
-                type="number"
+                type="range"
                 min="50"
-                max="2000"
+                max="5000"
                 step="50"
                 value={debugSettings.playerAttackSpeed}
                 onChange={handleAttackSpeedChange}
-                className="game-text-small"
+                className={styles.slider}
               />
-              <small
-                className="game-text-small"
-                style={{
-                  color: "rgba(255, 255, 255, 0.6)",
-                  marginTop: "0.25rem",
-                }}
-              >
-                Minimum: 50ms
-              </small>
+              <div className={styles.sliderLabels}>
+                <span className="game-text-small">50ms</span>
+                <span className="game-text-small">5000ms</span>
+              </div>
             </div>
 
-            <div className={styles.inputGroup}>
-              <label className="game-text-small">Attack Range:</label>
+            <div className={styles.sliderGroup}>
+              <label className="game-text-small">
+                Attack Range: {debugSettings.playerAttackRange}px
+              </label>
               <input
-                type="number"
-                min="50"
-                max="300"
+                type="range"
+                min="1"
+                max="2000"
                 step="10"
                 value={debugSettings.playerAttackRange}
-                onChange={(e) =>
-                  onDebugChange("playerAttackRange", parseInt(e.target.value))
-                }
-                className="game-text-small"
+                onChange={handleAttackRangeChange}
+                className={styles.slider}
               />
+              <div className={styles.sliderLabels}>
+                <span className="game-text-small">1px</span>
+                <span className="game-text-small">2000px</span>
+              </div>
             </div>
           </div>
 

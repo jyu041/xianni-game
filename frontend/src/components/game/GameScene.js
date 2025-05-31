@@ -168,12 +168,8 @@ class GameScene extends Phaser.Scene {
       }
     });
 
-    // Player-Soul collisions with range detection
-    this.physics.add.overlap(this.playerController.player, this.souls, (player, soul) => {
-      if (soul.isSoul) {
-        this.playerController.collectSoul(soul);
-      }
-    });
+    // Remove automatic soul collection overlap - now handled manually in PlayerController
+    // This prevents the buggy collection system
   }
 
   update() {

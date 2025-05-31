@@ -9,6 +9,7 @@ class PlayerController {
     this.iFrames = 1000; // Invincibility frames duration in ms
     this.lastHitTime = 0;
     this.debugGraphics = null;
+    this.soulCollectionRange = 50; // Range for soul collection
   }
 
   createPlayer() {
@@ -47,6 +48,7 @@ class PlayerController {
     this.handleInput();
     this.updateDebugRange();
     this.updateAttackRange();
+    this.checkSoulCollection();
   }
 
   updateDebugRange() {
@@ -73,6 +75,26 @@ class PlayerController {
     if (debugSettings && debugSettings.playerAttackRange) {
       this.attackRange = debugSettings.playerAttackRange;
     }
+  }
+
+  checkSoulCollection() {
+    // Manually check for soul collection with improved detection
+    if (!this.scene.souls || !this.scene.souls.children) return;
+
+    const souls = this.scene.souls.children.entries.slice(); // Create copy to avoid modification during iteration
+    
+    souls.forEach(soul => {
+      if (!soul.active || !soul.isSoul || !soul.isCollectable) return;
+      
+      const distance = Phaser.Math.Distance.Between(
+        this.player.x, this.player.y, 
+        soul.x, soul.y
+      );
+      
+      if (distance <= this.soulCollectionRange) {
+        this.collectSoul(soul);
+      }
+    });
   }
 
   handleInput() {
@@ -271,6 +293,11 @@ class PlayerController {
   }
 
   collectSoul(soul) {
+    if (!soul.isCollectable || !soul.isSoul) return;
+    
+    // Mark as not collectable immediately to prevent double collection
+    soul.isCollectable = false;
+    
     if (this.scene.gameStateRef) {
       this.scene.gameStateRef.soulCount = (this.scene.gameStateRef.soulCount || 0) + soul.soulValue;
     }
@@ -281,17 +308,19 @@ class PlayerController {
 
   createSoulCollectionAnimation(soul) {
     // Create a tiny glowing circle that moves to player
-    const collectEffect = this.scene.add.circle(soul.x, soul.y, 4, 0x00ffff, 1);
-    collectEffect.setStrokeStyle(1, 0xffffff, 0.8);
+    const collectEffect = this.scene.add.circle(soul.x, soul.y, 6, 0x00ffff, 1);
+    collectEffect.setStrokeStyle(2, 0xffffff, 0.8);
     
     // Add glow effect
-    const glow = this.scene.add.circle(soul.x, soul.y, 8, 0x00ffff, 0.3);
+    const glow = this.scene.add.circle(soul.x, soul.y, 12, 0x00ffcc, 0.4);
     
-    // Move upward slightly, shrink, and move to player
+    // Move upward slightly, then move to player
     this.scene.tweens.add({
       targets: [collectEffect, glow],
-      y: soul.y - 10,
-      duration: 200,
+      y: soul.y - 15,
+      scaleX: 1.5,
+      scaleY: 1.5,
+      duration: 150,
       ease: 'Power2.easeOut',
       onComplete: () => {
         // Move to player center
@@ -299,10 +328,10 @@ class PlayerController {
           targets: [collectEffect, glow],
           x: this.player.x,
           y: this.player.y,
-          scaleX: 0.1,
-          scaleY: 0.1,
+          scaleX: 0.2,
+          scaleY: 0.2,
           alpha: 0,
-          duration: 300,
+          duration: 250,
           ease: 'Power2.easeIn',
           onComplete: () => {
             collectEffect.destroy();
@@ -312,8 +341,13 @@ class PlayerController {
       }
     });
     
-    // Destroy the original soul
-    soul.destroy();
+    // Destroy the original soul after a small delay
+    this.scene.time.delayedCall(50, () => {
+      if (soul.body) {
+        soul.body.destroy();
+      }
+      soul.destroy();
+    });
   }
 
   hitPlayer() {

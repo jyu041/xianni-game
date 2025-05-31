@@ -203,8 +203,10 @@ class EnemyManager {
     
     if (this.scene.anims.exists(attackAnimKey)) {
       enemy.play(attackAnimKey);
-      enemy.once('animationcomplete', () => {
-        if (!enemy.isDead) {
+      
+      // Use a timer instead of animation complete to ensure enemy gets unstuck
+      this.scene.time.delayedCall(800, () => {
+        if (!enemy.isDead && enemy.active) {
           this.dealAttackDamage(enemy, player);
           enemy.isAttacking = false;
         }
@@ -212,7 +214,7 @@ class EnemyManager {
     } else {
       this.dealAttackDamage(enemy, player);
       this.scene.time.delayedCall(500, () => {
-        if (!enemy.isDead) {
+        if (!enemy.isDead && enemy.active) {
           enemy.isAttacking = false;
         }
       });
@@ -300,15 +302,16 @@ class EnemyManager {
     return enemy;
   }
 
-  // Simplified soul drop creation to avoid freezing
+  // Completely overhauled soul drop system
   createSoulDrop(x, y) {
-    // Create a simple blue circle soul instead of using enemy sprites
-    const soul = this.scene.add.circle(x, y, 12, 0x4444ff, 0.8);
-    soul.setStrokeStyle(2, 0x6666ff, 0.6);
+    // Create a simple aqua blue circle soul
+    const soul = this.scene.add.circle(x, y, 8, 0x00ffcc, 0.9);
+    soul.setStrokeStyle(2, 0x00ffff, 0.8);
     
-    // Add physics for collection
+    // Add physics for collection with proper collision box
     this.scene.physics.add.existing(soul);
-    soul.body.setSize(24, 24); // Collision box
+    soul.body.setSize(32, 32); // Larger collision box for easier pickup
+    soul.body.setImmovable(true); // Soul doesn't move when touched
     
     // Add to souls group for collection
     if (!this.scene.souls) {
@@ -319,12 +322,15 @@ class EnemyManager {
     // Set soul properties
     soul.soulValue = 1;
     soul.isSoul = true;
+    soul.isCollectable = true;
     
     // Gentle pulsing glow effect
     this.scene.tweens.add({
       targets: soul,
-      alpha: 0.5,
-      duration: 1000,
+      alpha: 0.6,
+      scaleX: 1.2,
+      scaleY: 1.2,
+      duration: 800,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut'
@@ -333,24 +339,34 @@ class EnemyManager {
     // Add subtle floating
     this.scene.tweens.add({
       targets: soul,
-      y: soul.y - 5,
-      duration: 1500,
+      y: soul.y - 3,
+      duration: 1200,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut'
     });
     
-    // Auto-expire after 60 seconds
-    this.scene.time.delayedCall(60000, () => {
+    // Auto-expire after 45 seconds with fade out
+    this.scene.time.delayedCall(45000, () => {
       if (soul && soul.active) {
+        soul.isCollectable = false;
         this.scene.tweens.add({
           targets: soul,
           alpha: 0,
+          scaleX: 0.1,
+          scaleY: 0.1,
           duration: 2000,
-          onComplete: () => soul.destroy()
+          onComplete: () => {
+            if (soul.body) {
+              soul.body.destroy();
+            }
+            soul.destroy();
+          }
         });
       }
     });
+    
+    return soul;
   }
 }
 

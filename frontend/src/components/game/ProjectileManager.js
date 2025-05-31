@@ -55,8 +55,10 @@ class ProjectileManager {
         enemy.isAttacking = true; // Prevent movement during hit
         
         enemy.play(animKey);
-        enemy.once('animationcomplete', () => {
-          if (!enemy.isDead) {
+        
+        // Use timer instead of animation complete to prevent freezing
+        this.scene.time.delayedCall(400, () => {
+          if (!enemy.isDead && enemy.active) {
             enemy.isAttacking = wasAttacking; // Restore previous state
           }
         });
@@ -83,76 +85,90 @@ class ProjectileManager {
       this.scene.enemyManager.hideEnemyHealthBar(enemy);
     }
 
-    // Create death effects immediately
-    this.createDeathEffect(enemy);
-
-    // Create soul drop using simple method
-    if (this.scene.enemyManager) {
-      this.scene.enemyManager.createSoulDrop(enemy.x, enemy.y);
-    }
-
-    // Handle death animation or immediate destruction
-    if (enemy.enemyType) {
-      const deathAnimKey = `enemy_${enemy.enemyType}_death_anim`;
-      const deadAnimKey = `enemy_${enemy.enemyType}_dead_anim`;
-      
-      // Try death animation first, then dead animation
-      let animKey = this.scene.anims.exists(deathAnimKey) ? deathAnimKey : 
-                   this.scene.anims.exists(deadAnimKey) ? deadAnimKey : null;
-      
-      if (animKey) {
-        enemy.play(animKey);
-        
-        enemy.once('animationcomplete', () => {
-          enemy.destroy();
-        });
-      } else {
-        // No death animation, destroy immediately
-        enemy.destroy();
-      }
-    } else {
-      // Basic enemy, destroy immediately
-      enemy.destroy();
-    }
+    // Start the new death sequence
+    this.startDeathSequence(enemy);
   }
 
-  createDeathEffect(enemy) {
-    // Create explosion effect
-    const explosion = this.scene.add.circle(enemy.x, enemy.y, 10, 0xff4444, 0.8);
+  startDeathSequence(enemy) {
+    // Stop all enemy animations and movement
+    enemy.anims.stop();
+    enemy.setVelocity(0, 0);
     
-    this.scene.tweens.add({
-      targets: explosion,
-      scaleX: 3,
-      scaleY: 3,
-      alpha: 0,
-      duration: 400,
-      ease: 'Power2',
-      onComplete: () => explosion.destroy()
+    // Phase 1: Glow aqua blue for 500ms
+    enemy.setTint(0x00ffcc);
+    
+    // Add pulsing glow effect
+    const glowTween = this.scene.tweens.add({
+      targets: enemy,
+      alpha: 0.7,
+      scaleX: enemy.scaleX * 1.1,
+      scaleY: enemy.scaleY * 1.1,
+      duration: 100,
+      yoyo: true,
+      repeat: 4, // 5 total pulses over 500ms
+      ease: 'Sine.easeInOut'
     });
 
-    // Create particles effect
-    for (let i = 0; i < 6; i++) {
+    // Phase 2: After 500ms, shrink to a glowing dot and create soul
+    this.scene.time.delayedCall(500, () => {
+      if (!enemy.active) return;
+      
+      // Create explosion particles before shrinking
+      this.createDeathParticles(enemy);
+      
+      // Shrink enemy to a tiny glowing dot
+      this.scene.tweens.add({
+        targets: enemy,
+        scaleX: 0.1,
+        scaleY: 0.1,
+        alpha: 0.8,
+        duration: 300,
+        ease: 'Power2.easeIn',
+        onComplete: () => {
+          // Create soul drop at enemy position
+          if (this.scene.enemyManager) {
+            this.scene.enemyManager.createSoulDrop(enemy.x, enemy.y);
+          }
+          
+          // Destroy the enemy
+          enemy.destroy();
+        }
+      });
+    });
+  }
+
+  createDeathParticles(enemy) {
+    // Create simple particle burst effect
+    for (let i = 0; i < 8; i++) {
+      const angle = (Math.PI * 2 * i) / 8;
       const particle = this.scene.add.circle(
-        enemy.x + Phaser.Math.Between(-10, 10),
-        enemy.y + Phaser.Math.Between(-10, 10),
-        Phaser.Math.Between(2, 5),
-        0xffaa00,
-        0.7
+        enemy.x,
+        enemy.y,
+        Phaser.Math.Between(2, 4),
+        0x00ffcc,
+        0.8
       );
 
       this.scene.tweens.add({
         targets: particle,
-        x: particle.x + Phaser.Math.Between(-30, 30),
-        y: particle.y + Phaser.Math.Between(-30, 30),
+        x: enemy.x + Math.cos(angle) * Phaser.Math.Between(20, 40),
+        y: enemy.y + Math.sin(angle) * Phaser.Math.Between(20, 40),
         alpha: 0,
-        duration: Phaser.Math.Between(300, 600),
-        ease: 'Power2',
+        scaleX: 0.1,
+        scaleY: 0.1,
+        duration: Phaser.Math.Between(200, 400),
+        ease: 'Power2.easeOut',
         onComplete: () => particle.destroy()
       });
     }
 
     // Screen shake effect
     this.scene.cameras.main.shake(100, 0.01);
+  }
+
+  createDeathEffect(enemy) {
+    // Legacy method - now handled by startDeathSequence
+    this.startDeathSequence(enemy);
   }
 
   showEnemyHitEffect(enemy) {
