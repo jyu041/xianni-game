@@ -1,11 +1,13 @@
 // frontend/src/components/pages/GameLevel.jsx
 import { useState, useEffect, useRef, useCallback } from "react";
+import GameLevelHeader from "../game/GameLevelHeader";
 import gameSessionService from "../services/gameSessionService";
 import styles from "./GameLevel.module.css";
 
 const GameLevel = ({ stageData, playerData, onGameEnd }) => {
   const canvasRef = useRef(null);
   const gameLoopRef = useRef(null);
+  const lastFireTime = useRef(0);
   const [gameState, setGameState] = useState({
     player: {
       x: 400,
@@ -27,7 +29,6 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
   });
 
   const keys = useRef({});
-  const mouse = useRef({ x: 0, y: 0 });
 
   // Initialize game session
   useEffect(() => {
@@ -46,23 +47,54 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
     initGame();
   }, [playerData.id, stageData.stageId]);
 
+  // Input handling
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      keys.current[e.key.toLowerCase()] = true;
+    };
+
+    const handleKeyUp = (e) => {
+      keys.current[e.key.toLowerCase()] = false;
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
+
   // Game loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
-    canvas.width = 800;
-    canvas.height = 600;
+
+    // Set canvas size to fill the screen
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight - 80; // Account for header height
+    };
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
 
     const gameLoop = () => {
       if (gameState.isPaused || gameState.isGameOver) return;
 
+      // Clear canvas
+      ctx.fillStyle = "#001122";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
       // Update game state
-      updatePlayer();
+      updatePlayer(canvas);
       updateEnemies();
-      updateProjectiles();
-      spawnEnemies();
+      updateProjectiles(canvas);
+      spawnEnemies(canvas);
+      autoFire();
 
       // Check collisions
       checkCollisions();
@@ -80,38 +112,11 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
       if (gameLoopRef.current) {
         clearInterval(gameLoopRef.current);
       }
+      window.removeEventListener("resize", resizeCanvas);
     };
   }, [gameState.isPaused, gameState.isGameOver]);
 
-  // Input handling
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      keys.current[e.key.toLowerCase()] = true;
-    };
-
-    const handleKeyUp = (e) => {
-      keys.current[e.key.toLowerCase()] = false;
-    };
-
-    const handleMouseMove = (e) => {
-      const canvas = canvasRef.current;
-      const rect = canvas.getBoundingClientRect();
-      mouse.current.x = e.clientX - rect.left;
-      mouse.current.y = e.clientY - rect.top;
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-    canvasRef.current?.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-      canvasRef.current?.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
-
-  const updatePlayer = () => {
+  const updatePlayer = (canvas) => {
     setGameState((prev) => {
       const newPlayer = { ...prev.player };
 
@@ -126,8 +131,8 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
         newPlayer.x += newPlayer.speed;
 
       // Boundary checking
-      newPlayer.x = Math.max(25, Math.min(775, newPlayer.x));
-      newPlayer.y = Math.max(25, Math.min(575, newPlayer.y));
+      newPlayer.x = Math.max(25, Math.min(canvas.width - 25, newPlayer.x));
+      newPlayer.y = Math.max(25, Math.min(canvas.height - 25, newPlayer.y));
 
       return { ...prev, player: newPlayer };
     });
@@ -153,7 +158,7 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
     });
   };
 
-  const updateProjectiles = () => {
+  const updateProjectiles = (canvas) => {
     setGameState((prev) => {
       const newProjectiles = prev.projectiles
         .map((projectile) => ({
@@ -164,37 +169,37 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
         .filter(
           (projectile) =>
             projectile.x >= 0 &&
-            projectile.x <= 800 &&
+            projectile.x <= canvas.width &&
             projectile.y >= 0 &&
-            projectile.y <= 600
+            projectile.y <= canvas.height
         );
 
       return { ...prev, projectiles: newProjectiles };
     });
   };
 
-  const spawnEnemies = () => {
+  const spawnEnemies = (canvas) => {
     setGameState((prev) => {
       if (prev.enemies.length < 20 && Math.random() < 0.02) {
         const side = Math.floor(Math.random() * 4);
         let x, y;
 
         switch (side) {
-          case 0:
-            x = Math.random() * 800;
+          case 0: // Top
+            x = Math.random() * canvas.width;
             y = -20;
             break;
-          case 1:
-            x = 820;
-            y = Math.random() * 600;
+          case 1: // Right
+            x = canvas.width + 20;
+            y = Math.random() * canvas.height;
             break;
-          case 2:
-            x = Math.random() * 800;
-            y = 620;
+          case 2: // Bottom
+            x = Math.random() * canvas.width;
+            y = canvas.height + 20;
             break;
-          default:
+          default: // Left
             x = -20;
-            y = Math.random() * 600;
+            y = Math.random() * canvas.height;
             break;
         }
 
@@ -203,8 +208,9 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
           x,
           y,
           health: 50,
-          speed: 1 + Math.random(),
+          speed: 1 + Math.random() * 2,
           size: 15,
+          type: Math.floor(Math.random() * 3), // Different enemy types
         };
 
         return { ...prev, enemies: [...prev.enemies, newEnemy] };
@@ -213,30 +219,87 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
     });
   };
 
+  const autoFire = () => {
+    const now = Date.now();
+    if (now - lastFireTime.current < 300) return; // Fire rate limit
+
+    setGameState((prev) => {
+      if (prev.enemies.length === 0) return prev;
+
+      // Auto-aim at nearest enemy
+      const nearestEnemy = prev.enemies.reduce(
+        (nearest, enemy) => {
+          const dx = prev.player.x - enemy.x;
+          const dy = prev.player.y - enemy.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          return distance < nearest.distance ? { enemy, distance } : nearest;
+        },
+        { enemy: null, distance: Infinity }
+      );
+
+      if (nearestEnemy.enemy) {
+        const dx = nearestEnemy.enemy.x - prev.player.x;
+        const dy = nearestEnemy.enemy.y - prev.player.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        const projectile = {
+          id: Date.now() + Math.random(),
+          x: prev.player.x,
+          y: prev.player.y,
+          vx: (dx / distance) * 8,
+          vy: (dy / distance) * 8,
+          size: 5,
+        };
+
+        lastFireTime.current = now;
+        return {
+          ...prev,
+          projectiles: [...prev.projectiles, projectile],
+        };
+      }
+
+      return prev;
+    });
+  };
+
   const checkCollisions = () => {
     setGameState((prev) => {
       let newState = { ...prev };
+      let scoreGained = 0;
+      let expGained = 0;
 
       // Projectile-Enemy collisions
-      newState.projectiles.forEach((projectile, pIndex) => {
-        newState.enemies.forEach((enemy, eIndex) => {
+      for (
+        let pIndex = newState.projectiles.length - 1;
+        pIndex >= 0;
+        pIndex--
+      ) {
+        const projectile = newState.projectiles[pIndex];
+
+        for (let eIndex = newState.enemies.length - 1; eIndex >= 0; eIndex--) {
+          const enemy = newState.enemies[eIndex];
           const dx = projectile.x - enemy.x;
           const dy = projectile.y - enemy.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < enemy.size + 5) {
+          if (distance < enemy.size + projectile.size) {
             // Hit enemy
-            newState.enemies[eIndex].health -= 25;
+            newState.enemies[eIndex] = {
+              ...enemy,
+              health: enemy.health - 25,
+            };
             newState.projectiles.splice(pIndex, 1);
 
             if (newState.enemies[eIndex].health <= 0) {
-              newState.score += 10;
-              newState.experience += 5;
+              scoreGained += 10;
+              expGained += 5;
               newState.enemies.splice(eIndex, 1);
             }
+            break;
           }
-        });
-      });
+        }
+      }
 
       // Player-Enemy collisions
       newState.enemies.forEach((enemy) => {
@@ -245,7 +308,7 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < enemy.size + 15) {
-          newState.player.health -= 1;
+          newState.player.health = Math.max(0, newState.player.health - 0.5);
           if (newState.player.health <= 0) {
             newState.isGameOver = true;
             endGame("died");
@@ -253,85 +316,74 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
         }
       });
 
+      newState.score += scoreGained;
+      newState.experience += expGained;
+
       return newState;
     });
   };
 
-  const fireProjectile = useCallback(() => {
-    if (gameState.enemies.length === 0) return;
-
-    // Auto-aim at nearest enemy
-    const nearestEnemy = gameState.enemies.reduce(
-      (nearest, enemy) => {
-        const dx = gameState.player.x - enemy.x;
-        const dy = gameState.player.y - enemy.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        return distance < nearest.distance ? { enemy, distance } : nearest;
-      },
-      { enemy: null, distance: Infinity }
-    );
-
-    if (nearestEnemy.enemy) {
-      const dx = nearestEnemy.enemy.x - gameState.player.x;
-      const dy = nearestEnemy.enemy.y - gameState.player.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      const projectile = {
-        id: Date.now() + Math.random(),
-        x: gameState.player.x,
-        y: gameState.player.y,
-        vx: (dx / distance) * 8,
-        vy: (dy / distance) * 8,
-        size: 5,
-      };
-
-      setGameState((prev) => ({
-        ...prev,
-        projectiles: [...prev.projectiles, projectile],
-      }));
-    }
-  }, [gameState.player, gameState.enemies]);
-
-  // Auto-fire projectiles
-  useEffect(() => {
-    const fireInterval = setInterval(fireProjectile, 300);
-    return () => clearInterval(fireInterval);
-  }, [fireProjectile]);
-
   const render = (ctx) => {
-    // Clear canvas
-    ctx.fillStyle = "#001122";
-    ctx.fillRect(0, 0, 800, 600);
-
     // Draw player
-    ctx.fillStyle = "#00ff00";
+    ctx.fillStyle = "#00ff88";
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(gameState.player.x, gameState.player.y, 15, 0, Math.PI * 2);
     ctx.fill();
+    ctx.stroke();
+
+    // Draw player inner glow
+    ctx.fillStyle = "#88ffaa";
+    ctx.beginPath();
+    ctx.arc(gameState.player.x, gameState.player.y, 8, 0, Math.PI * 2);
+    ctx.fill();
 
     // Draw enemies
-    ctx.fillStyle = "#ff0000";
     gameState.enemies.forEach((enemy) => {
+      // Enemy body
+      const colors = ["#ff4444", "#ff8844", "#ff44aa"];
+      ctx.fillStyle = colors[enemy.type] || "#ff4444";
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.arc(enemy.x, enemy.y, enemy.size, 0, Math.PI * 2);
       ctx.fill();
+      ctx.stroke();
+
+      // Enemy health bar
+      if (enemy.health < 50) {
+        const barWidth = enemy.size * 2;
+        const barHeight = 4;
+        const barX = enemy.x - barWidth / 2;
+        const barY = enemy.y - enemy.size - 10;
+
+        ctx.fillStyle = "#660000";
+        ctx.fillRect(barX, barY, barWidth, barHeight);
+
+        ctx.fillStyle = "#ff0000";
+        ctx.fillRect(barX, barY, (enemy.health / 50) * barWidth, barHeight);
+      }
     });
 
     // Draw projectiles
-    ctx.fillStyle = "#ffff00";
     gameState.projectiles.forEach((projectile) => {
+      ctx.fillStyle = "#ffff00";
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.arc(projectile.x, projectile.y, projectile.size, 0, Math.PI * 2);
       ctx.fill();
-    });
+      ctx.stroke();
 
-    // Draw UI
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "16px Arial";
-    ctx.fillText(`Health: ${gameState.player.health}`, 10, 30);
-    ctx.fillText(`Score: ${gameState.score}`, 10, 50);
-    ctx.fillText(`Time: ${Math.floor(gameState.time)}s`, 10, 70);
+      // Projectile glow effect
+      ctx.shadowColor = "#ffff00";
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.arc(projectile.x, projectile.y, projectile.size - 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    });
   };
 
   const endGame = async (reason) => {
@@ -366,10 +418,11 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
     return (
       <div className={styles.gameOver}>
         <div className={styles.gameOverContent}>
-          <h2>游戏结束</h2>
+          <h2>渡劫失败</h2>
           <p>最终得分: {gameState.score}</p>
           <p>存活时间: {Math.floor(gameState.time)}秒</p>
           <p>击杀敌人: {Math.floor(gameState.score / 10)}</p>
+          <p>获得经验: {gameState.experience}</p>
           <button onClick={() => onGameEnd("died", gameState.score)}>
             返回关卡选择
           </button>
@@ -380,56 +433,27 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
 
   return (
     <div className={styles.gameLevel}>
-      <div className={styles.gameUI}>
-        <div className={styles.playerStats}>
-          <div className={styles.healthBar}>
-            <div
-              className={styles.healthFill}
-              style={{
-                width: `${
-                  (gameState.player.health / gameState.player.maxHealth) * 100
-                }%`,
-              }}
-            />
-          </div>
-          <span>
-            生命值: {gameState.player.health}/{gameState.player.maxHealth}
-          </span>
-        </div>
-
-        <div className={styles.gameStats}>
-          <span>得分: {gameState.score}</span>
-          <span>时间: {Math.floor(gameState.time)}s</span>
-          <span>经验: {gameState.experience}</span>
-        </div>
-
-        <div className={styles.gameControls}>
-          <button onClick={pauseGame}>
-            {gameState.isPaused ? "继续" : "暂停"}
-          </button>
-          <button onClick={quitGame}>退出</button>
-        </div>
-      </div>
-
-      <canvas
-        ref={canvasRef}
-        className={styles.gameCanvas}
-        width={800}
-        height={600}
+      <GameLevelHeader
+        playerData={playerData}
+        gameState={gameState}
+        onPause={pauseGame}
+        onQuit={quitGame}
+        isPaused={gameState.isPaused}
       />
 
-      <div className={styles.instructions}>
-        <p>使用 WASD 或方向键移动</p>
-        <p>自动瞄准最近的敌人射击</p>
-        <p>击败敌人获得分数和经验</p>
-      </div>
+      <canvas ref={canvasRef} className={styles.gameCanvas} />
 
       {gameState.isPaused && (
         <div className={styles.pauseOverlay}>
           <div className={styles.pauseMenu}>
-            <h3>游戏暂停</h3>
-            <button onClick={pauseGame}>继续游戏</button>
-            <button onClick={quitGame}>退出游戏</button>
+            <h3>修炼暂停</h3>
+            <p>当前境界: {playerData.level}级</p>
+            <p>当前得分: {gameState.score}</p>
+            <p>存活时间: {Math.floor(gameState.time)}秒</p>
+            <div className={styles.pauseActions}>
+              <button onClick={pauseGame}>继续修炼</button>
+              <button onClick={quitGame}>结束修炼</button>
+            </div>
           </div>
         </div>
       )}

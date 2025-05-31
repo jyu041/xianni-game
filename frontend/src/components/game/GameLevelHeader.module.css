@@ -1,0 +1,263 @@
+/* frontend/src/components/game/GameLevelHeader.module.css */
+
+.gameHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem 2rem;
+  height: 80px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6),
+              0 0 30px rgba(255, 255, 255, 0.05),
+              0 0 50px rgba(138, 43, 226, 0.1);
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+.playerInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #8a2be2, #9370db);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4),
+              0 0 20px rgba(147, 112, 219, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.avatarIcon {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 
+               0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.playerDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.playerName {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.cultivation {
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-style: italic;
+  margin: 0;
+  text-shadow: 0 0 8px currentColor;
+}
+
+.healthSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.healthBar {
+  width: 200px;
+  height: 12px;
+  background: rgba(255, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.healthFill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4444 0%, #ffaa44 50%, #44ff44 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px rgba(68, 255, 68, 0.5);
+  position: relative;
+}
+
+.healthFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.4), 
+    transparent);
+  animation: healthShimmer 2s infinite;
+}
+
+@keyframes healthShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.healthText {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  text-align: center;
+}
+
+.centerSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 2;
+}
+
+.gameStats {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  min-width: 70px;
+}
+
+.statIcon {
+  font-size: 1.2rem;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.statValue {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  margin: 0;
+}
+
+.statLabel {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+.pauseButton {
+  background: linear-gradient(45deg, 
+    rgba(138, 43, 226, 0.8), 
+    rgba(147, 112, 219, 0.8));
+  border: 1px solid rgba(138, 43, 226, 0.6);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5),
+              0 0 15px rgba(138, 43, 226, 0.3);
+}
+
+.pauseButton:hover {
+  background: linear-gradient(45deg, 
+    rgba(138, 43, 226, 0.9), 
+    rgba(147, 112, 219, 0.9));
+  border-color: rgba(138, 43, 226, 0.8);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6),
+              0 0 25px rgba(138, 43, 226, 0.4);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .gameHeader {
+    padding: 0.75rem 1rem;
+    height: 70px;
+  }
+
+  .leftSection {
+    gap: 1rem;
+  }
+
+  .healthBar {
+    width: 150px;
+    height: 10px;
+  }
+
+  .gameStats {
+    gap: 1rem;
+  }
+
+  .statItem {
+    padding: 0.5rem 0.75rem;
+    min-width: 60px;
+  }
+
+  .statIcon {
+    font-size: 1rem;
+  }
+
+  .statValue {
+    font-size: 0.9rem;
+  }
+
+  .statLabel {
+    font-size: 0.6rem;
+  }
+
+  .pauseButton {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .gameStats {
+    gap: 1.5rem;
+  }
+
+  .statItem {
+    min-width: 65px;
+  }
+}
