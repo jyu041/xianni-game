@@ -65,13 +65,13 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
   const handleSoulRangeChange = (e) => {
     const value = parseInt(e.target.value);
     const limitedValue = Math.max(1, value);
-    console.log("Soul range change:", limitedValue);
+    // console.log("Soul range change:", limitedValue);
     onDebugChange("soulCollectionRange", limitedValue);
   };
 
   if (!isOpen) return null;
 
-  console.log("Debug menu rendering with settings:", debugSettings);
+  // console.log("Debug menu rendering with settings:", debugSettings);
 
   return (
     <div className={styles.debugOverlay}>
@@ -118,10 +118,10 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
                 type="checkbox"
                 checked={debugSettings.showSoulCollectionRange ?? false}
                 onChange={(e) => {
-                  console.log(
-                    "Soul collection range visibility change:",
-                    e.target.checked
-                  );
+                  // console.log(
+                  //   "Soul collection range visibility change:",
+                  //   e.target.checked
+                  // );
                   onDebugChange("showSoulCollectionRange", e.target.checked);
                 }}
               />

@@ -88,6 +88,7 @@ class GameScene extends Phaser.Scene {
   }
 
   updateDebugSettings(key, value) {
+    // console.log('Updating debug setting:', key, '=', value);
     this.debugSettings[key] = value;
     
     // Apply real-time changes
@@ -96,6 +97,18 @@ class GameScene extends Phaser.Scene {
       const limitedValue = Math.max(50, value);
       this.autoFireTimer.delay = limitedValue;
       this.debugSettings[key] = limitedValue; // Update the stored value
+    }
+    
+    // Ensure PlayerController picks up the new soul collection range
+    if (key === 'soulCollectionRange' && this.playerController) {
+      this.playerController.soulCollectionRange = value;
+      // console.log('Updated PlayerController soul collection range to:', value);
+    }
+    
+    // Ensure PlayerController picks up the new attack range
+    if (key === 'playerAttackRange' && this.playerController) {
+      this.playerController.attackRange = value;
+      // console.log('Updated PlayerController attack range to:', value);
     }
   }
 

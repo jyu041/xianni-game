@@ -48,6 +48,7 @@ class PlayerController {
     this.handleInput();
     this.updateDebugRange();
     this.updateAttackRange();
+    this.updateSoulCollectionRange();
     this.checkSoulCollection();
   }
 
@@ -67,6 +68,12 @@ class PlayerController {
       this.debugGraphics.lineStyle(3, 0x00ff00, 0.4);
       this.debugGraphics.strokeCircle(this.player.x, this.player.y, this.attackRange);
     }
+
+    // Show soul collection range
+    if (debugSettings.showSoulCollectionRange) {
+      this.debugGraphics.lineStyle(3, 0x00ffff, 0.6);
+      this.debugGraphics.strokeCircle(this.player.x, this.player.y, this.soulCollectionRange);
+    }
   }
 
   updateAttackRange() {
@@ -74,6 +81,15 @@ class PlayerController {
     const debugSettings = this.scene.debugSettings;
     if (debugSettings && debugSettings.playerAttackRange) {
       this.attackRange = debugSettings.playerAttackRange;
+    }
+  }
+
+  updateSoulCollectionRange() {
+    // Update soul collection range from debug settings
+    const debugSettings = this.scene.debugSettings;
+    if (debugSettings && debugSettings.soulCollectionRange) {
+      this.soulCollectionRange = debugSettings.soulCollectionRange;
+      // console.log('Updated soul collection range to:', this.soulCollectionRange);
     }
   }
 
@@ -300,6 +316,7 @@ class PlayerController {
     
     if (this.scene.gameStateRef) {
       this.scene.gameStateRef.soulCount = (this.scene.gameStateRef.soulCount || 0) + soul.soulValue;
+      // console.log('Soul collected! Total souls:', this.scene.gameStateRef.soulCount);
     }
     
     // Create enhanced collection animation
