@@ -145,7 +145,7 @@ export const ENEMY_ANIMATIONS = {
     'enemy_martialHero2_attack1_anim': { texture: 'enemy_martialHero2_attack1', frames: [0, 3], frameRate: 12, repeat: 0 },
     'enemy_martialHero2_attack2_anim': { texture: 'enemy_martialHero2_attack2', frames: [0, 3], frameRate: 12, repeat: 0 },
     'enemy_martialHero2_death_anim': { texture: 'enemy_martialHero2_death', frames: [0, 6], frameRate: 8, repeat: 0 },
-    'enemy_martialHero2_hit_anim': { texture: 'enemy_martialHero2_hit', frames: [0, 2], frameRate: 10, repeat: 0 }
+    'enemy_martialHero2_hurt_anim': { texture: 'enemy_martialHero2_hurt', frames: [0, 2], frameRate: 10, repeat: 0 }
   },
 
   martialHero3: {

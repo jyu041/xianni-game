@@ -148,7 +148,7 @@ export const ENEMY_ASSETS = {
     { key: 'enemy_martialHero2_fall', path: '/assets/characters/enemies/martialHero2/Fall.png' },
     { key: 'enemy_martialHero2_idle', path: '/assets/characters/enemies/martialHero2/Idle.png' },
     { key: 'enemy_martialHero2_run', path: '/assets/characters/enemies/martialHero2/Run.png' },
-    { key: 'enemy_martialHero2_hit', path: '/assets/characters/enemies/martialHero2/Hurt.png' },
+    { key: 'enemy_martialHero2_hurt', path: '/assets/characters/enemies/martialHero2/Hurt.png' },
   ],
 
   martialHero3: [

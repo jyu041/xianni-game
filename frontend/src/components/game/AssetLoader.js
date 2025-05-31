@@ -48,7 +48,7 @@ class AssetLoader {
 
   setupLoadEvents() {
     this.scene.load.on('filecomplete', (key, type, data) => {
-      console.log('Loaded:', key);
+      // console.log('Loaded:', key);
     });
 
     this.scene.load.on('loaderror', (file) => {

@@ -249,6 +249,7 @@ class EnemyManager {
 
     const spawnPosition = this.getRandomSpawnPosition();
     const enemyType = getRandomEnemyType();
+    console.log("spawning in: ", enemyType.key);
     
     this.createEnemy(spawnPosition, enemyType);
   }

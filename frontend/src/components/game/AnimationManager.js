@@ -41,7 +41,7 @@ class AnimationManager {
         frameRate: frameRate,
         repeat: repeat
       });
-      console.log(`Created animation: ${key}`);
+      // console.log(`Created animation: ${key}`);
     } else {
       console.warn(`Texture not found for animation: ${key} (${texture})`);
     }
