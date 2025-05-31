@@ -1,4 +1,4 @@
-// frontend/src/components/game/StageModal.jsx
+// src/components/game/StageModal.jsx
 import { useState } from "react";
 import styles from "./StageModal.module.css";
 

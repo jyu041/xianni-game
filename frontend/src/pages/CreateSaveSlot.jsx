@@ -1,9 +1,9 @@
-// frontend/src/components/pages/CreateSaveSlot.jsx
+// src/pages/CreateSaveSlot.jsx
 import { useState } from "react";
-import Button from "../ui/Button";
-import Card from "../ui/Card";
-import Input from "../ui/Input";
-import Select from "../ui/Select";
+import Button from "../components/ui/Button";
+import Card from "../components/ui/Card";
+import Input from "../components/ui/Input";
+import Select from "../components/ui/Select";
 import playerService from "../services/playerService";
 import styles from "./CreateSaveSlot.module.css";
 

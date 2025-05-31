@@ -1,4 +1,4 @@
-// frontend/src/components/game/DebugMenu.jsx
+// src/components/game/DebugMenu.jsx
 import { useState, useRef, useEffect } from "react";
 import styles from "./DebugMenu.module.css";
 

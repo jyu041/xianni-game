@@ -1,4 +1,4 @@
-// frontend/src/components/game/LevelSelector.jsx
+// src/components/game/LevelSelector.jsx
 import { useState } from "react";
 import styles from "./LevelSelector.module.css";
 

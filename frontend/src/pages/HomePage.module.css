@@ -1,4 +1,4 @@
-/* frontend/src/components/pages/HomePage.module.css */
+/* frontend/src/pages/HomePage.module.css */
 
 .homePage {
   min-height: 100vh;
@@ -134,9 +134,10 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
-  font-family: 'serif';
+  text-shadow: none; /* Remove text-shadow as it doesn't work with background-clip */
+  font-family: 'VonwaonBitmap16', monospace; /* Add the custom font */
   animation: titleGlow 3s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 20px rgba(138, 43, 226, 0.3)); /* Use filter instead of text-shadow */
 }
 
 @keyframes titleGlow {

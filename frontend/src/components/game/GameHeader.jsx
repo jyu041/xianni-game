@@ -1,4 +1,4 @@
-// frontend/src/components/game/GameHeader.jsx
+// src/components/game/GameHeader.jsx
 import { useState } from "react";
 import styles from "./GameHeader.module.css";
 

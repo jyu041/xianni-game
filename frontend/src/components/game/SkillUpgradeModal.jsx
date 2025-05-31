@@ -1,4 +1,4 @@
-// frontend/src/components/game/SkillUpgradeModal.jsx
+// src/components/game/SkillUpgradeModal.jsx
 import { useState } from "react";
 import Button from "../ui/Button";
 import styles from "./SkillUpgradeModal.module.css";

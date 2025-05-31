@@ -1,4 +1,4 @@
-// frontend/src/components/services/playerService.js
+// frontend/src/services/playerService.js
 import apiService from './apiService.js';
 
 class PlayerService {

@@ -1,4 +1,4 @@
-// frontend/src/components/game/SidebarMenu.jsx
+// src/components/game/SidebarMenu.jsx
 import { useState } from "react";
 import styles from "./SidebarMenu.module.css";
 

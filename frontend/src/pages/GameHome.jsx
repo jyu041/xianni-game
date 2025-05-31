@@ -1,10 +1,10 @@
-// frontend/src/components/pages/GameHome.jsx
+// src/pages/GameHome.jsx
 import { useState, useEffect } from "react";
-import Card from "../ui/Card";
-import GameHeader from "../game/GameHeader";
-import SidebarMenu from "../game/SidebarMenu";
-import LevelSelector from "../game/LevelSelector";
-import StageModal from "../game/StageModal";
+import Card from "../components/ui/Card";
+import GameHeader from "../components/game/GameHeader";
+import SidebarMenu from "../components/game/SidebarMenu";
+import LevelSelector from "../components/game/LevelSelector";
+import StageModal from "../components/game/StageModal";
 import playerService from "../services/playerService";
 import stageService from "../services/stageService";
 import styles from "./GameHome.module.css";

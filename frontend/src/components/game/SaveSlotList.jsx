@@ -1,4 +1,4 @@
-// frontend/src/components/game/SaveSlotList.jsx
+// src/components/game/SaveSlotList.jsx
 import Button from "../ui/Button";
 import Card from "../ui/Card";
 import styles from "./SaveSlotList.module.css";

@@ -1,9 +1,9 @@
-// frontend/src/App.jsx
+// src/App.jsx
 import { useState } from "react";
-import HomePage from "./components/pages/HomePage";
-import CreateSaveSlot from "./components/pages/CreateSaveSlot";
-import GameHome from "./components/pages/GameHome";
-import GameLevel from "./components/pages/GameLevel";
+import HomePage from "./pages/HomePage";
+import CreateSaveSlot from "./pages/CreateSaveSlot";
+import GameHome from "./pages/GameHome";
+import GameLevel from "./pages/GameLevel";
 import "./App.css";
 
 function App() {

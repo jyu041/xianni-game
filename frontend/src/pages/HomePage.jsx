@@ -1,9 +1,9 @@
-// frontend/src/components/pages/HomePage.jsx
+// src/pages/HomePage.jsx
 import { useState, useEffect } from "react";
-import Button from "../ui/Button";
-import Card from "../ui/Card";
-import SaveSlotList from "../game/SaveSlotList";
-import ResponsiveLayout from "../layout/ResponsiveLayout";
+import Button from "../components/ui/Button";
+import Card from "../components/ui/Card";
+import SaveSlotList from "../components/game/SaveSlotList";
+import ResponsiveLayout from "../components/layout/ResponsiveLayout";
 import playerService from "../services/playerService";
 import styles from "./HomePage.module.css";
 

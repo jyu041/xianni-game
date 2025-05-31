@@ -1,8 +1,8 @@
-// frontend/src/components/pages/GameLevel.jsx
+// src/pages/GameLevel.jsx
 import { useState, useEffect, useRef } from "react";
 import Phaser from "phaser";
-import GameLevelHeader from "../game/GameLevelHeader";
-import GameScene from "../game/GameScene";
+import GameLevelHeader from "../components/game/GameLevelHeader";
+import GameScene from "../components/game/GameScene";
 import playerService from "../services/playerService";
 import styles from "./GameLevel.module.css";
 

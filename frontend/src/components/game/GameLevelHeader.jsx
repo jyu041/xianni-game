@@ -1,4 +1,4 @@
-// frontend/src/components/game/GameLevelHeader.jsx
+// src/components/game/GameLevelHeader.jsx
 import { useState, useEffect } from "react";
 import Button from "../ui/Button";
 import DebugMenu from "./DebugMenu";
