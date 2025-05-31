@@ -4,7 +4,7 @@ export const ENEMY_TYPES = {
   evilWizard1: {
     key: 'evilWizard1',
     texture: 'enemy_evilWizard1_idle',
-    size: 80,
+    size: 96, // Increased by 20% from 80
     health: 75,
     speedRange: [40, 60],
     damage: 15,
@@ -14,7 +14,7 @@ export const ENEMY_TYPES = {
   evilWizard2: {
     key: 'evilWizard2',
     texture: 'enemy_evilWizard2_idle',
-    size: 85,
+    size: 102, // Increased by 20% from 85
     health: 100,
     speedRange: [35, 55],
     damage: 20,
@@ -24,7 +24,7 @@ export const ENEMY_TYPES = {
   evilWizard3: {
     key: 'evilWizard3',
     texture: 'enemy_evilWizard3_idle',
-    size: 90,
+    size: 108, // Increased by 20% from 90
     health: 120,
     speedRange: [30, 50],
     damage: 25,
@@ -44,7 +44,7 @@ export const ENEMY_TYPES = {
   martialHero1: {
     key: 'martialHero1',
     texture: 'enemy_martialHero1_idle',
-    size: 75,
+    size: 113, // Increased by 50% from 75
     health: 60,
     speedRange: [45, 65],
     damage: 12,
@@ -54,7 +54,7 @@ export const ENEMY_TYPES = {
   martialHero2: {
     key: 'martialHero2',
     texture: 'enemy_martialHero2_idle',
-    size: 75,
+    size: 113, // Increased by 50% from 75
     health: 65,
     speedRange: [45, 65],
     damage: 14,
@@ -64,7 +64,7 @@ export const ENEMY_TYPES = {
   martialHero3: {
     key: 'martialHero3',
     texture: 'enemy_martialHero3_idle',
-    size: 70,
+    size: 105, // Increased by 50% from 70
     health: 70,
     speedRange: [40, 60],
     damage: 16,
@@ -74,7 +74,7 @@ export const ENEMY_TYPES = {
   samurai1: {
     key: 'samurai1',
     texture: 'enemy_samurai1_idle',
-    size: 65,
+    size: 91, // Increased by 40% from 65
     health: 55,
     speedRange: [50, 70],
     damage: 18,
@@ -84,7 +84,7 @@ export const ENEMY_TYPES = {
   samurai2: {
     key: 'samurai2',
     texture: 'enemy_samurai2_idle',
-    size: 70,
+    size: 98, // Increased by 40% from 70
     health: 65,
     speedRange: [45, 65],
     damage: 20,
@@ -94,7 +94,7 @@ export const ENEMY_TYPES = {
   shinobi: {
     key: 'shinobi',
     texture: 'enemy_shinobi_idle',
-    size: 65,
+    size: 75, // Increased by 15% from 65
     health: 45,
     speedRange: [60, 80],
     damage: 15,

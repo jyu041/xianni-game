@@ -52,19 +52,26 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
 
   const handleAttackSpeedChange = (e) => {
     const value = parseInt(e.target.value);
-    // Ensure minimum attack speed of 50ms
     const limitedValue = Math.max(50, value);
     onDebugChange("playerAttackSpeed", limitedValue);
   };
 
   const handleAttackRangeChange = (e) => {
     const value = parseInt(e.target.value);
-    // Ensure minimum attack range of 1
     const limitedValue = Math.max(1, value);
     onDebugChange("playerAttackRange", limitedValue);
   };
 
+  const handleSoulRangeChange = (e) => {
+    const value = parseInt(e.target.value);
+    const limitedValue = Math.max(1, value);
+    console.log("Soul range change:", limitedValue);
+    onDebugChange("soulCollectionRange", limitedValue);
+  };
+
   if (!isOpen) return null;
+
+  console.log("Debug menu rendering with settings:", debugSettings);
 
   return (
     <div className={styles.debugOverlay}>
@@ -105,6 +112,23 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
               />
               <span className="game-text-small">Show Enemy Attack Ranges</span>
             </label>
+
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                checked={debugSettings.showSoulCollectionRange ?? false}
+                onChange={(e) => {
+                  console.log(
+                    "Soul collection range visibility change:",
+                    e.target.checked
+                  );
+                  onDebugChange("showSoulCollectionRange", e.target.checked);
+                }}
+              />
+              <span className="game-text-small">
+                Show Soul Collection Range
+              </span>
+            </label>
           </div>
 
           <div className={styles.debugSection}>
@@ -140,6 +164,26 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
                 step="10"
                 value={debugSettings.playerAttackRange}
                 onChange={handleAttackRangeChange}
+                className={styles.slider}
+              />
+              <div className={styles.sliderLabels}>
+                <span className="game-text-small">1px</span>
+                <span className="game-text-small">2000px</span>
+              </div>
+            </div>
+
+            <div className={styles.sliderGroup}>
+              <label className="game-text-small">
+                Soul Collection Range: {debugSettings.soulCollectionRange ?? 50}
+                px
+              </label>
+              <input
+                type="range"
+                min="1"
+                max="2000"
+                step="5"
+                value={debugSettings.soulCollectionRange ?? 50}
+                onChange={handleSoulRangeChange}
                 className={styles.slider}
               />
               <div className={styles.sliderLabels}>

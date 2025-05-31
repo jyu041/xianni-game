@@ -4,7 +4,7 @@ import { getAllEnemyTypes, getRandomEnemyType } from './config/EnemyTypes.js';
 class EnemyManager {
   constructor(scene) {
     this.scene = scene;
-    this.maxEnemies = 15;
+    this.maxEnemies = 100;
     this.attackRange = 60;
     this.attackCooldown = 2000;
     this.enemyTypes = getAllEnemyTypes();

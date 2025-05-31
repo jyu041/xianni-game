@@ -1,7 +1,8 @@
 // frontend/src/components/game/GameLevelHeader.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "../ui/Button";
 import DebugMenu from "./DebugMenu";
+import SkillUpgradeModal from "./SkillUpgradeModal";
 import styles from "./GameLevelHeader.module.css";
 
 const GameLevelHeader = ({
@@ -14,6 +15,25 @@ const GameLevelHeader = ({
   onDebugChange,
 }) => {
   const [showDebugMenu, setShowDebugMenu] = useState(false);
+  const [showSkillModal, setShowSkillModal] = useState(false);
+  const [soulProgress, setSoulProgress] = useState(0);
+  const [skillLevel, setSkillLevel] = useState(0);
+
+  const soulProgressMax = 25;
+
+  useEffect(() => {
+    const totalSouls = gameState.soulCount || 0;
+    const currentProgress = totalSouls % soulProgressMax;
+    const currentSkillLevel = Math.floor(totalSouls / soulProgressMax);
+
+    // Check if we've gained a new skill level
+    if (currentSkillLevel > skillLevel && totalSouls > 0) {
+      setShowSkillModal(true);
+      setSkillLevel(currentSkillLevel);
+    }
+
+    setSoulProgress(currentProgress);
+  }, [gameState.soulCount]);
 
   const getCultivationLevel = (level) => {
     if (level <= 10) return { name: "练气期", color: "#8fbc8f" };
@@ -25,6 +45,12 @@ const GameLevelHeader = ({
     if (level <= 70) return { name: "合体期", color: "#00ced1" };
     if (level <= 80) return { name: "大乘期", color: "#ffd700" };
     return { name: "渡劫期", color: "#ff4500" };
+  };
+
+  const handleSkillSelect = (skill) => {
+    console.log("Selected skill:", skill);
+    // TODO: Apply skill effects to game state
+    setShowSkillModal(false);
   };
 
   const cultivation = getCultivationLevel(playerData.level);
@@ -119,22 +145,44 @@ const GameLevelHeader = ({
           </div>
         </div>
 
-        {/* Right Section - Controls */}
+        {/* Right Section - Soul Progress and Controls */}
         <div className={styles.rightSection}>
-          <Button
-            variant="secondary"
-            onClick={() => setShowDebugMenu(!showDebugMenu)}
-            className={`${styles.debugButton} game-text-small`}
-          >
-            Debug
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={onPause}
-            className={`${styles.pauseButton} game-text-small`}
-          >
-            {isPaused ? "继续" : "暂停"}
-          </Button>
+          {/* Soul Progress Bar */}
+          <div className={styles.soulProgressSection}>
+            <div className={styles.soulProgressLabel}>
+              <span className={`${styles.soulProgressText} game-text-small`}>
+                下个技能: {soulProgress}/{soulProgressMax}
+              </span>
+              <span className={`${styles.skillLevelText} game-text-small`}>
+                技能等级: {skillLevel}
+              </span>
+            </div>
+            <div className={styles.soulProgressBar}>
+              <div
+                className={styles.soulProgressFill}
+                style={{
+                  width: `${(soulProgress / soulProgressMax) * 100}%`,
+                }}
+              />
+            </div>
+          </div>
+
+          <div className={styles.controlButtons}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDebugMenu(!showDebugMenu)}
+              className={`${styles.debugButton} game-text-small`}
+            >
+              Debug
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={onPause}
+              className={`${styles.pauseButton} game-text-small`}
+            >
+              {isPaused ? "继续" : "暂停"}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -143,6 +191,12 @@ const GameLevelHeader = ({
         onClose={() => setShowDebugMenu(false)}
         debugSettings={debugSettings}
         onDebugChange={onDebugChange}
+      />
+
+      <SkillUpgradeModal
+        isOpen={showSkillModal}
+        onClose={() => setShowSkillModal(false)}
+        onSkillSelect={handleSkillSelect}
       />
     </>
   );

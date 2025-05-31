@@ -11,11 +11,11 @@ class PlayerController {
     this.debugGraphics = null;
     this.soulCollectionRange = 50; // Range for soul collection
   }
-
+  
   createPlayer() {
     // Create player sprite
     this.player = this.scene.physics.add.sprite(400, 300, 'player');
-    this.player.setDisplaySize(54, 54); // Increased by 50% from 36
+    this.player.setDisplaySize(49, 49); // Reduced by 10% from 54
     this.player.setCollideWorldBounds(true);
     this.player.setDrag(300);
     this.player.currentDirection = 'down';
@@ -24,7 +24,7 @@ class PlayerController {
     // Try to use actual sprite if loaded
     if (this.scene.textures.exists('mainChar_idle_down')) {
       this.player.setTexture('mainChar_idle_down');
-      this.player.setDisplaySize(144, 144); // Increased by 50% from 96
+      this.player.setDisplaySize(130, 130); // Reduced by 10% from 144
       this.player.play('mainChar_idle_down_anim');
       console.log('Using actual player sprite with animation');
     }

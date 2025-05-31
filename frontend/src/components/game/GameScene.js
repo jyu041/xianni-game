@@ -15,8 +15,10 @@ class GameScene extends Phaser.Scene {
     this.debugSettings = {
       showPlayerAttackRange: false,
       showEnemyAttackRanges: false,
+      showSoulCollectionRange: false,
       playerAttackSpeed: 400,
       playerAttackRange: 150,
+      soulCollectionRange: 50,
       activeEnemies: 0,
       playerHealth: 100,
       soulCount: 0

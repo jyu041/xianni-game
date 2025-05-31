@@ -26,8 +26,10 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
   const [debugSettings, setDebugSettings] = useState({
     showPlayerAttackRange: false,
     showEnemyAttackRanges: false,
+    showSoulCollectionRange: false,
     playerAttackSpeed: 400,
     playerAttackRange: 150,
+    soulCollectionRange: 50,
     activeEnemies: 0,
     playerHealth: 100,
     soulCount: 0,
