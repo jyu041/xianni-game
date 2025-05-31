@@ -83,7 +83,15 @@ class ProjectileManager {
       this.scene.enemyManager.hideEnemyHealthBar(enemy);
     }
 
-    // Play death animation if available
+    // Create death effects immediately
+    this.createDeathEffect(enemy);
+
+    // Create soul drop using simple method
+    if (this.scene.enemyManager) {
+      this.scene.enemyManager.createSoulDrop(enemy.x, enemy.y);
+    }
+
+    // Handle death animation or immediate destruction
     if (enemy.enemyType) {
       const deathAnimKey = `enemy_${enemy.enemyType}_death_anim`;
       const deadAnimKey = `enemy_${enemy.enemyType}_dead_anim`;
@@ -95,27 +103,15 @@ class ProjectileManager {
       if (animKey) {
         enemy.play(animKey);
         
-        // Create death effect immediately
-        this.createDeathEffect(enemy);
-        
         enemy.once('animationcomplete', () => {
-          // Create soul drop and death shadow
-          this.scene.enemyManager.createSoulDrop(enemy.x, enemy.y);
-          this.scene.enemyManager.createDeathShadow(enemy);
           enemy.destroy();
         });
       } else {
-        // No death animation, destroy immediately with effects
-        this.createDeathEffect(enemy);
-        this.scene.enemyManager.createSoulDrop(enemy.x, enemy.y);
-        this.scene.enemyManager.createDeathShadow(enemy);
+        // No death animation, destroy immediately
         enemy.destroy();
       }
     } else {
       // Basic enemy, destroy immediately
-      this.createDeathEffect(enemy);
-      this.scene.enemyManager.createSoulDrop(enemy.x, enemy.y);
-      this.scene.enemyManager.createDeathShadow(enemy);
       enemy.destroy();
     }
   }

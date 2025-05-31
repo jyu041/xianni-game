@@ -139,20 +139,6 @@ class EnemyManager {
     }
   }
 
-  getDirectionFromAngle(angle) {
-    const normalizedAngle = Phaser.Math.Angle.Normalize(angle);
-    
-    if (normalizedAngle >= -Math.PI/4 && normalizedAngle <= Math.PI/4) {
-      return 'right';
-    } else if (normalizedAngle > Math.PI/4 && normalizedAngle < 3*Math.PI/4) {
-      return 'down';
-    } else if (normalizedAngle >= 3*Math.PI/4 || normalizedAngle <= -3*Math.PI/4) {
-      return 'left';
-    } else {
-      return 'up';
-    }
-  }
-
   updateEnemyMovementAnimation(enemy, direction) {
     if (enemy.enemyType && !enemy.isAttacking && !enemy.isDead) {
       // Try movement animations in priority order
@@ -196,11 +182,6 @@ class EnemyManager {
     if (direction === 'left' || direction === 'right') {
       enemy.lastHorizontalDirection = direction;
     }
-  }
-
-  updateSpriteDirection(enemy, direction) {
-    // More precise direction handling with forced facing
-    this.forceCorrectDirection(enemy, direction);
   }
 
   tryAttack(enemy, player) {
@@ -319,51 +300,15 @@ class EnemyManager {
     return enemy;
   }
 
-  destroyEnemy(enemy) {
-    if (enemy && enemy.active && !enemy.isDead) {
-      enemy.isDead = true;
-      enemy.setVelocity(0, 0);
-      enemy.isAttacking = false;
-      
-      // Hide health bar
-      this.hideEnemyHealthBar(enemy);
-      
-      // Create soul drop using enemy sprite
-      this.createSoulDrop(enemy);
-      
-      const deathAnimKey = `enemy_${enemy.enemyType}_death_anim`;
-      if (this.scene.anims.exists(deathAnimKey)) {
-        enemy.play(deathAnimKey);
-        enemy.once('animationcomplete', () => {
-          enemy.destroy();
-        });
-      } else {
-        enemy.destroy();
-      }
-    }
-  }
-
-  createSoulDrop(enemy) {
-    // Create soul using enemy's idle frame, rotated 90 degrees and tinted blue
-    let soulTexture = enemy.texture.key;
-    
-    // Try to get the idle texture for this enemy type
-    const idleTextureKey = `enemy_${enemy.enemyType}_idle`;
-    if (this.scene.textures.exists(idleTextureKey)) {
-      soulTexture = idleTextureKey;
-    }
-    
-    const soul = this.scene.add.sprite(enemy.x, enemy.y, soulTexture);
-    
-    // Match enemy size and rotation
-    soul.setDisplaySize(enemy.displayWidth * 0.8, enemy.displayHeight * 0.8);
-    soul.setRotation(Math.PI / 2); // Rotate 90 degrees to lie down
-    soul.setTint(0x4444ff); // Blue tint
-    soul.setAlpha(0.8);
+  // Simplified soul drop creation to avoid freezing
+  createSoulDrop(x, y) {
+    // Create a simple blue circle soul instead of using enemy sprites
+    const soul = this.scene.add.circle(x, y, 12, 0x4444ff, 0.8);
+    soul.setStrokeStyle(2, 0x6666ff, 0.6);
     
     // Add physics for collection
     this.scene.physics.add.existing(soul);
-    soul.body.setSize(soul.displayWidth * 0.6, soul.displayHeight * 0.6); // Smaller collision box
+    soul.body.setSize(24, 24); // Collision box
     
     // Add to souls group for collection
     if (!this.scene.souls) {
@@ -406,11 +351,6 @@ class EnemyManager {
         });
       }
     });
-  }
-
-  createDeathShadow(enemy) {
-    // This method is now handled by createSoulDrop
-    // Keep for compatibility but no longer used
   }
 }
 
