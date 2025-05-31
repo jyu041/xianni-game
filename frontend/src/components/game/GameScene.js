@@ -12,12 +12,27 @@ class GameScene extends Phaser.Scene {
     this.gameStateRef = null;
     this.updateGameState = null;
     this.stageData = null;
+    this.debugSettings = {
+      showPlayerAttackRange: false,
+      showEnemyAttackRanges: false,
+      playerAttackSpeed: 400,
+      playerAttackRange: 150,
+      activeEnemies: 0,
+      playerHealth: 100,
+      soulCount: 0
+    };
   }
 
   init(data) {
     this.gameStateRef = data.gameStateRef;
     this.updateGameState = data.updateGameState;
     this.stageData = data.stageData;
+    this.onDebugChange = data.onDebugChange;
+    
+    // Initialize soul count in game state
+    if (this.gameStateRef) {
+      this.gameStateRef.soulCount = this.gameStateRef.soulCount || 0;
+    }
   }
 
   preload() {
@@ -49,6 +64,7 @@ class GameScene extends Phaser.Scene {
     // Create groups
     this.enemies = this.physics.add.group();
     this.projectiles = this.physics.add.group();
+    this.souls = this.physics.add.group();
 
     // Setup input
     this.playerController.setupInput();
@@ -63,6 +79,15 @@ class GameScene extends Phaser.Scene {
     this.setupCollisions();
 
     console.log('Scene creation complete');
+  }
+
+  updateDebugSettings(key, value) {
+    this.debugSettings[key] = value;
+    
+    // Apply real-time changes
+    if (key === 'playerAttackSpeed' && this.autoFireTimer) {
+      this.autoFireTimer.delay = value;
+    }
   }
 
   setupStageSettings() {
@@ -85,9 +110,9 @@ class GameScene extends Phaser.Scene {
   }
 
   setupTimers() {
-    // Auto-fire timer
+    // Auto-fire timer with debug settings
     this.autoFireTimer = this.time.addEvent({
-      delay: 400,
+      delay: this.debugSettings.playerAttackSpeed,
       callback: () => this.playerController.autoFire(),
       loop: true
     });
@@ -116,19 +141,28 @@ class GameScene extends Phaser.Scene {
   setupCollisions() {
     // Projectile-Enemy collisions
     this.physics.add.overlap(this.projectiles, this.enemies, (projectile, enemy) => {
-      this.projectileManager.hitEnemy(projectile, enemy);
+      if (!enemy.isDead) { // Only hit alive enemies
+        this.projectileManager.hitEnemy(projectile, enemy);
+      }
     });
 
     // Player-Enemy collisions
     this.physics.add.overlap(this.playerController.player, this.enemies, (player, enemy) => {
-      // Let the enemy manager handle the attack if enemy is in attack range
-      const distance = Phaser.Math.Distance.Between(player.x, player.y, enemy.x, enemy.y);
-      if (distance <= this.enemyManager.attackRange) {
-        // Enemy will handle attack through its update cycle
-      } else {
-        // Direct collision damage (for when enemy touches player while moving)
-        this.playerController.takeDamage(5);
+      if (!enemy.isDead) { // Only take damage from alive enemies
+        // Let the enemy manager handle the attack if enemy is in attack range
+        const distance = Phaser.Math.Distance.Between(player.x, player.y, enemy.x, enemy.y);
+        if (distance <= this.enemyManager.attackRange) {
+          // Enemy will handle attack through its update cycle
+        } else {
+          // Direct collision damage (for when enemy touches player while moving)
+          this.playerController.takeDamage(5);
+        }
       }
+    });
+
+    // Player-Soul collisions
+    this.physics.add.overlap(this.playerController.player, this.souls, (player, soul) => {
+      this.playerController.collectSoul(soul);
     });
   }
 
@@ -137,16 +171,26 @@ class GameScene extends Phaser.Scene {
       return;
     }
 
+    // Update debug settings real-time
+    this.autoFireTimer.delay = this.debugSettings.playerAttackSpeed;
+
     this.playerController.update();
     this.enemyManager.update();
     this.projectileManager.update();
     this.updateGameStateData();
+    this.updateDebugStats();
+  }
+
+  updateDebugStats() {
+    this.debugSettings.activeEnemies = this.enemies.children.entries.filter(e => e.active && !e.isDead).length;
+    this.debugSettings.playerHealth = this.gameStateRef?.player?.health || 0;
+    this.debugSettings.soulCount = this.gameStateRef?.soulCount || 0;
   }
 
   updateGameStateData() {
     if (this.gameStateRef && this.updateGameState) {
       this.gameStateRef.time += 1/60; // Add time based on 60fps
-      this.gameStateRef.enemies = this.enemies.children.entries;
+      this.gameStateRef.enemies = this.enemies.children.entries.filter(e => e.active && !e.isDead);
       this.gameStateRef.projectiles = this.projectiles.children.entries;
 
       // Stage completion conditions
@@ -167,6 +211,30 @@ class GameScene extends Phaser.Scene {
         }
       }
 
+      // Loss condition - player health reaches 0
+      if (this.gameStateRef.player.health <= 0) {
+        this.gameStateRef.isGameOver = true;
+        this.gameStateRef.completed = false;
+        
+        // Stop all timers and physics to prevent further updates
+        if (this.autoFireTimer) this.autoFireTimer.paused = true;
+        if (this.enemySpawnTimer) this.enemySpawnTimer.paused = true;
+        if (this.difficultyTimer) this.difficultyTimer.paused = true;
+        
+        // Stop all enemy movement
+        this.enemies.children.entries.forEach(enemy => {
+          if (enemy.active) {
+            enemy.setVelocity(0, 0);
+            enemy.isAttacking = false;
+          }
+        });
+        
+        // Stop player movement
+        if (this.playerController.player) {
+          this.playerController.player.setVelocity(0, 0);
+        }
+      }
+
       // Update the React state
       this.updateGameState({ ...this.gameStateRef });
     }
@@ -175,11 +243,17 @@ class GameScene extends Phaser.Scene {
   // Called when scene is paused
   pause() {
     console.log('Game scene paused');
+    if (this.autoFireTimer) this.autoFireTimer.paused = true;
+    if (this.enemySpawnTimer) this.enemySpawnTimer.paused = true;
+    if (this.difficultyTimer) this.difficultyTimer.paused = true;
   }
 
   // Called when scene is resumed
   resume() {
     console.log('Game scene resumed');
+    if (this.autoFireTimer) this.autoFireTimer.paused = false;
+    if (this.enemySpawnTimer) this.enemySpawnTimer.paused = false;
+    if (this.difficultyTimer) this.difficultyTimer.paused = false;
   }
 }
 

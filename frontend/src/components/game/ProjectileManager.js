@@ -23,6 +23,9 @@ class ProjectileManager {
   }
 
   hitEnemy(projectile, enemy) {
+    // Don't hit dead or dying enemies
+    if (enemy.isDead) return;
+    
     // Destroy projectile immediately
     projectile.destroy();
     
@@ -38,7 +41,7 @@ class ProjectileManager {
   }
 
   playEnemyHitAnimation(enemy) {
-    if (enemy.enemyType) {
+    if (enemy.enemyType && !enemy.isDead) {
       const hitAnimKey = `enemy_${enemy.enemyType}_hit_anim`;
       const hurtAnimKey = `enemy_${enemy.enemyType}_hurt_anim`;
       
@@ -53,17 +56,31 @@ class ProjectileManager {
         
         enemy.play(animKey);
         enemy.once('animationcomplete', () => {
-          enemy.isAttacking = wasAttacking; // Restore previous state
+          if (!enemy.isDead) {
+            enemy.isAttacking = wasAttacking; // Restore previous state
+          }
         });
       }
     }
   }
 
   destroyEnemy(enemy) {
+    if (enemy.isDead) return; // Already dead
+    
+    // Mark as dead immediately to prevent multiple hits
+    enemy.isDead = true;
+    enemy.setVelocity(0, 0);
+    enemy.isAttacking = false;
+    
     // Add score and experience immediately
     if (this.scene.gameStateRef) {
       this.scene.gameStateRef.score += 10;
       this.scene.gameStateRef.experience += 5;
+    }
+
+    // Hide health bar if it exists
+    if (this.scene.enemyManager && this.scene.enemyManager.hideEnemyHealthBar) {
+      this.scene.enemyManager.hideEnemyHealthBar(enemy);
     }
 
     // Play death animation if available
@@ -76,24 +93,29 @@ class ProjectileManager {
                    this.scene.anims.exists(deadAnimKey) ? deadAnimKey : null;
       
       if (animKey) {
-        enemy.setVelocity(0, 0); // Stop movement
-        enemy.isAttacking = true; // Prevent further actions
         enemy.play(animKey);
         
-        // Create death effect
+        // Create death effect immediately
         this.createDeathEffect(enemy);
         
         enemy.once('animationcomplete', () => {
+          // Create soul drop and death shadow
+          this.scene.enemyManager.createSoulDrop(enemy.x, enemy.y);
+          this.scene.enemyManager.createDeathShadow(enemy);
           enemy.destroy();
         });
       } else {
-        // No death animation, destroy immediately with effect
+        // No death animation, destroy immediately with effects
         this.createDeathEffect(enemy);
+        this.scene.enemyManager.createSoulDrop(enemy.x, enemy.y);
+        this.scene.enemyManager.createDeathShadow(enemy);
         enemy.destroy();
       }
     } else {
       // Basic enemy, destroy immediately
       this.createDeathEffect(enemy);
+      this.scene.enemyManager.createSoulDrop(enemy.x, enemy.y);
+      this.scene.enemyManager.createDeathShadow(enemy);
       enemy.destroy();
     }
   }
@@ -154,17 +176,10 @@ class ProjectileManager {
     });
     
     this.scene.time.delayedCall(100, () => {
-      if (enemy.active) {
+      if (enemy.active && !enemy.isDead) {
         enemy.setScale(originalScale.x, originalScale.y);
       }
     });
-  }
-
-  addScore() {
-    if (this.scene.gameStateRef) {
-      this.scene.gameStateRef.score += 10;
-      this.scene.gameStateRef.experience += 5;
-    }
   }
 }
 

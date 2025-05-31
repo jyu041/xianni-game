@@ -8,12 +8,13 @@ class PlayerController {
     this.attackRange = 150;
     this.iFrames = 1000; // Invincibility frames duration in ms
     this.lastHitTime = 0;
+    this.debugGraphics = null;
   }
 
   createPlayer() {
     // Create player sprite
     this.player = this.scene.physics.add.sprite(400, 300, 'player');
-    this.player.setDisplaySize(30, 30);
+    this.player.setDisplaySize(36, 36); // Increased from 30
     this.player.setCollideWorldBounds(true);
     this.player.setDrag(300);
     this.player.currentDirection = 'down';
@@ -22,7 +23,7 @@ class PlayerController {
     // Try to use actual sprite if loaded
     if (this.scene.textures.exists('mainChar_idle_down')) {
       this.player.setTexture('mainChar_idle_down');
-      this.player.setDisplaySize(80, 80);
+      this.player.setDisplaySize(96, 96); // Increased from 80
       this.player.play('mainChar_idle_down_anim');
       console.log('Using actual player sprite with animation');
     }
@@ -44,6 +45,34 @@ class PlayerController {
 
   update() {
     this.handleInput();
+    this.updateDebugRange();
+    this.updateAttackRange();
+  }
+
+  updateDebugRange() {
+    // Clear previous debug graphics
+    if (this.debugGraphics) {
+      this.debugGraphics.clear();
+    } else {
+      this.debugGraphics = this.scene.add.graphics();
+    }
+
+    const debugSettings = this.scene.debugSettings;
+    if (!debugSettings) return;
+
+    // Show player attack range
+    if (debugSettings.showPlayerAttackRange) {
+      this.debugGraphics.lineStyle(3, 0x00ff00, 0.4);
+      this.debugGraphics.strokeCircle(this.player.x, this.player.y, this.attackRange);
+    }
+  }
+
+  updateAttackRange() {
+    // Update attack range from debug settings
+    const debugSettings = this.scene.debugSettings;
+    if (debugSettings && debugSettings.playerAttackRange) {
+      this.attackRange = debugSettings.playerAttackRange;
+    }
   }
 
   handleInput() {
@@ -113,11 +142,14 @@ class PlayerController {
   autoFire() {
     if (this.scene.enemies.children.size === 0) return;
 
-    // Find nearest enemy within attack range
+    // Find nearest ALIVE enemy within attack range
     let nearest = null;
     let nearestDistance = Infinity;
 
     this.scene.enemies.children.entries.forEach(enemy => {
+      // Skip dead or dying enemies
+      if (!enemy.active || enemy.isDead) return;
+      
       const distance = Phaser.Math.Distance.Between(
         this.player.x, this.player.y, enemy.x, enemy.y
       );
@@ -129,7 +161,7 @@ class PlayerController {
       }
     });
 
-    if (!nearest) return; // No enemies in range
+    if (!nearest) return; // No alive enemies in range
 
     // Trigger attack animation
     this.triggerAttackAnimation();
@@ -161,7 +193,7 @@ class PlayerController {
 
   createProjectile(target) {
     const projectile = this.scene.projectiles.create(this.player.x, this.player.y, 'projectile');
-    projectile.setDisplaySize(8, 8);
+    projectile.setDisplaySize(10, 10); // Slightly increased from 8
     projectile.setTint(0xffff00);
 
     const angle = Phaser.Math.Angle.Between(
@@ -236,6 +268,25 @@ class PlayerController {
       },
       repeat: maxFlashes - 1
     });
+  }
+
+  collectSoul(soul) {
+    if (this.scene.gameStateRef) {
+      this.scene.gameStateRef.soulCount = (this.scene.gameStateRef.soulCount || 0) + soul.soulValue;
+    }
+    
+    // Create collection effect
+    const effect = this.scene.add.circle(soul.x, soul.y, 12, 0x00ffff, 0.8);
+    this.scene.tweens.add({
+      targets: effect,
+      scaleX: 2,
+      scaleY: 2,
+      alpha: 0,
+      duration: 300,
+      onComplete: () => effect.destroy()
+    });
+    
+    soul.destroy();
   }
 
   hitPlayer() {

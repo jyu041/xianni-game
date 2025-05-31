@@ -1,0 +1,518 @@
+{
+  "_metadata": {
+    "scanning_errors": 0
+  },
+  "animated portal.gif": {
+    "avg_duration_per_frame_ms": 0,
+    "dimensions": [
+      64,
+      64
+    ],
+    "frame_count": 7,
+    "looping": false,
+    "notes": "duration_estimated",
+    "total_duration_ms": 0,
+    "type": "gif"
+  },
+  "effects": {
+    "Effect_Anima_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        437,
+        437
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_BigHit_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        557,
+        553
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_BloodImpact_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        69,
+        60
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_Charged_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        321,
+        371
+      ],
+      "frame_count": 80,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1600,
+      "type": "gif"
+    },
+    "Effect_Constellation_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        299,
+        313
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_DitheredFire_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        517,
+        246
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_EldenRing_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        421,
+        425
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_ElectricShield_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        265,
+        265
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_Explosion2_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        355,
+        355
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_Explosion_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        517,
+        517
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_FastPixelFire_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        173,
+        193
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_Hyperspeed_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        517,
+        515
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_Impact_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        291,
+        301
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_Magma_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        381,
+        186
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_PowerChords_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        517,
+        353
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_PuffAndStars_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        120,
+        109
+      ],
+      "frame_count": 80,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1600,
+      "type": "gif"
+    },
+    "Effect_SmallHit_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        532,
+        528
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_Tentacles_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        453,
+        337
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_TheVortex_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        427,
+        431
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_Wheel_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        273,
+        273
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "Effect_Worm_1.gif": {
+      "avg_duration_per_frame_ms": 20,
+      "dimensions": [
+        413,
+        369
+      ],
+      "frame_count": 60,
+      "looping": false,
+      "notes": "duration_calculated",
+      "total_duration_ms": 1200,
+      "type": "gif"
+    },
+    "type": "folder"
+  },
+  "slash": {
+    "slash1_color1.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 9,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash1_color2.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 9,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash1_color3.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 9,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash1_color4.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 9,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash1_color5.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 9,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash2_color1.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 7,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash2_color2.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 7,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash2_color3.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 7,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash2_color4.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 7,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash2_color5.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 7,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash3_color1.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 9,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash3_color2.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 9,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash3_color3.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 9,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash3_color4.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 9,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "slash3_color5.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 9,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "type": "folder"
+  },
+  "warrior_attacks": {
+    "VFX1_GIF.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 10,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "VFX2_GIF.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 9,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "VFX3_GIF.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 10,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "VFX4_GIF.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 7,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "VFX5_GIF.gif": {
+      "avg_duration_per_frame_ms": 0,
+      "dimensions": [
+        128,
+        128
+      ],
+      "frame_count": 8,
+      "looping": false,
+      "notes": "duration_estimated",
+      "total_duration_ms": 0,
+      "type": "gif"
+    },
+    "type": "folder"
+  }
+}
