@@ -1,6 +1,16 @@
 // frontend/src/components/game/config/EnemyTypes.js
 
 export const ENEMY_TYPES = {
+  boyFighter: {
+    key: 'boyFighter',
+    texture: 'enemy_boyFighter_idle',
+    size: 70,
+    health: 50,
+    speedRange: [50, 70],
+    damage: 10,
+    frameSize: { width: 128, height: 128 }
+  },
+
   evilWizard1: {
     key: 'evilWizard1',
     texture: 'enemy_evilWizard1_idle',
@@ -30,17 +40,37 @@ export const ENEMY_TYPES = {
     damage: 25,
     frameSize: { width: 140, height: 140 }
   },
-  
-  fighter: {
-    key: 'fighter',
-    texture: 'enemy_fighter_idle',
+
+  girlKitsune: {
+    key: 'girlKitsune',
+    texture: 'enemy_girlKitsune_idle',
     size: 70,
     health: 50,
     speedRange: [50, 70],
     damage: 10,
     frameSize: { width: 128, height: 128 }
   },
-  
+
+  girlKunoichi: {
+    key: 'girlKunoichi',
+    texture: 'enemy_girlKunoichi_idle',
+    size: 70,
+    health: 50,
+    speedRange: [50, 70],
+    damage: 10,
+    frameSize: { width: 128, height: 128 }
+  },
+
+  girlShinobi: {
+    key: 'girlShinobi',
+    texture: 'enemy_girlShinobi_idle',
+    size: 70,
+    health: 50,
+    speedRange: [50, 70],
+    damage: 10,
+    frameSize: { width: 128, height: 128 }
+  },
+    
   martialHero1: {
     key: 'martialHero1',
     texture: 'enemy_martialHero1_idle',
@@ -71,6 +101,26 @@ export const ENEMY_TYPES = {
     frameSize: { width: 126, height: 126 }
   },
   
+  ninjaMonk: {
+    key: 'ninjaMonk',
+    texture: 'enemy_ninjaMonk_idle',
+    size: 91, // Increased by 40% from 65
+    health: 55,
+    speedRange: [50, 70],
+    damage: 18,
+    frameSize: { width: 96, height: 96 }
+  },
+
+  ninjaPeasant: {
+    key: 'ninjaPeasant',
+    texture: 'enemy_ninjaPeasant_idle',
+    size: 91, // Increased by 40% from 65
+    health: 55,
+    speedRange: [50, 70],
+    damage: 18,
+    frameSize: { width: 96, height: 96 }
+  },
+
   samurai1: {
     key: 'samurai1',
     texture: 'enemy_samurai1_idle',
@@ -91,15 +141,87 @@ export const ENEMY_TYPES = {
     frameSize: { width: 128, height: 128 }
   },
   
-  shinobi: {
-    key: 'shinobi',
-    texture: 'enemy_shinobi_idle',
+  skeletonArcher: {
+    key: 'skeletonArcher',
+    texture: 'enemy_skeletonArcher_idle',
     size: 75, // Increased by 15% from 65
     health: 45,
     speedRange: [60, 80],
     damage: 15,
     frameSize: { width: 128, height: 128 }
-  }
+  },
+
+  skeletonSpearman: {
+    key: 'skeletonSpearman',
+    texture: 'enemy_skeletonSpearman_idle',
+    size: 75, // Increased by 15% from 65
+    health: 45,
+    speedRange: [60, 80],
+    damage: 15,
+    frameSize: { width: 128, height: 128 }
+  },
+
+  skeletonWarrior: {
+    key: 'skeletonWarrior',
+    texture: 'enemy_skeletonWarrior_idle',
+    size: 75, // Increased by 15% from 65
+    health: 45,
+    speedRange: [60, 80],
+    damage: 15,
+    frameSize: { width: 128, height: 128 }
+  },
+
+  tenguKarasu: {
+    key: 'tenguKarasu',
+    texture: 'enemy_tenguKarasu_idle',
+    size: 75, // Increased by 15% from 65
+    health: 45,
+    speedRange: [60, 80],
+    damage: 15,
+    frameSize: { width: 128, height: 128 }
+  },
+
+  tenguYamabushi: {
+    key: 'tenguYamabushi',
+    texture: 'enemy_tenguYamabushi_idle',
+    size: 75, // Increased by 15% from 65
+    health: 45,
+    speedRange: [60, 80],
+    damage: 15,
+    frameSize: { width: 128, height: 128 }
+  },
+
+  werewolf1: {
+    key: 'werewolf1',
+    texture: 'enemy_werewolf1_idle',
+    size: 75, // Increased by 15% from 65
+    health: 45,
+    speedRange: [60, 80],
+    damage: 15,
+    frameSize: { width: 128, height: 128 }
+  },
+
+  werewolf2: {
+    key: 'werewolf2',
+    texture: 'enemy_werewolf2_idle',
+    size: 75, // Increased by 15% from 65
+    health: 45,
+    speedRange: [60, 80],
+    damage: 15,
+    frameSize: { width: 128, height: 128 }
+  },
+
+  werewolf3: {
+    key: 'werewolf3',
+    texture: 'enemy_werewolf3_idle',
+    size: 75, // Increased by 15% from 65
+    health: 45,
+    speedRange: [60, 80],
+    damage: 15,
+    frameSize: { width: 128, height: 128 }
+  },
+
+  
 };
 
 // Get array of all enemy types for random selection
