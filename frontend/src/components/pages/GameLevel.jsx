@@ -8,6 +8,9 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
   const canvasRef = useRef(null);
   const gameLoopRef = useRef(null);
   const lastFireTime = useRef(0);
+  const keys = useRef({});
+  const gameStateRef = useRef();
+
   const [gameState, setGameState] = useState({
     player: {
       x: 400,
@@ -28,7 +31,8 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
     isGameOver: false,
   });
 
-  const keys = useRef({});
+  // Keep a ref to current game state for game loop
+  gameStateRef.current = gameState;
 
   // Initialize game session
   useEffect(() => {
@@ -50,11 +54,41 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
   // Input handling
   useEffect(() => {
     const handleKeyDown = (e) => {
-      keys.current[e.key.toLowerCase()] = true;
+      const key = e.key.toLowerCase();
+      keys.current[key] = true;
+      if (
+        [
+          "w",
+          "a",
+          "s",
+          "d",
+          "arrowup",
+          "arrowdown",
+          "arrowleft",
+          "arrowright",
+        ].includes(key)
+      ) {
+        e.preventDefault();
+      }
     };
 
     const handleKeyUp = (e) => {
-      keys.current[e.key.toLowerCase()] = false;
+      const key = e.key.toLowerCase();
+      keys.current[key] = false;
+      if (
+        [
+          "w",
+          "a",
+          "s",
+          "d",
+          "arrowup",
+          "arrowdown",
+          "arrowleft",
+          "arrowright",
+        ].includes(key)
+      ) {
+        e.preventDefault();
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -66,101 +100,67 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
     };
   }, []);
 
-  // Game loop
+  // Canvas setup and game loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
 
-    // Set canvas size to fill the screen
+    // Set canvas size
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight - 80; // Account for header height
+      canvas.height = window.innerHeight - 80;
     };
 
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
+    // Game loop
     const gameLoop = () => {
-      if (gameState.isPaused || gameState.isGameOver) return;
+      const currentState = gameStateRef.current;
 
-      // Clear canvas
-      ctx.fillStyle = "#001122";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Update game state
-      updatePlayer(canvas);
-      updateEnemies();
-      updateProjectiles(canvas);
-      spawnEnemies(canvas);
-      autoFire();
-
-      // Check collisions
-      checkCollisions();
-
-      // Render
-      render(ctx);
-
-      // Update time
-      setGameState((prev) => ({ ...prev, time: prev.time + 1 / 60 }));
-    };
-
-    gameLoopRef.current = setInterval(gameLoop, 1000 / 60);
-
-    return () => {
-      if (gameLoopRef.current) {
-        clearInterval(gameLoopRef.current);
+      if (currentState.isPaused || currentState.isGameOver) {
+        return;
       }
-      window.removeEventListener("resize", resizeCanvas);
-    };
-  }, [gameState.isPaused, gameState.isGameOver]);
 
-  const updatePlayer = (canvas) => {
-    setGameState((prev) => {
-      const newPlayer = { ...prev.player };
+      // Create new state object
+      let newState = { ...currentState };
 
-      // Movement
-      if (keys.current["w"] || keys.current["arrowup"])
-        newPlayer.y -= newPlayer.speed;
-      if (keys.current["s"] || keys.current["arrowdown"])
-        newPlayer.y += newPlayer.speed;
-      if (keys.current["a"] || keys.current["arrowleft"])
-        newPlayer.x -= newPlayer.speed;
-      if (keys.current["d"] || keys.current["arrowright"])
-        newPlayer.x += newPlayer.speed;
+      // Update player position
+      const player = { ...newState.player };
+      if (keys.current["w"] || keys.current["arrowup"]) {
+        player.y = Math.max(25, player.y - player.speed);
+      }
+      if (keys.current["s"] || keys.current["arrowdown"]) {
+        player.y = Math.min(canvas.height - 25, player.y + player.speed);
+      }
+      if (keys.current["a"] || keys.current["arrowleft"]) {
+        player.x = Math.max(25, player.x - player.speed);
+      }
+      if (keys.current["d"] || keys.current["arrowright"]) {
+        player.x = Math.min(canvas.width - 25, player.x + player.speed);
+      }
+      newState.player = player;
 
-      // Boundary checking
-      newPlayer.x = Math.max(25, Math.min(canvas.width - 25, newPlayer.x));
-      newPlayer.y = Math.max(25, Math.min(canvas.height - 25, newPlayer.y));
-
-      return { ...prev, player: newPlayer };
-    });
-  };
-
-  const updateEnemies = () => {
-    setGameState((prev) => {
-      const newEnemies = prev.enemies.map((enemy) => {
-        // Move towards player
-        const dx = prev.player.x - enemy.x;
-        const dy = prev.player.y - enemy.y;
+      // Update enemies
+      newState.enemies = newState.enemies.map((enemy) => {
+        const dx = player.x - enemy.x;
+        const dy = player.y - enemy.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance > 0) {
-          enemy.x += (dx / distance) * enemy.speed;
-          enemy.y += (dy / distance) * enemy.speed;
+          return {
+            ...enemy,
+            x: enemy.x + (dx / distance) * enemy.speed,
+            y: enemy.y + (dy / distance) * enemy.speed,
+          };
         }
-
         return enemy;
       });
 
-      return { ...prev, enemies: newEnemies };
-    });
-  };
-
-  const updateProjectiles = (canvas) => {
-    setGameState((prev) => {
-      const newProjectiles = prev.projectiles
+      // Update projectiles
+      newState.projectiles = newState.projectiles
         .map((projectile) => ({
           ...projectile,
           x: projectile.x + projectile.vx,
@@ -168,104 +168,94 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
         }))
         .filter(
           (projectile) =>
-            projectile.x >= 0 &&
-            projectile.x <= canvas.width &&
-            projectile.y >= 0 &&
-            projectile.y <= canvas.height
+            projectile.x >= -50 &&
+            projectile.x <= canvas.width + 50 &&
+            projectile.y >= -50 &&
+            projectile.y <= canvas.height + 50
         );
 
-      return { ...prev, projectiles: newProjectiles };
-    });
-  };
+      // Spawn enemies
+      const spawnRate = Math.min(0.08, 0.02 + newState.time * 0.001);
+      const maxEnemies = Math.min(30, 10 + Math.floor(newState.time / 10));
 
-  const spawnEnemies = (canvas) => {
-    setGameState((prev) => {
-      if (prev.enemies.length < 20 && Math.random() < 0.02) {
+      if (newState.enemies.length < maxEnemies && Math.random() < spawnRate) {
         const side = Math.floor(Math.random() * 4);
         let x, y;
 
         switch (side) {
           case 0: // Top
             x = Math.random() * canvas.width;
-            y = -20;
+            y = -30;
             break;
           case 1: // Right
-            x = canvas.width + 20;
+            x = canvas.width + 30;
             y = Math.random() * canvas.height;
             break;
           case 2: // Bottom
             x = Math.random() * canvas.width;
-            y = canvas.height + 20;
+            y = canvas.height + 30;
             break;
           default: // Left
-            x = -20;
+            x = -30;
             y = Math.random() * canvas.height;
             break;
         }
+
+        const enemyTypes = [
+          { health: 50, speed: 1.5, size: 15, color: "#ff4444" },
+          { health: 75, speed: 1.0, size: 18, color: "#ff8844" },
+          { health: 100, speed: 0.8, size: 20, color: "#ff44aa" },
+        ];
+
+        const type = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
 
         const newEnemy = {
           id: Date.now() + Math.random(),
           x,
           y,
-          health: 50,
-          speed: 1 + Math.random() * 2,
-          size: 15,
-          type: Math.floor(Math.random() * 3), // Different enemy types
+          health: type.health,
+          maxHealth: type.health,
+          speed: type.speed + Math.random() * 0.5,
+          size: type.size,
+          color: type.color,
         };
 
-        return { ...prev, enemies: [...prev.enemies, newEnemy] };
+        newState.enemies.push(newEnemy);
       }
-      return prev;
-    });
-  };
 
-  const autoFire = () => {
-    const now = Date.now();
-    if (now - lastFireTime.current < 300) return; // Fire rate limit
+      // Auto fire
+      const now = Date.now();
+      if (now - lastFireTime.current > 300 && newState.enemies.length > 0) {
+        const nearestEnemy = newState.enemies.reduce(
+          (nearest, enemy) => {
+            const dx = player.x - enemy.x;
+            const dy = player.y - enemy.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            return distance < nearest.distance ? { enemy, distance } : nearest;
+          },
+          { enemy: null, distance: Infinity }
+        );
 
-    setGameState((prev) => {
-      if (prev.enemies.length === 0) return prev;
-
-      // Auto-aim at nearest enemy
-      const nearestEnemy = prev.enemies.reduce(
-        (nearest, enemy) => {
-          const dx = prev.player.x - enemy.x;
-          const dy = prev.player.y - enemy.y;
+        if (nearestEnemy.enemy) {
+          const dx = nearestEnemy.enemy.x - player.x;
+          const dy = nearestEnemy.enemy.y - player.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          return distance < nearest.distance ? { enemy, distance } : nearest;
-        },
-        { enemy: null, distance: Infinity }
-      );
+          const projectile = {
+            id: Date.now() + Math.random(),
+            x: player.x,
+            y: player.y,
+            vx: (dx / distance) * 8,
+            vy: (dy / distance) * 8,
+            size: 5,
+          };
 
-      if (nearestEnemy.enemy) {
-        const dx = nearestEnemy.enemy.x - prev.player.x;
-        const dy = nearestEnemy.enemy.y - prev.player.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        const projectile = {
-          id: Date.now() + Math.random(),
-          x: prev.player.x,
-          y: prev.player.y,
-          vx: (dx / distance) * 8,
-          vy: (dy / distance) * 8,
-          size: 5,
-        };
-
-        lastFireTime.current = now;
-        return {
-          ...prev,
-          projectiles: [...prev.projectiles, projectile],
-        };
+          newState.projectiles.push(projectile);
+          lastFireTime.current = now;
+        }
       }
 
-      return prev;
-    });
-  };
-
-  const checkCollisions = () => {
-    setGameState((prev) => {
-      let newState = { ...prev };
+      // Check collisions
       let scoreGained = 0;
       let expGained = 0;
 
@@ -303,47 +293,70 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
 
       // Player-Enemy collisions
       newState.enemies.forEach((enemy) => {
-        const dx = newState.player.x - enemy.x;
-        const dy = newState.player.y - enemy.y;
+        const dx = player.x - enemy.x;
+        const dy = player.y - enemy.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < enemy.size + 15) {
           newState.player.health = Math.max(0, newState.player.health - 0.5);
           if (newState.player.health <= 0) {
             newState.isGameOver = true;
-            endGame("died");
           }
         }
       });
 
+      // Update score and experience
       newState.score += scoreGained;
       newState.experience += expGained;
 
-      return newState;
-    });
-  };
+      // Update time
+      newState.time = newState.time + 1 / 60;
 
-  const render = (ctx) => {
+      // Render
+      render(ctx, newState, canvas);
+
+      // Update state
+      setGameState(newState);
+    };
+
+    gameLoopRef.current = setInterval(gameLoop, 1000 / 60);
+
+    return () => {
+      if (gameLoopRef.current) {
+        clearInterval(gameLoopRef.current);
+      }
+      window.removeEventListener("resize", resizeCanvas);
+    };
+  }, []);
+
+  const render = (ctx, state, canvas) => {
+    // Clear canvas
+    ctx.fillStyle = "#001122";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     // Draw player
+    ctx.save();
     ctx.fillStyle = "#00ff88";
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(gameState.player.x, gameState.player.y, 15, 0, Math.PI * 2);
+    ctx.arc(state.player.x, state.player.y, 15, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
 
     // Draw player inner glow
     ctx.fillStyle = "#88ffaa";
     ctx.beginPath();
-    ctx.arc(gameState.player.x, gameState.player.y, 8, 0, Math.PI * 2);
+    ctx.arc(state.player.x, state.player.y, 8, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
 
     // Draw enemies
-    gameState.enemies.forEach((enemy) => {
+    state.enemies.forEach((enemy) => {
+      ctx.save();
+
       // Enemy body
-      const colors = ["#ff4444", "#ff8844", "#ff44aa"];
-      ctx.fillStyle = colors[enemy.type] || "#ff4444";
+      ctx.fillStyle = enemy.color || "#ff4444";
       ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -351,23 +364,33 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
       ctx.fill();
       ctx.stroke();
 
-      // Enemy health bar
-      if (enemy.health < 50) {
+      // Enemy health bar (if damaged)
+      if (enemy.health < enemy.maxHealth) {
         const barWidth = enemy.size * 2;
         const barHeight = 4;
         const barX = enemy.x - barWidth / 2;
         const barY = enemy.y - enemy.size - 10;
 
+        // Background
         ctx.fillStyle = "#660000";
         ctx.fillRect(barX, barY, barWidth, barHeight);
 
+        // Health
         ctx.fillStyle = "#ff0000";
-        ctx.fillRect(barX, barY, (enemy.health / 50) * barWidth, barHeight);
+        ctx.fillRect(
+          barX,
+          barY,
+          (enemy.health / enemy.maxHealth) * barWidth,
+          barHeight
+        );
       }
+
+      ctx.restore();
     });
 
     // Draw projectiles
-    gameState.projectiles.forEach((projectile) => {
+    state.projectiles.forEach((projectile) => {
+      ctx.save();
       ctx.fillStyle = "#ffff00";
       ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 1;
@@ -382,12 +405,15 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
       ctx.beginPath();
       ctx.arc(projectile.x, projectile.y, projectile.size - 2, 0, Math.PI * 2);
       ctx.fill();
-      ctx.shadowBlur = 0;
+      ctx.restore();
     });
   };
 
   const endGame = async (reason) => {
-    if (!gameState.gameSession) return;
+    if (!gameState.gameSession) {
+      onGameEnd(reason, gameState.score);
+      return;
+    }
 
     try {
       await gameSessionService.endGameSession(gameState.gameSession.id, {
@@ -399,9 +425,9 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
           experienceGained: gameState.experience,
         },
       });
-      onGameEnd(reason, gameState.score);
     } catch (error) {
       console.error("Failed to end game session:", error);
+    } finally {
       onGameEnd(reason, gameState.score);
     }
   };
@@ -413,6 +439,13 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
   const quitGame = () => {
     endGame("quit");
   };
+
+  // Handle game over
+  useEffect(() => {
+    if (gameState.isGameOver) {
+      endGame("died");
+    }
+  }, [gameState.isGameOver]);
 
   if (gameState.isGameOver) {
     return (
