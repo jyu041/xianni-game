@@ -119,17 +119,6 @@ export const ENEMY_ANIMATIONS = {
     'enemy_gorgon2_walk_anim': {texture: 'enemy_gorgon2_walk', frames: [0, 12], frameRate: 8, repeat:-1},
   },
 
-  gorgon3: {
-    'enemy_gorgon3_attack1_anim': {texture: 'enemy_gorgon3_attack1', frames: [0, 15], frameRate: 12, repeat:0},
-    'enemy_gorgon3_attack2_anim': {texture: 'enemy_gorgon3_attack2', frames: [0, 6], frameRate: 12, repeat:0},
-    'enemy_gorgon3_attack3_anim': {texture: 'enemy_gorgon3_attack3', frames: [0, 9], frameRate: 12, repeat:0},
-    'enemy_gorgon3_death_anim': {texture: 'enemy_gorgon3_death', frames: [0, 2], frameRate: 8, repeat:0},
-    'enemy_gorgon3_hit_anim': {texture: 'enemy_gorgon3_hit', frames: [0, 2], frameRate: 10, repeat:0},
-    'enemy_gorgon3_idle_anim': {texture: 'enemy_gorgon3_idle', frames: [0, 6], frameRate: 8, repeat:-1},
-    'enemy_gorgon3_run_anim': {texture: 'enemy_gorgon3_run', frames: [0, 6], frameRate: 10, repeat:-1},
-    'enemy_gorgon3_walk_anim': {texture: 'enemy_gorgon3_walk', frames: [0, 12], frameRate: 8, repeat:-1},
-  },
-
   martialHero1: {
     'enemy_martialHero1_idle_anim': { texture: 'enemy_martialHero1_idle', frames: [0, 7], frameRate: 8, repeat: -1 },
     'enemy_martialHero1_run_anim': { texture: 'enemy_martialHero1_run', frames: [0, 7], frameRate: 10, repeat: -1 },
@@ -156,26 +145,6 @@ export const ENEMY_ANIMATIONS = {
     'enemy_martialHero3_attack3_anim': { texture: 'enemy_martialHero3_attack3', frames: [0, 8], frameRate: 12, repeat: 0 },
     'enemy_martialHero3_death_anim': { texture: 'enemy_martialHero3_death', frames: [0, 10], frameRate: 8, repeat: 0 },
     'enemy_martialHero3_hit_anim': { texture: 'enemy_martialHero3_hit', frames: [0, 2], frameRate: 10, repeat: 0 }
-  },
-
-  ninjaMonk: {
-    'enemy_ninjaMonk_attack1_anim': {texture: 'enemy_ninjaMonk_attack1', frames: [0, 4], frameRate: 12, repeat: 0},
-    'enemy_ninjaMonk_attack2_anim': {texture: 'enemy_ninjaMonk_attack2', frames: [0, 4], frameRate: 12, repeat: 0},
-    'enemy_ninjaMonk_death_anim': {texture: 'enemy_ninjaMonk_death', frames: [0, 4], frameRate: 8, repeat: 0},
-    'enemy_ninjaMonk_hit_anim': {texture: 'enemy_ninjaMonk_hit', frames: [0, 3], frameRate: 10, repeat: 0},
-    'enemy_ninjaMonk_idle_anim': {texture: 'enemy_ninjaMonk_idle', frames: [0, 6], frameRate: 8, repeat: -1},
-    'enemy_ninjaMonk_run_anim': {texture: 'enemy_ninjaMonk_run', frames: [0, 7], frameRate: 10, repeat: -1},
-    'enemy_ninjaMonk_walk_anim': {texture: 'enemy_ninjaMonk_walk', frames: [0, 6], frameRate: 8, repeat: -1},
-  },
-
-  ninjaPeasant: {
-    'enemy_ninjaPeasant_attack1_anim': {texture: 'enemy_ninjaPeasant_attack1', frames: [0, 5], frameRate: 12, repeat: 0},
-    'enemy_ninjaPeasant_attack2_anim': {texture: 'enemy_ninjaPeasant_attack2', frames: [0, 3], frameRate: 12, repeat: 0},
-    'enemy_ninjaPeasant_death_anim': {texture: 'enemy_ninjaPeasant_death', frames: [0, 3], frameRate: 8, repeat: 0},
-    'enemy_ninjaPeasant_hit_anim': {texture: 'enemy_ninjaPeasant_hit', frames: [0, 1], frameRate: 10, repeat: 0},
-    'enemy_ninjaPeasant_idle_anim': {texture: 'enemy_ninjaPeasant_idle', frames: [0, 5], frameRate: 8, repeat: -1},
-    'enemy_ninjaPeasant_run_anim': {texture: 'enemy_ninjaPeasant_run', frames: [0, 5], frameRate: 10, repeat: -1},
-    'enemy_ninjaPeasant_walk_anim': {texture: 'enemy_ninjaPeasant_walk', frames: [0, 7], frameRate: 8, repeat: -1},
   },
 
   samurai1: {

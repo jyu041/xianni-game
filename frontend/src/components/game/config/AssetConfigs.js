@@ -163,26 +163,6 @@ export const ENEMY_ASSETS = {
     { key: 'enemy_martialHero3_down', path: '/assets/characters/enemies/martialHero3/Going Down.png' }
   ],
 
-  ninjaMonk: [
-    { key: 'enemy_ninjaMonk_attack1', path: '/assets/characters/enemies/ninjaMonk/Attack_1.png' },
-    { key: 'enemy_ninjaMonk_attack2', path: '/assets/characters/enemies/ninjaMonk/Attack_2.png' },
-    { key: 'enemy_ninjaMonk_death', path: '/assets/characters/enemies/ninjaMonk/Dead.png' },
-    { key: 'enemy_ninjaMonk_hit', path: '/assets/characters/enemies/ninjaMonk/Hurt.png' },
-    { key: 'enemy_ninjaMonk_idle', path: '/assets/characters/enemies/ninjaMonk/Idle.png' },
-    { key: 'enemy_ninjaMonk_run', path: '/assets/characters/enemies/ninjaMonk/Run.png' },
-    { key: 'enemy_ninjaMonk_walk', path: '/assets/characters/enemies/ninjaMonk/Walk.png' },
-  ],
-
-  ninjaPeasant: [
-    { key: 'enemy_ninjaPeasant_attack1', path: '/assets/characters/enemies/ninjaPeasant/Attack_1.png' },
-    { key: 'enemy_ninjaPeasant_attack2', path: '/assets/characters/enemies/ninjaPeasant/Attack_2.png' },
-    { key: 'enemy_ninjaPeasant_death', path: '/assets/characters/enemies/ninjaPeasant/Dead.png' },
-    { key: 'enemy_ninjaPeasant_hit', path: '/assets/characters/enemies/ninjaPeasant/Hurt.png' },
-    { key: 'enemy_ninjaPeasant_idle', path: '/assets/characters/enemies/ninjaPeasant/Idle.png' },
-    { key: 'enemy_ninjaPeasant_run', path: '/assets/characters/enemies/ninjaPeasant/Run.png' },
-    { key: 'enemy_ninjaPeasant_walk', path: '/assets/characters/enemies/ninjaPeasant/Walk.png' },
-  ],
-
   samurai1: [
     { key: 'enemy_samurai1_attack', path: '/assets/characters/enemies/samurai1/ATTACK 1.png' },
     { key: 'enemy_samurai1_hurt', path: '/assets/characters/enemies/samurai1/HURT.png' },
@@ -319,12 +299,9 @@ export const getEnemyFrameSize = (enemyType) => {
     girlShinobi: { width: 128, height: 128 },
     gorgon1: { width: 128, height: 128 },
     gorgon2: { width: 128, height: 128 },
-    gorgon3: { width: 128, height: 128 },
     martialHero1: { width: 200, height: 200 },
     martialHero2: { width: 200, height: 200 },
     martialHero3: { width: 126, height: 126 },
-    ninjaMonk: { width: 128, height: 128 },
-    ninjaPeasant: { width: 128, height: 128 },
     samurai1: { width: 96, height: 96 },
     samurai2: { width: 128, height: 128 },
     skeletonArcher: { width: 128, height: 128 },

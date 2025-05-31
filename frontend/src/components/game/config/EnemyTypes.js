@@ -70,6 +70,26 @@ export const ENEMY_TYPES = {
     damage: 10,
     frameSize: { width: 128, height: 128 }
   },
+
+  gorgon1: {
+    key: 'gorgon1',
+    texture: 'enemy_gorgon1_idle',
+    size: 75, // Increased by 15% from 65
+    health: 45,
+    speedRange: [60, 80],
+    damage: 15,
+    frameSize: { width: 128, height: 128 }
+  },
+
+  gorgon2: {
+    key: 'gorgon2',
+    texture: 'enemy_gorgon2_idle',
+    size: 75, // Increased by 15% from 65
+    health: 45,
+    speedRange: [60, 80],
+    damage: 15,
+    frameSize: { width: 128, height: 128 }
+  },
     
   martialHero1: {
     key: 'martialHero1',
@@ -99,26 +119,6 @@ export const ENEMY_TYPES = {
     speedRange: [40, 60],
     damage: 16,
     frameSize: { width: 126, height: 126 }
-  },
-  
-  ninjaMonk: {
-    key: 'ninjaMonk',
-    texture: 'enemy_ninjaMonk_idle',
-    size: 91, // Increased by 40% from 65
-    health: 55,
-    speedRange: [50, 70],
-    damage: 18,
-    frameSize: { width: 96, height: 96 }
-  },
-
-  ninjaPeasant: {
-    key: 'ninjaPeasant',
-    texture: 'enemy_ninjaPeasant_idle',
-    size: 91, // Increased by 40% from 65
-    health: 55,
-    speedRange: [50, 70],
-    damage: 18,
-    frameSize: { width: 96, height: 96 }
   },
 
   samurai1: {
@@ -221,7 +221,7 @@ export const ENEMY_TYPES = {
     frameSize: { width: 128, height: 128 }
   },
 
-  
+
 };
 
 // Get array of all enemy types for random selection
