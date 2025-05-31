@@ -46,7 +46,7 @@ def scan_directory(root_dir):
     return assets_data
 
 if __name__ == "__main__":
-    assets_dir = "assets"  # Change this if needed
+    assets_dir = "assets/characters"  # Change this if needed
     output_file = "assets_structure.json"
     
     print(f"Scanning {assets_dir}...")

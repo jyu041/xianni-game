@@ -1,747 +1,1881 @@
 {
-  "characters": {
+  "enemies": {
     "type": "folder",
-    "enemies": {
+    "Black_Werewolf": {
       "type": "folder",
-      "evilWizard1": {
-        "type": "folder",
-        "Attack.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1200,
-            "height": 150
-          }
-        },
-        "Death.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 750,
-            "height": 150
-          }
-        },
-        "Idle.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1200,
-            "height": 150
-          }
-        },
-        "Move.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1200,
-            "height": 150
-          }
-        },
-        "Take Hit.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 600,
-            "height": 150
-          }
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
         }
       },
-      "evilWizard2": {
-        "type": "folder",
-        "Attack1.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 2000,
-            "height": 250
-          }
-        },
-        "Attack2.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 2000,
-            "height": 250
-          }
-        },
-        "Death.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1750,
-            "height": 250
-          }
-        },
-        "Fall.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 500,
-            "height": 250
-          }
-        },
-        "Idle.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 2000,
-            "height": 250
-          }
-        },
-        "Jump.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 500,
-            "height": 250
-          }
-        },
-        "Run.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 2000,
-            "height": 250
-          }
-        },
-        "Take hit.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 750,
-            "height": 250
-          }
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
         }
       },
-      "evilWizard3": {
-        "type": "folder",
-        "Attack.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1820,
-            "height": 140
-          }
-        },
-        "Death.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 2520,
-            "height": 140
-          }
-        },
-        "Fall.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 420,
-            "height": 140
-          }
-        },
-        "Get hit.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 420,
-            "height": 140
-          }
-        },
-        "Idle.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1400,
-            "height": 140
-          }
-        },
-        "Jump.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 420,
-            "height": 140
-          }
-        },
-        "Run.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1120,
-            "height": 140
-          }
-        },
-        "Walk.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1120,
-            "height": 140
-          }
-        },
-        "Projectile": {
-          "type": "folder",
-          "Explode.png": {
-            "type": "file",
-            "dimensions": {
-              "width": 350,
-              "height": 50
-            }
-          },
-          "Moving.png": {
-            "type": "file",
-            "dimensions": {
-              "width": 200,
-              "height": 50
-            }
-          }
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
         }
       },
-      "fighter": {
-        "type": "folder",
-        "Attack_1.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 512,
-            "height": 128
-          }
-        },
-        "Attack_2.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 384,
-            "height": 128
-          }
-        },
-        "Attack_3.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 512,
-            "height": 128
-          }
-        },
-        "Dead.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 384,
-            "height": 128
-          }
-        },
-        "Hurt.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 384,
-            "height": 128
-          }
-        },
-        "Idle.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 128
-          }
-        },
-        "Jump.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1280,
-            "height": 128
-          }
-        },
-        "Run.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1024,
-            "height": 128
-          }
-        },
-        "Shield.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 256,
-            "height": 128
-          }
-        },
-        "Walk.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1024,
-            "height": 128
-          }
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
         }
       },
-      "martialHero1": {
-        "type": "folder",
-        "Attack1.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1200,
-            "height": 200
-          }
-        },
-        "Attack2.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1200,
-            "height": 200
-          }
-        },
-        "Death.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1200,
-            "height": 200
-          }
-        },
-        "Fall.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 400,
-            "height": 200
-          }
-        },
-        "Idle.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1600,
-            "height": 200
-          }
-        },
-        "Jump.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 400,
-            "height": 200
-          }
-        },
-        "Run.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1600,
-            "height": 200
-          }
-        },
-        "Take Hit - white silhouette.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 800,
-            "height": 200
-          }
-        },
-        "Take Hit.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 800,
-            "height": 200
-          }
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
         }
       },
-      "martialHero2": {
-        "type": "folder",
-        "Attack1.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 800,
-            "height": 200
-          }
-        },
-        "Attack2.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 800,
-            "height": 200
-          }
-        },
-        "Death.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1400,
-            "height": 200
-          }
-        },
-        "Fall.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 400,
-            "height": 200
-          }
-        },
-        "Idle.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 800,
-            "height": 200
-          }
-        },
-        "Jump.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 400,
-            "height": 200
-          }
-        },
-        "Run.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1600,
-            "height": 200
-          }
-        },
-        "Take hit.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 600,
-            "height": 200
-          }
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
         }
       },
-      "martialHero3": {
-        "type": "folder",
-        "Attack1.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 882,
-            "height": 126
-          }
-        },
-        "Attack2.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 756,
-            "height": 126
-          }
-        },
-        "Attack3.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1134,
-            "height": 126
-          }
-        },
-        "Death.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1386,
-            "height": 126
-          }
-        },
-        "Going Down.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 378,
-            "height": 126
-          }
-        },
-        "Going Up.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 378,
-            "height": 126
-          }
-        },
-        "Idle.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1260,
-            "height": 126
-          }
-        },
-        "Run.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1008,
-            "height": 126
-          }
-        },
-        "Take Hit.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 378,
-            "height": 126
-          }
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1408,
+          "height": 128
         }
       },
-      "samurai1": {
-        "type": "folder",
-        "ATTACK 1.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 672,
-            "height": 96
-          }
-        },
-        "HURT.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 384,
-            "height": 96
-          }
-        },
-        "IDLE.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 960,
-            "height": 96
-          }
-        },
-        "RUN.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1536,
-            "height": 96
-          }
+      "Run+Attack.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
         }
       },
-      "samurai2": {
-        "type": "folder",
-        "Attack_1.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 128
-          }
-        },
-        "Attack_2.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 512,
-            "height": 128
-          }
-        },
-        "Attack_3.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 384,
-            "height": 128
-          }
-        },
-        "Dead.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 384,
-            "height": 128
-          }
-        },
-        "Hurt.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 256,
-            "height": 128
-          }
-        },
-        "Idle.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 128
-          }
-        },
-        "Jump.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1536,
-            "height": 128
-          }
-        },
-        "Run.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1024,
-            "height": 128
-          }
-        },
-        "Shield.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 256,
-            "height": 128
-          }
-        },
-        "Walk.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1024,
-            "height": 128
-          }
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1152,
+          "height": 128
         }
       },
-      "shinobi": {
+      "walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1408,
+          "height": 128
+        }
+      }
+    },
+    "evilWizard1": {
+      "type": "folder",
+      "Attack.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1200,
+          "height": 150
+        }
+      },
+      "Death.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 750,
+          "height": 150
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1200,
+          "height": 150
+        }
+      },
+      "Move.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1200,
+          "height": 150
+        }
+      },
+      "Take Hit.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 600,
+          "height": 150
+        }
+      }
+    },
+    "evilWizard2": {
+      "type": "folder",
+      "Attack1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 2000,
+          "height": 250
+        }
+      },
+      "Attack2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 2000,
+          "height": 250
+        }
+      },
+      "Death.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1750,
+          "height": 250
+        }
+      },
+      "Fall.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 500,
+          "height": 250
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 2000,
+          "height": 250
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 500,
+          "height": 250
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 2000,
+          "height": 250
+        }
+      },
+      "Take hit.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 750,
+          "height": 250
+        }
+      }
+    },
+    "evilWizard3": {
+      "type": "folder",
+      "Attack.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1820,
+          "height": 140
+        }
+      },
+      "Death.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 2520,
+          "height": 140
+        }
+      },
+      "Fall.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 420,
+          "height": 140
+        }
+      },
+      "Get hit.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 420,
+          "height": 140
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1400,
+          "height": 140
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 420,
+          "height": 140
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1120,
+          "height": 140
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1120,
+          "height": 140
+        }
+      },
+      "Projectile": {
         "type": "folder",
-        "Attack_1.png": {
+        "Explode.png": {
           "type": "file",
           "dimensions": {
-            "width": 640,
-            "height": 128
+            "width": 350,
+            "height": 50
           }
         },
-        "Attack_2.png": {
+        "Moving.png": {
           "type": "file",
           "dimensions": {
-            "width": 384,
-            "height": 128
-          }
-        },
-        "Attack_3.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 512,
-            "height": 128
-          }
-        },
-        "Dead.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 512,
-            "height": 128
-          }
-        },
-        "Hurt.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 256,
-            "height": 128
-          }
-        },
-        "Idle.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 128
-          }
-        },
-        "Jump.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1536,
-            "height": 128
-          }
-        },
-        "Run.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1024,
-            "height": 128
-          }
-        },
-        "Shield.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 512,
-            "height": 128
-          }
-        },
-        "Walk.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 1024,
-            "height": 128
+            "width": 200,
+            "height": 50
           }
         }
       }
     },
-    "mainCharacter": {
+    "fighter": {
       "type": "folder",
-      "ATTACK 1": {
-        "type": "folder",
-        "attack1_down.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
-        },
-        "attack1_left.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
-        },
-        "attack1_right.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
-        },
-        "attack1_up.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
         }
       },
-      "ATTACK 2": {
-        "type": "folder",
-        "attack2_down.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
-        },
-        "attack2_left.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
-        },
-        "attack2_right.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
-        },
-        "attack2_up.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
         }
       },
-      "IDLE": {
-        "type": "folder",
-        "idle_down.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
-        },
-        "idle_left.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
-        },
-        "idle_right.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
-        },
-        "idle_up.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
         }
       },
-      "RUN": {
-        "type": "folder",
-        "run_down.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
-        },
-        "run_left.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
-        },
-        "run_right.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
-        },
-        "run_up.png": {
-          "type": "file",
-          "dimensions": {
-            "width": 768,
-            "height": 80
-          }
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1280,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      },
+      "Shield.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      }
+    },
+    "Gorgon_1": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 2048,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1280,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Idle_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Special.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1664,
+          "height": 128
+        }
+      }
+    },
+    "Gorgon_2": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 2048,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1280,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Idle_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Special.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1664,
+          "height": 128
+        }
+      }
+    },
+    "Gorgon_3": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 2048,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1280,
+          "height": 128
+        }
+      },
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Idle_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Special.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1664,
+          "height": 128
+        }
+      }
+    },
+    "Karasu_tengu": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Idle_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1920,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      }
+    },
+    "Kitsune": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1280,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1280,
+          "height": 128
+        }
+      },
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1280,
+          "height": 128
+        }
+      },
+      "Fire_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 64
+        }
+      },
+      "Fire_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 704,
+          "height": 64
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      },
+      "Idle_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1280,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      }
+    },
+    "Kunoichi": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      },
+      "Cast.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Eating.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1152,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1152,
+          "height": 128
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1280,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      },
+      "Spine.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 10,
+          "height": 10
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      }
+    },
+    "martialHero1": {
+      "type": "folder",
+      "Attack1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1200,
+          "height": 200
+        }
+      },
+      "Attack2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1200,
+          "height": 200
+        }
+      },
+      "Death.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1200,
+          "height": 200
+        }
+      },
+      "Fall.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 400,
+          "height": 200
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1600,
+          "height": 200
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 400,
+          "height": 200
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1600,
+          "height": 200
+        }
+      },
+      "Take Hit - white silhouette.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 800,
+          "height": 200
+        }
+      },
+      "Take Hit.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 800,
+          "height": 200
+        }
+      }
+    },
+    "martialHero2": {
+      "type": "folder",
+      "Attack1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 800,
+          "height": 200
+        }
+      },
+      "Attack2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 800,
+          "height": 200
+        }
+      },
+      "Death.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1400,
+          "height": 200
+        }
+      },
+      "Fall.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 400,
+          "height": 200
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 800,
+          "height": 200
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 400,
+          "height": 200
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1600,
+          "height": 200
+        }
+      },
+      "Take hit.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 600,
+          "height": 200
+        }
+      }
+    },
+    "martialHero3": {
+      "type": "folder",
+      "Attack1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 882,
+          "height": 126
+        }
+      },
+      "Attack2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 756,
+          "height": 126
+        }
+      },
+      "Attack3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1134,
+          "height": 126
+        }
+      },
+      "Death.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1386,
+          "height": 126
+        }
+      },
+      "Going Down.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 378,
+          "height": 126
+        }
+      },
+      "Going Up.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 378,
+          "height": 126
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1260,
+          "height": 126
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1008,
+          "height": 126
+        }
+      },
+      "Take Hit.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 378,
+          "height": 126
+        }
+      }
+    },
+    "Ninja_Monk": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 480,
+          "height": 96
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 480,
+          "height": 96
+        }
+      },
+      "Blade.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 576,
+          "height": 96
+        }
+      },
+      "Cast.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 480,
+          "height": 96
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 480,
+          "height": 96
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 96
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 672,
+          "height": 96
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 864,
+          "height": 96
+        }
+      },
+      "Kunai.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 48,
+          "height": 16
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 96
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 672,
+          "height": 96
+        }
+      }
+    },
+    "Ninja_Peasant": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 576,
+          "height": 96
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 96
+        }
+      },
+      "Dart.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 6,
+          "height": 6
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 96
+        }
+      },
+      "Disguise.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 864,
+          "height": 96
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 192,
+          "height": 96
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 576,
+          "height": 96
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 96
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 576,
+          "height": 96
+        }
+      },
+      "Shot.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 576,
+          "height": 96
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 96
+        }
+      }
+    },
+    "Red_Werewolf": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1408,
+          "height": 128
+        }
+      },
+      "Run+Attack.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1152,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1408,
+          "height": 128
+        }
+      }
+    },
+    "samurai1": {
+      "type": "folder",
+      "ATTACK 1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 672,
+          "height": 96
+        }
+      },
+      "HURT.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 96
+        }
+      },
+      "IDLE.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 960,
+          "height": 96
+        }
+      },
+      "RUN.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1536,
+          "height": 96
+        }
+      }
+    },
+    "samurai2": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1536,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      },
+      "Shield.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      }
+    },
+    "shinobi": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1536,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      },
+      "Shield.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      }
+    },
+    "Skeleton_Archer": {
+      "type": "folder",
+      "Arrow.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 48,
+          "height": 48
+        }
+      },
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Evasion.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Shot_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1920,
+          "height": 128
+        }
+      },
+      "Shot_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1920,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      }
+    },
+    "Skeleton_Spearman": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Fall.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Protect.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Run+attack.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      }
+    },
+    "Skeleton_Warrior": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Protect.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 128,
+          "height": 128
+        }
+      },
+      "Run+attack.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      }
+    },
+    "White_Werewolf": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1408,
+          "height": 128
+        }
+      },
+      "Run+Attack.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 896,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1152,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1408,
+          "height": 128
+        }
+      }
+    },
+    "Yamabushi_tengu": {
+      "type": "folder",
+      "Attack_1.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Attack_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Attack_3.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 512,
+          "height": 128
+        }
+      },
+      "Dead.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Hurt.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 384,
+          "height": 128
+        }
+      },
+      "Idle.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 128
+        }
+      },
+      "Idle_2.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 640,
+          "height": 128
+        }
+      },
+      "Jump.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1920,
+          "height": 128
+        }
+      },
+      "Run.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      },
+      "Walk.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 1024,
+          "height": 128
+        }
+      }
+    }
+  },
+  "mainCharacter": {
+    "type": "folder",
+    "ATTACK 1": {
+      "type": "folder",
+      "attack1_down.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      },
+      "attack1_left.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      },
+      "attack1_right.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      },
+      "attack1_up.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      }
+    },
+    "ATTACK 2": {
+      "type": "folder",
+      "attack2_down.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      },
+      "attack2_left.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      },
+      "attack2_right.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      },
+      "attack2_up.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      }
+    },
+    "IDLE": {
+      "type": "folder",
+      "idle_down.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      },
+      "idle_left.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      },
+      "idle_right.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      },
+      "idle_up.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      }
+    },
+    "RUN": {
+      "type": "folder",
+      "run_down.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      },
+      "run_left.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      },
+      "run_right.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
+        }
+      },
+      "run_up.png": {
+        "type": "file",
+        "dimensions": {
+          "width": 768,
+          "height": 80
         }
       }
     }
