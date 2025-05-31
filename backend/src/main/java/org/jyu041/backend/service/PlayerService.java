@@ -69,6 +69,16 @@ public class PlayerService {
         return null;
     }
 
+    public Player addGems(String playerId, long gems) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            player.setGems(player.getGems() + gems);
+            return playerRepository.save(player);
+        }
+        return null;
+    }
+
     public Player unlockStage(String playerId, int stageId) {
         Optional<Player> playerOpt = playerRepository.findById(playerId);
         if (playerOpt.isPresent()) {
@@ -88,6 +98,40 @@ public class PlayerService {
         if (playerOpt.isPresent()) {
             Player player = playerOpt.get();
             player.setCurrentStage(stageId);
+            return playerRepository.save(player);
+        }
+        return null;
+    }
+
+    public Player completeStage(String playerId, int stageId, long score, long experience, long gold) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+
+            // Add rewards
+            player.setExperience(player.getExperience() + experience);
+            player.setGold(player.getGold() + gold);
+
+            // Check for level up
+            int newLevel = calculateLevelFromExperience(player.getExperience());
+            if (newLevel > player.getLevel()) {
+                player.setLevel(newLevel);
+            }
+
+            // Unlock next stage
+            List<Integer> unlockedStages = new ArrayList<>(player.getUnlockedStages());
+            int nextStage = stageId + 1;
+            if (!unlockedStages.contains(nextStage)) {
+                unlockedStages.add(nextStage);
+                player.setUnlockedStages(unlockedStages);
+            }
+
+            // Update current stage to next stage
+            player.setCurrentStage(nextStage);
+
+            // Update playtime
+            player.setLastPlayed(LocalDateTime.now());
+
             return playerRepository.save(player);
         }
         return null;

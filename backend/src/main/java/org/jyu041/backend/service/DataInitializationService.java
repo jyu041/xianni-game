@@ -43,6 +43,6 @@ public class DataInitializationService implements CommandLineRunner {
         playerRepository.save(player1);
         playerRepository.save(player2);
 
-        System.out.println("Initialized sample players in database");
+        System.out.println("Initialized sample players in database - no game sessions needed!");
     }
 }

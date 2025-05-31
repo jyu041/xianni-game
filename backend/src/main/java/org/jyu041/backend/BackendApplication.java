@@ -18,6 +18,6 @@ public class BackendApplication {
 	@CrossOrigin(origins = "*")
 	@GetMapping("/api/health")
 	public String health() {
-		return "Backend is running!";
+		return "Backend is running! Game sessions removed for simplified architecture.";
 	}
 }

@@ -1,7 +1,7 @@
 // frontend/src/components/pages/GameLevel.jsx
 import { useState, useEffect, useRef, useCallback } from "react";
 import GameLevelHeader from "../game/GameLevelHeader";
-import gameSessionService from "../services/gameSessionService";
+import playerService from "../services/playerService";
 import styles from "./GameLevel.module.css";
 
 const GameLevel = ({ stageData, playerData, onGameEnd }) => {
@@ -10,6 +10,7 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
   const lastFireTime = useRef(0);
   const keys = useRef({});
   const gameStateRef = useRef();
+  const gameStartTime = useRef(Date.now());
 
   const [gameState, setGameState] = useState({
     player: {
@@ -18,38 +19,18 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
       health: 100,
       maxHealth: 100,
       speed: 5,
-      experience: 0,
-      level: 1,
     },
     enemies: [],
     projectiles: [],
     experience: 0,
     score: 0,
     time: 0,
-    gameSession: null,
     isPaused: false,
     isGameOver: false,
   });
 
   // Keep a ref to current game state for game loop
   gameStateRef.current = gameState;
-
-  // Initialize game session
-  useEffect(() => {
-    const initGame = async () => {
-      try {
-        const session = await gameSessionService.startGameSession(
-          playerData.id,
-          stageData.stageId
-        );
-        setGameState((prev) => ({ ...prev, gameSession: session }));
-      } catch (error) {
-        console.error("Failed to start game session:", error);
-      }
-    };
-
-    initGame();
-  }, [playerData.id, stageData.stageId]);
 
   // Input handling
   useEffect(() => {
@@ -312,6 +293,12 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
       // Update time
       newState.time = newState.time + 1 / 60;
 
+      // Check for stage completion (survival for 5 minutes)
+      if (newState.time >= 300 && !newState.isGameOver) {
+        newState.isGameOver = true;
+        newState.completed = true;
+      }
+
       // Render
       render(ctx, newState, canvas);
 
@@ -410,26 +397,46 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
   };
 
   const endGame = async (reason) => {
-    if (!gameState.gameSession) {
-      onGameEnd(reason, gameState.score);
-      return;
-    }
+    const survivalTime = Math.floor(
+      (Date.now() - gameStartTime.current) / 1000
+    );
+
+    // Calculate rewards
+    const goldReward = Math.floor(gameState.score / 10);
+    const expReward = gameState.experience;
 
     try {
-      await gameSessionService.endGameSession(gameState.gameSession.id, {
-        scoreAchieved: gameState.score,
-        endReason: reason,
-        stats: {
-          enemiesKilled: Math.floor(gameState.score / 10),
-          survivalTime: Math.floor(gameState.time),
-          experienceGained: gameState.experience,
-        },
-      });
+      // Update playtime
+      await playerService.updatePlaytime(playerData.id, survivalTime);
+
+      if (reason === "completed") {
+        // Stage completed - give full rewards and unlock next stage
+        await playerService.completeStage(
+          playerData.id,
+          stageData.stageId,
+          gameState.score,
+          expReward,
+          goldReward
+        );
+      } else {
+        // Stage failed - give partial rewards
+        await playerService.addExperience(
+          playerData.id,
+          Math.floor(expReward * 0.5)
+        );
+        await playerService.addGold(
+          playerData.id,
+          Math.floor(goldReward * 0.5)
+        );
+      }
+
+      // Update last played
+      await playerService.updateLastPlayed(playerData.id);
     } catch (error) {
-      console.error("Failed to end game session:", error);
-    } finally {
-      onGameEnd(reason, gameState.score);
+      console.error("Failed to update player data:", error);
     }
+
+    onGameEnd(reason, gameState.score);
   };
 
   const pauseGame = () => {
@@ -443,20 +450,27 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
   // Handle game over
   useEffect(() => {
     if (gameState.isGameOver) {
-      endGame("died");
+      const reason = gameState.completed ? "completed" : "died";
+      endGame(reason);
     }
   }, [gameState.isGameOver]);
 
   if (gameState.isGameOver) {
+    const isCompleted = gameState.completed;
     return (
       <div className={styles.gameOver}>
         <div className={styles.gameOverContent}>
-          <h2>渡劫失败</h2>
+          <h2>{isCompleted ? "修炼成功！" : "渡劫失败"}</h2>
           <p>最终得分: {gameState.score}</p>
           <p>存活时间: {Math.floor(gameState.time)}秒</p>
           <p>击杀敌人: {Math.floor(gameState.score / 10)}</p>
           <p>获得经验: {gameState.experience}</p>
-          <button onClick={() => onGameEnd("died", gameState.score)}>
+          {isCompleted && <p>🎉 恭喜通关！下一关卡已解锁！</p>}
+          <button
+            onClick={() =>
+              onGameEnd(isCompleted ? "completed" : "died", gameState.score)
+            }
+          >
             返回关卡选择
           </button>
         </div>

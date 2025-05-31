@@ -1,4 +1,4 @@
-// frontend/src/services/playerService.js
+// frontend/src/components/services/playerService.js
 import apiService from './apiService.js';
 
 class PlayerService {
@@ -38,8 +38,21 @@ class PlayerService {
     return await apiService.post(`/saves/${id}/gold`, { gold });
   }
 
+  async addGems(id, gems) {
+    return await apiService.post(`/saves/${id}/gems`, { gems });
+  }
+
   async unlockStage(id, stageId) {
     return await apiService.post(`/saves/${id}/unlock-stage`, { stageId });
+  }
+
+  async completeStage(id, stageId, score, experience, gold) {
+    return await apiService.post(`/saves/${id}/complete-stage`, { 
+      stageId, 
+      score, 
+      experience, 
+      gold 
+    });
   }
 
   async updateLastPlayed(id) {

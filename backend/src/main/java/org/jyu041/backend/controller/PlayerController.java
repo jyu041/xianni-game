@@ -128,11 +128,43 @@ public class PlayerController {
         }
     }
 
+    @PostMapping("/{id}/gems")
+    public ResponseEntity<Player> addGems(@PathVariable String id, @RequestBody Map<String, Object> data) {
+        try {
+            long gems = ((Number) data.get("gems")).longValue();
+            Player player = playerService.addGems(id, gems);
+            if (player != null) {
+                return ResponseEntity.ok(player);
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @PostMapping("/{id}/unlock-stage")
     public ResponseEntity<Player> unlockStage(@PathVariable String id, @RequestBody Map<String, Object> data) {
         try {
             int stageId = ((Number) data.get("stageId")).intValue();
             Player player = playerService.unlockStage(id, stageId);
+            if (player != null) {
+                return ResponseEntity.ok(player);
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/{id}/complete-stage")
+    public ResponseEntity<Player> completeStage(@PathVariable String id, @RequestBody Map<String, Object> data) {
+        try {
+            int stageId = ((Number) data.get("stageId")).intValue();
+            long score = ((Number) data.getOrDefault("score", 0)).longValue();
+            long experience = ((Number) data.getOrDefault("experience", 0)).longValue();
+            long gold = ((Number) data.getOrDefault("gold", 0)).longValue();
+
+            Player player = playerService.completeStage(id, stageId, score, experience, gold);
             if (player != null) {
                 return ResponseEntity.ok(player);
             }
