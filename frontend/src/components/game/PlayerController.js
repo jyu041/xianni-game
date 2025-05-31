@@ -14,7 +14,7 @@ class PlayerController {
   createPlayer() {
     // Create player sprite
     this.player = this.scene.physics.add.sprite(400, 300, 'player');
-    this.player.setDisplaySize(36, 36); // Increased from 30
+    this.player.setDisplaySize(54, 54); // Increased by 50% from 36
     this.player.setCollideWorldBounds(true);
     this.player.setDrag(300);
     this.player.currentDirection = 'down';
@@ -23,7 +23,7 @@ class PlayerController {
     // Try to use actual sprite if loaded
     if (this.scene.textures.exists('mainChar_idle_down')) {
       this.player.setTexture('mainChar_idle_down');
-      this.player.setDisplaySize(96, 96); // Increased from 80
+      this.player.setDisplaySize(144, 144); // Increased by 50% from 96
       this.player.play('mainChar_idle_down_anim');
       console.log('Using actual player sprite with animation');
     }
@@ -275,17 +275,44 @@ class PlayerController {
       this.scene.gameStateRef.soulCount = (this.scene.gameStateRef.soulCount || 0) + soul.soulValue;
     }
     
-    // Create collection effect
-    const effect = this.scene.add.circle(soul.x, soul.y, 12, 0x00ffff, 0.8);
+    // Create enhanced collection animation
+    this.createSoulCollectionAnimation(soul);
+  }
+
+  createSoulCollectionAnimation(soul) {
+    // Create a tiny glowing circle that moves to player
+    const collectEffect = this.scene.add.circle(soul.x, soul.y, 4, 0x00ffff, 1);
+    collectEffect.setStrokeStyle(1, 0xffffff, 0.8);
+    
+    // Add glow effect
+    const glow = this.scene.add.circle(soul.x, soul.y, 8, 0x00ffff, 0.3);
+    
+    // Move upward slightly, shrink, and move to player
     this.scene.tweens.add({
-      targets: effect,
-      scaleX: 2,
-      scaleY: 2,
-      alpha: 0,
-      duration: 300,
-      onComplete: () => effect.destroy()
+      targets: [collectEffect, glow],
+      y: soul.y - 10,
+      duration: 200,
+      ease: 'Power2.easeOut',
+      onComplete: () => {
+        // Move to player center
+        this.scene.tweens.add({
+          targets: [collectEffect, glow],
+          x: this.player.x,
+          y: this.player.y,
+          scaleX: 0.1,
+          scaleY: 0.1,
+          alpha: 0,
+          duration: 300,
+          ease: 'Power2.easeIn',
+          onComplete: () => {
+            collectEffect.destroy();
+            glow.destroy();
+          }
+        });
+      }
     });
     
+    // Destroy the original soul
     soul.destroy();
   }
 

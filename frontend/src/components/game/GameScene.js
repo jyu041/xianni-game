@@ -38,6 +38,10 @@ class GameScene extends Phaser.Scene {
   preload() {
     console.log('Preloading assets...');
     
+    // Load custom fonts
+    this.load.bitmapFont('vonwaon16', '/assets/fonts/vonwaon-bitmap.ttf/VonwaonBitmap-16px.ttf');
+    this.load.bitmapFont('vonwaon12', '/assets/fonts/vonwaon-bitmap.ttf/VonwaonBitmap-12px.ttf');
+    
     // Use AssetLoader to handle all asset loading
     this.assetLoader = new AssetLoader(this);
     this.assetLoader.loadAllAssets();
@@ -86,7 +90,10 @@ class GameScene extends Phaser.Scene {
     
     // Apply real-time changes
     if (key === 'playerAttackSpeed' && this.autoFireTimer) {
-      this.autoFireTimer.delay = value;
+      // Ensure minimum of 50ms
+      const limitedValue = Math.max(50, value);
+      this.autoFireTimer.delay = limitedValue;
+      this.debugSettings[key] = limitedValue; // Update the stored value
     }
   }
 
@@ -110,9 +117,10 @@ class GameScene extends Phaser.Scene {
   }
 
   setupTimers() {
-    // Auto-fire timer with debug settings
+    // Auto-fire timer with debug settings and minimum limit
+    const attackSpeed = Math.max(50, this.debugSettings.playerAttackSpeed);
     this.autoFireTimer = this.time.addEvent({
-      delay: this.debugSettings.playerAttackSpeed,
+      delay: attackSpeed,
       callback: () => this.playerController.autoFire(),
       loop: true
     });
@@ -160,9 +168,11 @@ class GameScene extends Phaser.Scene {
       }
     });
 
-    // Player-Soul collisions
+    // Player-Soul collisions with range detection
     this.physics.add.overlap(this.playerController.player, this.souls, (player, soul) => {
-      this.playerController.collectSoul(soul);
+      if (soul.isSoul) {
+        this.playerController.collectSoul(soul);
+      }
     });
   }
 
@@ -171,8 +181,9 @@ class GameScene extends Phaser.Scene {
       return;
     }
 
-    // Update debug settings real-time
-    this.autoFireTimer.delay = this.debugSettings.playerAttackSpeed;
+    // Update debug settings real-time with minimum enforcement
+    const limitedAttackSpeed = Math.max(50, this.debugSettings.playerAttackSpeed);
+    this.autoFireTimer.delay = limitedAttackSpeed;
 
     this.playerController.update();
     this.enemyManager.update();

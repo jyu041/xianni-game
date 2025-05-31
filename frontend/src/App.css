@@ -1,5 +1,22 @@
 /* frontend/src/App.css */
 
+/* Font Face Declarations */
+@font-face {
+  font-family: 'VonwaonBitmap16';
+  src: url('/assets/fonts/vonwaon-bitmap.ttf/VonwaonBitmap-16px.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'VonwaonBitmap12';
+  src: url('/assets/fonts/vonwaon-bitmap.ttf/VonwaonBitmap-12px.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Global Reset and Base Styles */
 * {
   margin: 0;
@@ -9,7 +26,7 @@
 
 html, body {
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'VonwaonBitmap16', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -17,6 +34,7 @@ html, body {
   background: #000000;
   color: #ffffff;
   overflow-x: hidden;
+  font-size: 16px;
 }
 
 #root {
@@ -30,6 +48,19 @@ html, body {
   width: 100%;
   position: relative;
   background: radial-gradient(ellipse at center, #1a0d26 0%, #000000 70%);
+}
+
+/* Game Text Styles */
+.game-text-large {
+  font-family: 'VonwaonBitmap16', monospace;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.game-text-small {
+  font-family: 'VonwaonBitmap12', monospace;
+  font-size: 12px;
+  line-height: 1.2;
 }
 
 /* Custom Scrollbar */
@@ -62,6 +93,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   color: #ffffff;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  font-family: 'VonwaonBitmap16', monospace;
 }
 
 h1 {
@@ -84,6 +116,7 @@ p {
   line-height: 1.6;
   font-size: clamp(0.9rem, 2vw, 1rem);
   color: #e0e0e0;
+  font-family: 'VonwaonBitmap12', monospace;
 }
 
 /* Focus Styles */
@@ -420,6 +453,7 @@ p {
   word-wrap: break-word;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  font-family: 'VonwaonBitmap12', monospace;
 }
 
 .toast.success {
@@ -483,6 +517,7 @@ p {
   max-height: 80vh;
   overflow-y: auto;
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+  font-family: 'VonwaonBitmap12', monospace;
 }
 
 /* Dark Theme Specific Elements */

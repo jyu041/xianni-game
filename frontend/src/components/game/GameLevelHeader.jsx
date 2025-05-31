@@ -36,12 +36,14 @@ const GameLevelHeader = ({
         <div className={styles.leftSection}>
           <div className={styles.playerInfo}>
             <div className={styles.avatar}>
-              <div className={styles.avatarIcon}>仙</div>
+              <div className={`${styles.avatarIcon} game-text-large`}>仙</div>
             </div>
             <div className={styles.playerDetails}>
-              <div className={styles.playerName}>{playerData.playerName}</div>
+              <div className={`${styles.playerName} game-text-large`}>
+                {playerData.playerName}
+              </div>
               <div
-                className={styles.cultivation}
+                className={`${styles.cultivation} game-text-small`}
                 style={{ color: cultivation.color }}
               >
                 {cultivation.name}
@@ -60,7 +62,7 @@ const GameLevelHeader = ({
                 }}
               />
             </div>
-            <div className={styles.healthText}>
+            <div className={`${styles.healthText} game-text-small`}>
               生命值: {gameState.player.health}/{gameState.player.maxHealth}
             </div>
           </div>
@@ -71,34 +73,48 @@ const GameLevelHeader = ({
           <div className={styles.gameStats}>
             <div className={styles.statItem}>
               <span className={styles.statIcon}>🏆</span>
-              <span className={styles.statValue}>{gameState.score}</span>
-              <span className={styles.statLabel}>得分</span>
+              <span className={`${styles.statValue} game-text-large`}>
+                {gameState.score}
+              </span>
+              <span className={`${styles.statLabel} game-text-small`}>
+                得分
+              </span>
             </div>
             <div className={styles.statItem}>
               <span className={styles.statIcon}>⏱️</span>
-              <span className={styles.statValue}>
+              <span className={`${styles.statValue} game-text-large`}>
                 {Math.floor(gameState.time)}s
               </span>
-              <span className={styles.statLabel}>时间</span>
+              <span className={`${styles.statLabel} game-text-small`}>
+                时间
+              </span>
             </div>
             <div className={styles.statItem}>
               <span className={styles.statIcon}>⭐</span>
-              <span className={styles.statValue}>{gameState.experience}</span>
-              <span className={styles.statLabel}>经验</span>
+              <span className={`${styles.statValue} game-text-large`}>
+                {gameState.experience}
+              </span>
+              <span className={`${styles.statLabel} game-text-small`}>
+                经验
+              </span>
             </div>
             <div className={styles.statItem}>
               <span className={styles.statIcon}>👹</span>
-              <span className={styles.statValue}>
+              <span className={`${styles.statValue} game-text-large`}>
                 {gameState.enemies.length}
               </span>
-              <span className={styles.statLabel}>敌人</span>
+              <span className={`${styles.statLabel} game-text-small`}>
+                敌人
+              </span>
             </div>
             <div className={styles.statItem}>
               <span className={styles.statIcon}>🔮</span>
-              <span className={styles.statValue}>
+              <span className={`${styles.statValue} game-text-large`}>
                 {gameState.soulCount || 0}
               </span>
-              <span className={styles.statLabel}>魂魄</span>
+              <span className={`${styles.statLabel} game-text-small`}>
+                魂魄
+              </span>
             </div>
           </div>
         </div>
@@ -108,14 +124,14 @@ const GameLevelHeader = ({
           <Button
             variant="secondary"
             onClick={() => setShowDebugMenu(!showDebugMenu)}
-            className={styles.debugButton}
+            className={`${styles.debugButton} game-text-small`}
           >
             Debug
           </Button>
           <Button
             variant="secondary"
             onClick={onPause}
-            className={styles.pauseButton}
+            className={`${styles.pauseButton} game-text-small`}
           >
             {isPaused ? "继续" : "暂停"}
           </Button>

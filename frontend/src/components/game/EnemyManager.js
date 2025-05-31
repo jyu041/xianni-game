@@ -114,7 +114,8 @@ class EnemyManager {
     const angle = Phaser.Math.Angle.Between(enemy.x, enemy.y, player.x, player.y);
     const speed = enemy.enemySpeed || 50;
     
-    const direction = this.getDirectionFromAngle(angle);
+    // Force direction determination based on player position
+    const direction = this.getDirectionFromPlayerPosition(enemy, player);
     enemy.currentDirection = direction;
     
     enemy.setVelocity(
@@ -123,6 +124,19 @@ class EnemyManager {
     );
 
     this.updateEnemyMovementAnimation(enemy, direction);
+    this.forceCorrectDirection(enemy, direction);
+  }
+
+  getDirectionFromPlayerPosition(enemy, player) {
+    const deltaX = player.x - enemy.x;
+    const deltaY = player.y - enemy.y;
+    
+    // Prioritize horizontal movement for facing direction
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      return deltaX > 0 ? 'right' : 'left';
+    } else {
+      return deltaY > 0 ? 'down' : 'up';
+    }
   }
 
   getDirectionFromAngle(angle) {
@@ -154,13 +168,11 @@ class EnemyManager {
       if (animKey && (!enemy.anims.isPlaying || enemy.anims.currentAnim.key !== animKey)) {
         enemy.play(animKey);
       }
-
-      this.updateSpriteDirection(enemy, direction);
     }
   }
 
-  updateSpriteDirection(enemy, direction) {
-    // More precise direction handling
+  forceCorrectDirection(enemy, direction) {
+    // Force sprite facing direction - prioritize left/right facing
     switch (direction) {
       case 'left':
         enemy.setFlipX(true);
@@ -170,9 +182,25 @@ class EnemyManager {
         break;
       case 'up':
       case 'down':
-        // Maintain current flip state for up/down movement
+        // For up/down movement, maintain the flip based on last horizontal direction
+        // If no previous horizontal direction, default to facing right (no flip)
+        if (enemy.lastHorizontalDirection === 'left') {
+          enemy.setFlipX(true);
+        } else {
+          enemy.setFlipX(false);
+        }
         break;
     }
+    
+    // Store last horizontal direction for up/down movement
+    if (direction === 'left' || direction === 'right') {
+      enemy.lastHorizontalDirection = direction;
+    }
+  }
+
+  updateSpriteDirection(enemy, direction) {
+    // More precise direction handling with forced facing
+    this.forceCorrectDirection(enemy, direction);
   }
 
   tryAttack(enemy, player) {
@@ -281,6 +309,7 @@ class EnemyManager {
     enemy.isAttacking = false;
     enemy.isDead = false;
     enemy.currentDirection = 'right';
+    enemy.lastHorizontalDirection = 'right'; // Default facing right
     enemy.lastAttackTime = 0;
 
     enemy.setCollideWorldBounds(false);
@@ -299,53 +328,80 @@ class EnemyManager {
       // Hide health bar
       this.hideEnemyHealthBar(enemy);
       
-      // Create soul drop
-      this.createSoulDrop(enemy.x, enemy.y);
+      // Create soul drop using enemy sprite
+      this.createSoulDrop(enemy);
       
       const deathAnimKey = `enemy_${enemy.enemyType}_death_anim`;
       if (this.scene.anims.exists(deathAnimKey)) {
         enemy.play(deathAnimKey);
         enemy.once('animationcomplete', () => {
-          this.createDeathShadow(enemy);
           enemy.destroy();
         });
       } else {
-        this.createDeathShadow(enemy);
         enemy.destroy();
       }
     }
   }
 
-  createSoulDrop(x, y) {
-    const soul = this.scene.add.circle(x, y, 8, 0x00ffff, 0.8);
-    soul.setStrokeStyle(2, 0xffffff, 0.6);
-    soul.soulValue = 1;
+  createSoulDrop(enemy) {
+    // Create soul using enemy's idle frame, rotated 90 degrees and tinted blue
+    let soulTexture = enemy.texture.key;
+    
+    // Try to get the idle texture for this enemy type
+    const idleTextureKey = `enemy_${enemy.enemyType}_idle`;
+    if (this.scene.textures.exists(idleTextureKey)) {
+      soulTexture = idleTextureKey;
+    }
+    
+    const soul = this.scene.add.sprite(enemy.x, enemy.y, soulTexture);
+    
+    // Match enemy size and rotation
+    soul.setDisplaySize(enemy.displayWidth * 0.8, enemy.displayHeight * 0.8);
+    soul.setRotation(Math.PI / 2); // Rotate 90 degrees to lie down
+    soul.setTint(0x4444ff); // Blue tint
+    soul.setAlpha(0.8);
+    
+    // Add physics for collection
+    this.scene.physics.add.existing(soul);
+    soul.body.setSize(soul.displayWidth * 0.6, soul.displayHeight * 0.6); // Smaller collision box
     
     // Add to souls group for collection
     if (!this.scene.souls) {
       this.scene.souls = this.scene.physics.add.group();
     }
-    
-    this.scene.physics.add.existing(soul);
     this.scene.souls.add(soul);
     
-    // Gentle floating animation
+    // Set soul properties
+    soul.soulValue = 1;
+    soul.isSoul = true;
+    
+    // Gentle pulsing glow effect
     this.scene.tweens.add({
       targets: soul,
-      y: y - 10,
+      alpha: 0.5,
       duration: 1000,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut'
     });
     
-    // Auto-expire after 30 seconds
-    this.scene.time.delayedCall(30000, () => {
+    // Add subtle floating
+    this.scene.tweens.add({
+      targets: soul,
+      y: soul.y - 5,
+      duration: 1500,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
+    
+    // Auto-expire after 60 seconds
+    this.scene.time.delayedCall(60000, () => {
       if (soul && soul.active) {
         this.scene.tweens.add({
           targets: soul,
           alpha: 0,
-          duration: 1000,
+          duration: 2000,
           onComplete: () => soul.destroy()
         });
       }
@@ -353,27 +409,8 @@ class EnemyManager {
   }
 
   createDeathShadow(enemy) {
-    // Create a horizontal shadow of the dead enemy
-    const shadow = this.scene.add.sprite(enemy.x, enemy.y, enemy.texture.key);
-    shadow.setDisplaySize(enemy.displayWidth * 0.8, enemy.displayHeight * 0.4);
-    shadow.setAlpha(0.3);
-    shadow.setTint(0x4444ff);
-    shadow.setRotation(Math.PI / 2); // Rotate 90 degrees to lie down
-    
-    // Make it slightly transparent and bluish
-    shadow.setDepth(-1); // Behind other objects
-    
-    // Fade out over time
-    this.scene.time.delayedCall(60000, () => { // 1 minute
-      if (shadow && shadow.active) {
-        this.scene.tweens.add({
-          targets: shadow,
-          alpha: 0,
-          duration: 2000,
-          onComplete: () => shadow.destroy()
-        });
-      }
-    });
+    // This method is now handled by createSoulDrop
+    // Keep for compatibility but no longer used
   }
 }
 

@@ -50,6 +50,13 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
     };
   }, [isDragging, dragOffset]);
 
+  const handleAttackSpeedChange = (e) => {
+    const value = parseInt(e.target.value);
+    // Ensure minimum attack speed of 50ms
+    const limitedValue = Math.max(50, value);
+    onDebugChange("playerAttackSpeed", limitedValue);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -60,7 +67,7 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
         onMouseDown={handleMouseDown}
       >
         <div className={styles.debugHeader}>
-          <h3>Debug Menu</h3>
+          <h3 className="game-text-large">Debug Menu</h3>
           <button className={styles.closeButton} onClick={onClose}>
             ×
           </button>
@@ -68,7 +75,7 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
 
         <div className={styles.debugContent}>
           <div className={styles.debugSection}>
-            <h4>Display Options</h4>
+            <h4 className="game-text-large">Display Options</h4>
 
             <label className={styles.checkboxLabel}>
               <input
@@ -78,7 +85,7 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
                   onDebugChange("showPlayerAttackRange", e.target.checked)
                 }
               />
-              Show Player Attack Range
+              <span className="game-text-small">Show Player Attack Range</span>
             </label>
 
             <label className={styles.checkboxLabel}>
@@ -89,29 +96,37 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
                   onDebugChange("showEnemyAttackRanges", e.target.checked)
                 }
               />
-              Show Enemy Attack Ranges
+              <span className="game-text-small">Show Enemy Attack Ranges</span>
             </label>
           </div>
 
           <div className={styles.debugSection}>
-            <h4>Player Settings</h4>
+            <h4 className="game-text-large">Player Settings</h4>
 
             <div className={styles.inputGroup}>
-              <label>Attack Speed (ms):</label>
+              <label className="game-text-small">Attack Speed (ms):</label>
               <input
                 type="number"
-                min="100"
+                min="50"
                 max="2000"
                 step="50"
                 value={debugSettings.playerAttackSpeed}
-                onChange={(e) =>
-                  onDebugChange("playerAttackSpeed", parseInt(e.target.value))
-                }
+                onChange={handleAttackSpeedChange}
+                className="game-text-small"
               />
+              <small
+                className="game-text-small"
+                style={{
+                  color: "rgba(255, 255, 255, 0.6)",
+                  marginTop: "0.25rem",
+                }}
+              >
+                Minimum: 50ms
+              </small>
             </div>
 
             <div className={styles.inputGroup}>
-              <label>Attack Range:</label>
+              <label className="game-text-small">Attack Range:</label>
               <input
                 type="number"
                 min="50"
@@ -121,16 +136,23 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
                 onChange={(e) =>
                   onDebugChange("playerAttackRange", parseInt(e.target.value))
                 }
+                className="game-text-small"
               />
             </div>
           </div>
 
           <div className={styles.debugSection}>
-            <h4>Game Stats</h4>
+            <h4 className="game-text-large">Game Stats</h4>
             <div className={styles.statDisplay}>
-              <span>Active Enemies: {debugSettings.activeEnemies}</span>
-              <span>Player Health: {debugSettings.playerHealth}</span>
-              <span>魂魄: {debugSettings.soulCount}</span>
+              <span className="game-text-small">
+                Active Enemies: {debugSettings.activeEnemies}
+              </span>
+              <span className="game-text-small">
+                Player Health: {debugSettings.playerHealth}
+              </span>
+              <span className="game-text-small">
+                魂魄: {debugSettings.soulCount}
+              </span>
             </div>
           </div>
         </div>
