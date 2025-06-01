@@ -50,13 +50,6 @@ const SidebarMenu = ({ activeMenu, onMenuSelect, playerData }) => {
 
   return (
     <div className={styles.sidebarMenu}>
-      <div className={styles.menuHeader}>
-        <h3 className={styles.menuTitle}>
-          <span className={styles.menuTitleIcon}>⚡</span>
-          功能菜单
-        </h3>
-      </div>
-
       <div className={styles.menuList}>
         {menuItems.map((item) => (
           <button

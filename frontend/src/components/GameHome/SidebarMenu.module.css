@@ -30,32 +30,6 @@
   pointer-events: none;
 }
 
-.menuHeader {
-  padding: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  position: relative;
-  z-index: 1;
-}
-
-.menuTitle {
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #ffffff;
-  margin: 0;
-  text-align: center;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.menuTitleIcon {
-  font-size: 1.5rem;
-  color: rgba(138, 43, 226, 0.9);
-  filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.5));
-}
-
 .menuList {
   flex: 1;
   padding: 1rem;
