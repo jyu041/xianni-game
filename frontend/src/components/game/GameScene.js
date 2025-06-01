@@ -83,6 +83,9 @@ class GameScene extends Phaser.Scene {
     // Create checkerboard background for explorable area
     this.createCheckerboardBackground();
 
+    // Create 剑气 texture early in scene creation
+    this.createJianqiTexture();
+
     // Initialize managers
     this.animationManager = new AnimationManager(this);
     this.playerController = new PlayerController(this);
@@ -124,6 +127,61 @@ class GameScene extends Phaser.Scene {
     this.setupCollisions();
 
     console.log('Scene creation complete');
+  }
+
+  createJianqiTexture() {
+    // Create 剑气 texture at scene level to ensure it's available
+    if (this.textures.exists('jianqi')) {
+      console.log('Jianqi texture already exists');
+      return;
+    }
+    
+    try {
+      // Create a simple but highly visible rectangular sword
+      const canvas = this.textures.createCanvas('jianqi', 20, 40);
+      const context = canvas.getContext('2d');
+      
+      // Clear canvas
+      context.clearRect(0, 0, 20, 40);
+      
+      // Draw main blade - bright cyan
+      context.fillStyle = '#00AAFF';
+      context.fillRect(8, 5, 4, 30);
+      
+      // Draw sword tip
+      context.fillStyle = '#88DDFF';
+      context.fillRect(7, 2, 6, 8);
+      
+      // Draw energy trails
+      context.fillStyle = '#44BBFF';
+      context.fillRect(5, 8, 2, 24);
+      context.fillRect(13, 8, 2, 24);
+      
+      // Draw outer glow
+      context.fillStyle = 'rgba(170, 238, 255, 0.6)';
+      context.fillRect(4, 6, 12, 28);
+      
+      // Refresh the texture
+      canvas.refresh();
+      
+      console.log('Successfully created jianqi texture using canvas method');
+    } catch (error) {
+      console.error('Failed to create jianqi texture:', error);
+      
+      // Fallback method using graphics
+      const graphics = this.add.graphics();
+      graphics.fillStyle(0x00AAFF, 1.0);
+      graphics.fillRect(8, 5, 4, 30);
+      graphics.fillStyle(0x88DDFF, 1.0);
+      graphics.fillRect(7, 2, 6, 8);
+      graphics.fillStyle(0x44BBFF, 0.8);
+      graphics.fillRect(5, 8, 2, 24);
+      graphics.fillRect(13, 8, 2, 24);
+      graphics.generateTexture('jianqi', 20, 40);
+      graphics.destroy();
+      
+      console.log('Created jianqi texture using fallback graphics method');
+    }
   }
 
   createCheckerboardBackground() {

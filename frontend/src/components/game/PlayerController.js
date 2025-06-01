@@ -266,8 +266,15 @@ class PlayerController {
   }
 
   autoFire() {
-    if (!this.canAttack()) return;
-    if (this.scene.enemies.children.size === 0) return;
+    if (!this.canAttack()) {
+      console.log('Cannot attack - still on cooldown');
+      return;
+    }
+    
+    if (this.scene.enemies.children.size === 0) {
+      console.log('No enemies to target');
+      return;
+    }
 
     // Find nearest ALIVE enemy within attack range
     let nearest = null;
@@ -281,6 +288,8 @@ class PlayerController {
         this.player.x, this.player.y, enemy.x, enemy.y
       );
       
+      console.log(`Enemy at distance: ${distance}, attack range: ${this.attackRange}`);
+      
       // Only target enemies within attack range
       if (distance < this.attackRange && distance < nearestDistance) {
         nearest = enemy;
@@ -288,36 +297,51 @@ class PlayerController {
       }
     });
 
-    if (!nearest) return; // No alive enemies in range
+    if (!nearest) {
+      console.log('No enemies in attack range');
+      return; // No alive enemies in range
+    }
 
-    // Update last attack time
+    console.log(`Targeting enemy at distance: ${nearestDistance}`);
+
+    // Update last attack time FIRST
     this.lastAttackTime = this.scene.time.now;
 
-    // Trigger attack animation
-    this.triggerAttackAnimation();
-
-    // Create 剑气 projectiles
+    // Create 剑气 projectiles IMMEDIATELY - don't wait for animation
+    console.log('=== CALLING CREATE JIANQI ===');
     this.createJianqi(nearest);
+
+    // Trigger attack animation AFTER creating projectile
+    this.triggerAttackAnimation();
   }
 
   triggerAttackAnimation() {
+    console.log('=== TRIGGERING ATTACK ANIMATION ===');
+    
     if (!this.player.isAttacking) {
       this.player.isAttacking = true;
       
       const attackAnimKey = `mainChar_attack1_${this.player.currentDirection}_anim`;
+      console.log('Trying to play animation:', attackAnimKey);
+      
       if (this.scene.anims.exists(attackAnimKey)) {
         this.player.play(attackAnimKey);
+        console.log('Playing attack animation:', attackAnimKey);
         
         // Reset attack state when animation completes
         this.player.once('animationcomplete', () => {
+          console.log('Attack animation completed');
           this.player.isAttacking = false;
         });
       } else {
+        console.log('Attack animation not found, using timer fallback');
         // If no attack animation, just reset attack state quickly
         this.scene.time.delayedCall(200, () => {
           this.player.isAttacking = false;
         });
       }
+    } else {
+      console.log('Player already attacking, skipping animation trigger');
     }
   }
 
@@ -359,39 +383,19 @@ class PlayerController {
   }
 
   createJianqiTexture() {
-    // Create SVG for 剑气 (sword energy) only if it doesn't exist
-    if (this.scene.textures.exists('jianqi')) {
-      return;
+    // Don't create texture here - it's now created at scene level
+    // This method is kept for compatibility but texture creation moved to GameScene.create()
+    if (!this.scene.textures.exists('jianqi')) {
+      console.warn('Jianqi texture not found! This should have been created in scene.create()');
+      // Emergency fallback - create simple colored rectangle
+      const graphics = this.scene.add.graphics();
+      graphics.fillStyle(0x00AAFF, 1.0);
+      graphics.fillRect(0, 0, 20, 40);
+      graphics.generateTexture('jianqi_fallback', 20, 40);
+      graphics.destroy();
+      return 'jianqi_fallback';
     }
-    
-    // Create a more visible 剑气 using Phaser's built-in graphics
-    const graphics = this.scene.add.graphics();
-    
-    // Set the graphics position and create a larger, more visible sword energy
-    graphics.clear();
-    
-    // Main sword blade - bright blue
-    graphics.fillStyle(0x00aaff, 1.0);
-    graphics.fillRect(8, 5, 4, 30); // Main vertical blade
-    
-    // Sword tip
-    graphics.fillStyle(0x88ddff, 1.0);
-    graphics.fillRect(7, 2, 6, 8); // Wider top
-    
-    // Energy trails on sides
-    graphics.fillStyle(0x44bbff, 0.8);
-    graphics.fillRect(5, 8, 2, 24); // Left trail
-    graphics.fillRect(13, 8, 2, 24); // Right trail
-    
-    // Outer glow effect
-    graphics.fillStyle(0xaaeeff, 0.4);
-    graphics.fillRect(4, 6, 12, 28); // Outer glow
-    
-    // Generate texture from graphics
-    graphics.generateTexture('jianqi', 20, 40);
-    graphics.destroy();
-    
-    console.log('Successfully created jianqi texture');
+    return 'jianqi';
   }
 
   takeDamage(damage) {
