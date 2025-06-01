@@ -38,6 +38,10 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
     vfxScale: 1.0,
     vfxRotation: 0,
     showDamageNumbers: true,
+    critChance: 15, // Percentage (0-100)
+    critDamageMultiplier: 1.5,
+    playerMovementSpeed: 200,
+    jianqiTravelSpeed: 300,
   });
 
   // Global game state reference for Phaser

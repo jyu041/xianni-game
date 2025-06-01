@@ -44,19 +44,20 @@ class ProjectileManager {
     // Get damage amount (from projectile or default)
     const damage = projectile.damage || this.projectileDamage;
     
+    // Get crit values from debug settings or defaults
+    const debugSettings = this.scene.debugSettings;
+    const critChance = debugSettings?.critChance !== undefined ? debugSettings.critChance / 100 : 0.15;
+    const critDamageMultiplier = debugSettings?.critDamageMultiplier || 1.5;
+    
+    // Calculate critical hit
+    const isCritical = Math.random() < critChance;
+    const actualDamage = isCritical ? damage * critDamageMultiplier : damage;
+    
     // Deal damage to enemy
-    enemy.health -= damage;
+    enemy.health -= actualDamage;
     
     // Show damage number
     if (this.scene.damageNumberManager) {
-      const isCritical = Math.random() < 0.15; // 15% critical chance
-      const actualDamage = isCritical ? damage * 1.5 : damage;
-      
-      // Update enemy health with actual damage
-      if (isCritical) {
-        enemy.health -= damage * 0.5; // Additional damage for critical
-      }
-      
       this.scene.damageNumberManager.showDamageNumber(
         enemy.x, 
         enemy.y - 20, 

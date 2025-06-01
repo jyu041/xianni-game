@@ -27,7 +27,11 @@ class GameScene extends Phaser.Scene {
       selectedVfxEffect: '',
       vfxScale: 1.0,
       vfxRotation: 0,
-      showDamageNumbers: true
+      showDamageNumbers: true,
+      critChance: 15, // Percentage (0-100)
+      critDamageMultiplier: 1.5,
+      playerMovementSpeed: 200,
+      jianqiTravelSpeed: 300
     };
     
     // World settings

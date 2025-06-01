@@ -107,6 +107,28 @@ const DebugMenu = ({
     onDebugChange("selectedVfxEffect", e.target.value);
   };
 
+  const handleJianqiSpeedChange = (e) => {
+    const value = parseInt(e.target.value);
+    const limitedValue = Math.max(50, value);
+    onDebugChange("jianqiTravelSpeed", limitedValue);
+  };
+
+  const handleMovementSpeedChange = (e) => {
+    const value = parseInt(e.target.value);
+    const limitedValue = Math.max(50, value);
+    onDebugChange("playerMovementSpeed", limitedValue);
+  };
+
+  const handleCritChanceChange = (e) => {
+    const value = parseFloat(e.target.value);
+    onDebugChange("critChance", value);
+  };
+
+  const handleCritDamageChange = (e) => {
+    const value = parseFloat(e.target.value);
+    onDebugChange("critDamageMultiplier", value);
+  };
+
   const handleCastVfx = () => {
     if (debugSettings.selectedVfxEffect && onCastVfx) {
       const options = {
@@ -241,6 +263,83 @@ const DebugMenu = ({
               <div className={styles.sliderLabels}>
                 <span className="game-text-small">1px</span>
                 <span className="game-text-small">2000px</span>
+              </div>
+            </div>
+
+            <div className={styles.sliderGroup}>
+              <label className="game-text-small">
+                Movement Speed: {debugSettings.playerMovementSpeed || 200}px/s
+              </label>
+              <input
+                type="range"
+                min="50"
+                max="1000"
+                step="10"
+                value={debugSettings.playerMovementSpeed || 200}
+                onChange={handleMovementSpeedChange}
+                className={styles.slider}
+              />
+              <div className={styles.sliderLabels}>
+                <span className="game-text-small">50px/s</span>
+                <span className="game-text-small">1000px/s</span>
+              </div>
+            </div>
+
+            <div className={styles.sliderGroup}>
+              <label className="game-text-small">
+                剑气 Travel Speed: {debugSettings.jianqiTravelSpeed || 300}px/s
+              </label>
+              <input
+                type="range"
+                min="50"
+                max="2000"
+                step="25"
+                value={debugSettings.jianqiTravelSpeed || 300}
+                onChange={handleJianqiSpeedChange}
+                className={styles.slider}
+              />
+              <div className={styles.sliderLabels}>
+                <span className="game-text-small">50px/s</span>
+                <span className="game-text-small">2000px/s</span>
+              </div>
+            </div>
+
+            <div className={styles.sliderGroup}>
+              <label className="game-text-small">
+                Crit Chance: {(debugSettings.critChance || 15).toFixed(1)}%
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                step="1"
+                value={debugSettings.critChance || 15}
+                onChange={handleCritChanceChange}
+                className={styles.slider}
+              />
+              <div className={styles.sliderLabels}>
+                <span className="game-text-small">0%</span>
+                <span className="game-text-small">100%</span>
+              </div>
+            </div>
+
+            <div className={styles.sliderGroup}>
+              <label className="game-text-small">
+                Crit Damage:{" "}
+                {(debugSettings.critDamageMultiplier || 1.5).toFixed(1)}x
+              </label>
+              <input
+                type="range"
+                min="1.0"
+                max="10.0"
+                step="0.1"
+                value={debugSettings.critDamageMultiplier || 1.5}
+                onChange={handleCritDamageChange}
+                className={styles.slider}
+              />
+              <div className={styles.sliderLabels}>
+                <span className="game-text-small">1.0x</span>
+                <span className="game-text-small">10.0x</span>
               </div>
             </div>
           </div>

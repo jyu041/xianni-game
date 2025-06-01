@@ -31,7 +31,7 @@ class PlayerController {
     // Create player sprite
     this.player = this.scene.physics.add.sprite(400, 300, 'player');
     this.player.setDisplaySize(49, 49); // Reduced by 10% from 54
-    this.player.setCollideWorldBounds(true);
+    this.player.setCollideWorldBounds(true); // Prevent player from leaving world bounds
     this.player.setDrag(300);
     this.player.currentDirection = 'down';
     this.player.isAttacking = false;
@@ -62,17 +62,17 @@ class PlayerController {
     );
     this.attackCooldownBg.setStrokeStyle(1, 0xffffff, 0.3);
 
-    // Create fill bar
+    // Create fill bar - grey color, always visible
     this.attackCooldownBar = this.scene.add.rectangle(
       this.player.x, 
       this.player.y + this.player.displayHeight/2 + 10, 
       28, 2, 
-      0x00ff88
+      0x888888 // Grey color instead of green
     );
     
-    // Initially hide the bars
-    this.attackCooldownBg.setVisible(false);
-    this.attackCooldownBar.setVisible(false);
+    // Always keep bars visible
+    this.attackCooldownBg.setVisible(true);
+    this.attackCooldownBar.setVisible(true);
   }
 
   updateAttackCooldownBar() {
@@ -81,28 +81,21 @@ class PlayerController {
     const currentTime = this.scene.time.now;
     const timeSinceAttack = currentTime - this.lastAttackTime;
     
-    // Show bar only when on cooldown
-    if (timeSinceAttack < this.attackCooldown) {
-      const progress = timeSinceAttack / this.attackCooldown;
-      const fillWidth = 28 * progress;
-      
-      this.attackCooldownBg.setVisible(true);
-      this.attackCooldownBar.setVisible(true);
-      this.attackCooldownBar.setDisplaySize(fillWidth, 2);
-      
-      // Update position to follow player
-      this.attackCooldownBg.setPosition(
-        this.player.x, 
-        this.player.y + this.player.displayHeight/2 + 10
-      );
-      this.attackCooldownBar.setPosition(
-        this.player.x, 
-        this.player.y + this.player.displayHeight/2 + 10
-      );
-    } else {
-      this.attackCooldownBg.setVisible(false);
-      this.attackCooldownBar.setVisible(false);
-    }
+    // Always show the bars and update progress
+    const progress = Math.min(timeSinceAttack / this.attackCooldown, 1.0);
+    const fillWidth = 28 * progress;
+    
+    this.attackCooldownBar.setDisplaySize(fillWidth, 2);
+    
+    // Update position to follow player
+    this.attackCooldownBg.setPosition(
+      this.player.x, 
+      this.player.y + this.player.displayHeight/2 + 10
+    );
+    this.attackCooldownBar.setPosition(
+      this.player.x, 
+      this.player.y + this.player.displayHeight/2 + 10
+    );
   }
 
   setupInput() {
@@ -188,7 +181,11 @@ class PlayerController {
   handleInput() {
     if (!this.player) return;
 
-    const speed = 200;
+    // Get movement speed from debug settings or default
+    const baseSpeed = 200;
+    const debugSettings = this.scene.debugSettings;
+    const speed = debugSettings?.playerMovementSpeed || baseSpeed;
+    
     let velocityX = 0;
     let velocityY = 0;
     let newDirection = this.player.currentDirection;
@@ -311,14 +308,11 @@ class PlayerController {
   }
 
   createJianqi(target) {
+    // Create 剑气 texture first if it doesn't exist
+    this.createJianqiTexture();
+    
     for (let i = 0; i < this.jianqiConfig.count; i++) {
       const jianqi = this.scene.projectiles.create(this.player.x, this.player.y, 'jianqi');
-      
-      // Create 剑气 SVG if it doesn't exist
-      if (!this.scene.textures.exists('jianqi')) {
-        this.createJianqiTexture();
-        jianqi.setTexture('jianqi');
-      }
       
       jianqi.setDisplaySize(20 * this.jianqiConfig.size, 40 * this.jianqiConfig.size);
       jianqi.setTint(0x88ddff); // Light blue sword energy color
@@ -351,22 +345,31 @@ class PlayerController {
   }
 
   createJianqiTexture() {
-    // Create SVG for 剑气 (sword energy)
+    // Create SVG for 剑气 (sword energy) only if it doesn't exist
+    if (this.scene.textures.exists('jianqi')) {
+      return;
+    }
+    
     const graphics = this.scene.add.graphics();
     
-    // Draw sword energy shape
-    graphics.fillStyle(0xffffff);
-    graphics.fillEllipse(0, -15, 8, 30); // Main blade
-    graphics.fillEllipse(0, -10, 12, 20); // Wider center
-    graphics.fillEllipse(0, -5, 6, 10); // Tip
+    // Draw sword energy shape with proper coordinates
+    graphics.fillStyle(0x88ddff, 1.0); // Light blue color
+    graphics.fillEllipse(10, 20, 8, 30); // Main blade (centered in 20x40 area)
+    graphics.fillEllipse(10, 15, 12, 20); // Wider center
+    graphics.fillEllipse(10, 10, 6, 10); // Tip
     
-    // Add energy trails
-    graphics.fillStyle(0xccddff, 0.7);
-    graphics.fillEllipse(-2, -12, 4, 24);
-    graphics.fillEllipse(2, -12, 4, 24);
+    // Add energy trails for visual effect
+    graphics.fillStyle(0xaaeeff, 0.7);
+    graphics.fillEllipse(8, 18, 4, 24);
+    graphics.fillEllipse(12, 18, 4, 24);
+    
+    // Add outer glow
+    graphics.fillStyle(0xffffff, 0.3);
+    graphics.fillEllipse(10, 20, 14, 34);
     
     graphics.generateTexture('jianqi', 20, 40);
     graphics.destroy();
+    console.log('Created jianqi texture');
   }
 
   takeDamage(damage) {
