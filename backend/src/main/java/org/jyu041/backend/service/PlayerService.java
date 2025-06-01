@@ -9,12 +9,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class PlayerService {
 
     @Autowired
     private PlayerRepository playerRepository;
+
+    @Autowired
+    private ElementService elementService;
 
     public List<Player> getAllPlayers() {
         return playerRepository.findAllByOrderByLastPlayedDesc();
@@ -103,6 +108,176 @@ public class PlayerService {
         return null;
     }
 
+    public Player updatePlaytime(String playerId, long additionalSeconds) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            player.setTotalPlaytimeSeconds(player.getTotalPlaytimeSeconds() + additionalSeconds);
+            player.setPlaytime(player.getPlaytime() + additionalSeconds);
+            return playerRepository.save(player);
+        }
+        return null;
+    }
+
+    public Player updateLastPlayed(String playerId) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            player.setLastPlayed(LocalDateTime.now());
+            return playerRepository.save(player);
+        }
+        return null;
+    }
+
+    /**
+     * Add element experience and update levels
+     */
+    public Player addElementExperience(String playerId, Map<String, Long> elementExperience) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            Map<String, Long> currentExp = player.getElementExperience();
+            Map<String, Integer> currentLevels = player.getElementLevels();
+
+            boolean levelChanged = false;
+            for (Map.Entry<String, Long> entry : elementExperience.entrySet()) {
+                String element = entry.getKey();
+                Long expGain = entry.getValue();
+
+                // Add experience
+                Long newExp = currentExp.getOrDefault(element, 0L) + expGain;
+                currentExp.put(element, newExp);
+
+                // Check for level up
+                int newLevel = elementService.calculateElementLevel(newExp);
+                int oldLevel = currentLevels.getOrDefault(element, 0);
+
+                if (newLevel > oldLevel) {
+                    currentLevels.put(element, newLevel);
+                    levelChanged = true;
+                }
+            }
+
+            player.setElementExperience(currentExp);
+            player.setElementLevels(currentLevels);
+
+            // Check for 大元素使 achievement
+            if (levelChanged && elementService.hasGreatElementMasterAchievement(currentLevels)) {
+                List<String> achievements = new ArrayList<>(player.getAchievements() != null ? player.getAchievements() : new ArrayList<>());
+                if (!achievements.contains("大元素使")) {
+                    achievements.add("大元素使");
+                    player.setAchievements(achievements);
+
+                    // Check for Tianni Sword mutation unlock
+                    if (player.getTianniSwordLevel() >= 10) {
+                        player.setHasTianniSwordMutation(true);
+                    }
+                }
+            }
+
+            return playerRepository.save(player);
+        }
+        return null;
+    }
+
+    /**
+     * Update primary element
+     */
+    public Player updatePrimaryElement(String playerId, String primaryElement) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            player.setPrimaryElement(primaryElement);
+            return playerRepository.save(player);
+        }
+        return null;
+    }
+
+    /**
+     * Update treasure levels
+     */
+    public Player updateTreasureLevel(String playerId, String treasureName, int level) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            Map<String, Integer> treasureLevels = player.getTreasureLevels();
+            if (treasureLevels == null) {
+                treasureLevels = new HashMap<>();
+            }
+            treasureLevels.put(treasureName, level);
+            player.setTreasureLevels(treasureLevels);
+            return playerRepository.save(player);
+        }
+        return null;
+    }
+
+    /**
+     * Upgrade Tianni Sword
+     */
+    public Player upgradeTianniSword(String playerId) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            int currentLevel = player.getTianniSwordLevel();
+
+            if (currentLevel < 10) {
+                player.setTianniSwordLevel(currentLevel + 1);
+
+                // Check for mutation unlock at level 10
+                if (currentLevel + 1 == 10 && elementService.hasGreatElementMasterAchievement(player.getElementLevels())) {
+                    player.setHasTianniSwordMutation(true);
+                }
+
+                return playerRepository.save(player);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Add mana
+     */
+    public Player addMana(String playerId, int mana) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            int newMana = Math.min(player.getMaxMana(), player.getMana() + mana);
+            player.setMana(newMana);
+            return playerRepository.save(player);
+        }
+        return null;
+    }
+
+    /**
+     * Use mana
+     */
+    public Player useMana(String playerId, int manaCost) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            if (player.getMana() >= manaCost) {
+                player.setMana(player.getMana() - manaCost);
+                return playerRepository.save(player);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Update game statistics
+     */
+    public Player updateGameStats(String playerId, long enemiesKilled, long damageDealt, long soulsCollected) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            player.setTotalEnemiesKilled(player.getTotalEnemiesKilled() + enemiesKilled);
+            player.setTotalDamageDealt(player.getTotalDamageDealt() + damageDealt);
+            player.setTotalSoulsCollected(player.getTotalSoulsCollected() + soulsCollected);
+            return playerRepository.save(player);
+        }
+        return null;
+    }
+
     public Player completeStage(String playerId, int stageId, long score, long experience, long gold) {
         Optional<Player> playerOpt = playerRepository.findById(playerId);
         if (playerOpt.isPresent()) {
@@ -111,6 +286,12 @@ public class PlayerService {
             // Add rewards
             player.setExperience(player.getExperience() + experience);
             player.setGold(player.getGold() + gold);
+
+            // Add element experience based on primary element
+            Map<String, Long> elementExpGain = elementService.calculateElementExperienceGain(
+                    player.getPrimaryElement(), experience
+            );
+            addElementExperience(playerId, elementExpGain);
 
             // Check for level up
             int newLevel = calculateLevelFromExperience(player.getExperience());

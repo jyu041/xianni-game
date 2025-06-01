@@ -7,6 +7,9 @@ import EnemyManager from "./EnemyManager";
 import ProjectileManager from "./ProjectileManager";
 import VfxManager from "./VfxManager";
 import DamageNumberManager from "./DamageNumberManager";
+import TianniSwordManager from "./TianniSwordManager";
+import HealthRegenManager from "./HealthRegenManager";
+import elementService from "../../services/elementService";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -14,6 +17,8 @@ class GameScene extends Phaser.Scene {
     this.gameStateRef = null;
     this.updateGameState = null;
     this.stageData = null;
+    this.playerData = null; // Store player data for element system
+    this.elementInteraction = null; // Store current element interaction effects
     this.debugSettings = {
       showPlayerAttackRange: false,
       showEnemyAttackRanges: false,
@@ -28,28 +33,28 @@ class GameScene extends Phaser.Scene {
       vfxScale: 1.0,
       vfxRotation: 0,
       showDamageNumbers: true,
-      showEnemyHealthBars: true, // New setting for enemy health bars
-      critChance: 15, // Percentage (0-100)
+      showEnemyHealthBars: true,
+      critChance: 15,
       critDamageMultiplier: 1.5,
       playerMovementSpeed: 200,
       jianqiTravelSpeed: 300,
-      enemySpawnInterval: 2000, // milliseconds
+      enemySpawnInterval: 2000,
       invincibility: false
     };
     
     // World settings
-    this.worldSize = { width: 4800, height: 3600 }; // Much larger virtual world
-    this.viewportSize = { width: 0, height: 0 }; // Will be set in create()
-    this.cameraFollowBorder = 150; // How close to edge before camera moves
+    this.worldSize = { width: 4800, height: 3600 };
+    this.viewportSize = { width: 0, height: 0 };
+    this.cameraFollowBorder = 150;
   }
 
   init(data) {
     this.gameStateRef = data.gameStateRef;
     this.updateGameState = data.updateGameState;
     this.stageData = data.stageData;
+    this.playerData = data.playerData; // Store player data
     this.onDebugChange = data.onDebugChange;
     
-    // Initialize soul count in game state
     if (this.gameStateRef) {
       this.gameStateRef.soulCount = this.gameStateRef.soulCount || 0;
     }
@@ -58,32 +63,23 @@ class GameScene extends Phaser.Scene {
   preload() {
     console.log('Preloading assets...');
     
-    // Load custom fonts
     this.load.bitmapFont('vonwaon16', '/assets/fonts/vonwaon-bitmap.ttf/VonwaonBitmap-16px.ttf');
     this.load.bitmapFont('vonwaon12', '/assets/fonts/vonwaon-bitmap.ttf/VonwaonBitmap-12px.ttf');
     
-    // Initialize VFX manager before asset loading
     this.vfxManager = new VfxManager(this);
-    
-    // Use AssetLoader to handle all asset loading
     this.assetLoader = new AssetLoader(this);
     this.assetLoader.loadAllAssets();
   }
 
-  create() {
+
+  async create() {
     console.log('Creating game scene...');
 
-    // Set viewport size based on available space (accounting for sidebars)
     this.viewportSize.width = this.cameras.main.width;
     this.viewportSize.height = this.cameras.main.height;
-
-    // Set world bounds to larger virtual world
     this.physics.world.setBounds(0, 0, this.worldSize.width, this.worldSize.height);
 
-    // Create checkerboard background for explorable area
     this.createCheckerboardBackground();
-
-    // Create 剑气 texture early in scene creation
     this.createJianqiTexture();
 
     // Initialize managers
@@ -92,41 +88,164 @@ class GameScene extends Phaser.Scene {
     this.enemyManager = new EnemyManager(this);
     this.projectileManager = new ProjectileManager(this);
     this.damageNumberManager = new DamageNumberManager(this);
-    // VfxManager is already initialized in preload
+    this.tianniSwordManager = new TianniSwordManager(this);
+    this.healthRegenManager = new HealthRegenManager(this);
 
-    // Create animations first
     this.animationManager.createAllAnimations();
     
     console.log('VFX Manager ready for DOM-based GIF effects');
 
-    // Create player in center of world
     this.playerController.createPlayer();
     this.playerController.player.setPosition(
       this.worldSize.width / 2, 
       this.worldSize.height / 2
     );
 
-    // Setup camera to follow player with bounds
     this.setupCamera();
 
     // Create groups
     this.enemies = this.physics.add.group();
     this.projectiles = this.physics.add.group();
     this.souls = this.physics.add.group();
+    this.healthOrbs = this.physics.add.group();
 
-    // Setup input
     this.playerController.setupInput();
-
-    // Setup stage-specific settings
+    
+    // Calculate element interaction effects
+    await this.calculateElementEffects();
+    
     this.setupStageSettings();
-
-    // Setup timers
     this.setupTimers();
-
-    // Setup collisions
     this.setupCollisions();
+    
+    // Initialize health regeneration
+    this.healthRegenManager.initialize();
 
     console.log('Scene creation complete');
+  }
+
+  async calculateElementEffects() {
+    if (!this.playerData || !this.stageData) return;
+    
+    try {
+      const playerElement = this.playerData.primaryElement || 'fire';
+      const playerLevel = this.playerData.elementLevels?.[playerElement] || 0;
+      const stageElement = this.stageData.stageElement || 'neutral';
+      const stageLevel = this.stageData.elementLevel || 0;
+      
+      this.elementInteraction = await elementService.calculateElementInteraction(
+        playerElement, playerLevel, stageElement, stageLevel
+      );
+      
+      console.log('Element interaction calculated:', this.elementInteraction);
+      
+      // Apply passive bonuses
+      this.applyElementPassives();
+      
+    } catch (error) {
+      console.error('Failed to calculate element effects:', error);
+      this.elementInteraction = { effectType: 'neutral' };
+    }
+  }
+
+  applyElementPassives() {
+    if (!this.playerData) return;
+    
+    const primaryElement = this.playerData.primaryElement || 'fire';
+    const elementLevels = this.playerData.elementLevels || {};
+    
+    // Apply passive bonuses
+    Object.keys(elementLevels).forEach(element => {
+      const level = elementLevels[element] || 0;
+      const isPrimary = element === primaryElement;
+      const bonus = elementService.getElementPassiveBonus(element, level, isPrimary);
+      
+      switch (element) {
+        case 'fire':
+          // Fire: Damage increase (handled in damage calculation)
+          this.fireDamageBonus = bonus;
+          break;
+        case 'earth':
+          // Earth: Damage reduction (handled in damage calculation)
+          this.earthDamageReduction = bonus;
+          break;
+        case 'water':
+          // Water: Mana regeneration (handled in mana system)
+          this.waterManaRegen = bonus;
+          break;
+        case 'wood':
+          // Wood: Health regeneration (handled by HealthRegenManager)
+          this.woodHealthRegen = bonus;
+          break;
+        case 'metal':
+          // Metal: Resource bonus (handled in rewards)
+          this.metalResourceBonus = bonus;
+          break;
+      }
+    });
+  }
+
+  // Override enemy hit method to include enemy kill tracking
+  onEnemyKilled() {
+    if (this.healthRegenManager) {
+      this.healthRegenManager.onEnemyKilled();
+    }
+  }
+  
+  // Add Tianni Sword skill trigger
+  triggerTianniSwordSkill() {
+    if (!this.playerData || !this.tianniSwordManager) return;
+    
+    const swordLevel = this.playerData.tianniSwordLevel || 1;
+    const primaryElement = this.playerData.primaryElement || 'fire';
+    const hasMutation = this.playerData.hasTianniSwordMutation || false;
+    
+    // Check if can use skill
+    if (!this.tianniSwordManager.canUseSkill(swordLevel)) {
+      console.log('Tianni Sword skill on cooldown');
+      return false;
+    }
+    
+    // Check mana cost
+    const manaCost = this.tianniSwordManager.getManaCost(swordLevel);
+    if (manaCost > 0) {
+      // TODO: Integrate with player mana system
+      // For now, just log the mana cost
+      console.log(`Tianni Sword skill requires ${manaCost} mana`);
+    }
+    
+    // Use the skill
+    return this.tianniSwordManager.useSkill(swordLevel, primaryElement, hasMutation);
+  }
+
+  // Apply element interaction effects to damage
+  applyElementEffects(baseDamage, isPlayerDealing = true) {
+    if (!this.elementInteraction || this.elementInteraction.effectType === 'neutral') {
+      return baseDamage;
+    }
+    
+    let modifiedDamage = baseDamage;
+    
+    if (isPlayerDealing) {
+      // Apply player damage multiplier
+      modifiedDamage *= this.elementInteraction.damageMultiplier || 1.0;
+      
+      // Apply fire element damage bonus
+      if (this.fireDamageBonus) {
+        modifiedDamage *= (1 + this.fireDamageBonus);
+      }
+    } else {
+      // Apply damage reduction when taking damage
+      const reduction = this.elementInteraction.damageReduction || 0;
+      modifiedDamage *= (1 + reduction); // reduction is negative for damage reduction
+      
+      // Apply earth element damage reduction
+      if (this.earthDamageReduction) {
+        modifiedDamage *= (1 - this.earthDamageReduction);
+      }
+    }
+    
+    return Math.max(1, Math.floor(modifiedDamage)); // Minimum 1 damage
   }
 
   createJianqiTexture() {
@@ -392,17 +511,26 @@ class GameScene extends Phaser.Scene {
 
     // Update debug settings real-time with minimum enforcement
     const limitedAttackSpeed = Math.max(50, this.debugSettings.playerAttackSpeed);
-    this.autoFireTimer.delay = limitedAttackSpeed;
+    if (this.autoFireTimer) {
+      this.autoFireTimer.delay = limitedAttackSpeed;
+    }
     
     // Update enemy spawn interval in real-time
     const limitedSpawnInterval = Math.max(100, this.debugSettings.enemySpawnInterval);
-    this.enemySpawnTimer.delay = limitedSpawnInterval;
+    if (this.enemySpawnTimer) {
+      this.enemySpawnTimer.delay = limitedSpawnInterval;
+    }
 
     this.playerController.update();
     this.enemyManager.update();
     this.projectileManager.update();
     this.vfxManager.update();
     this.damageNumberManager.update();
+    
+    // Update health regeneration manager if it exists
+    if (this.healthRegenManager) {
+      this.healthRegenManager.update();
+    }
     
     // Manually enforce player bounds
     this.enforcePlayerBounds();

@@ -22,6 +22,13 @@ public class StageConfig {
     private Map<String, Object> enemySpawns;
     private Map<String, Object> stageSettings;
 
+    // New element system
+    private String stageElement; // "metal", "wood", "water", "fire", "earth", "neutral"
+    private int elementLevel; // 0-100, element strength of the stage
+    private Map<String, Double> elementBuffs; // Buffs when player element counters stage
+    private Map<String, Double> elementDebuffs; // Debuffs when stage element counters player
+    private Map<String, Double> backfireEffects; // When player is 3+ levels below stage
+
     // Constructors
     public StageConfig() {}
 
@@ -69,4 +76,20 @@ public class StageConfig {
 
     public Map<String, Object> getStageSettings() { return stageSettings; }
     public void setStageSettings(Map<String, Object> stageSettings) { this.stageSettings = stageSettings; }
+
+    // New getters and setters
+    public String getStageElement() { return stageElement; }
+    public void setStageElement(String stageElement) { this.stageElement = stageElement; }
+
+    public int getElementLevel() { return elementLevel; }
+    public void setElementLevel(int elementLevel) { this.elementLevel = elementLevel; }
+
+    public Map<String, Double> getElementBuffs() { return elementBuffs; }
+    public void setElementBuffs(Map<String, Double> elementBuffs) { this.elementBuffs = elementBuffs; }
+
+    public Map<String, Double> getElementDebuffs() { return elementDebuffs; }
+    public void setElementDebuffs(Map<String, Double> elementDebuffs) { this.elementDebuffs = elementDebuffs; }
+
+    public Map<String, Double> getBackfireEffects() { return backfireEffects; }
+    public void setBackfireEffects(Map<String, Double> backfireEffects) { this.backfireEffects = backfireEffects; }
 }

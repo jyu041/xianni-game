@@ -1,0 +1,233 @@
+/* frontend/src/components/game/ElementStatusHUD.module.css */
+
+.elementHUD {
+  position: fixed;
+  top: 100px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.interactionStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(15px);
+  border: 2px solid;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  pointer-events: all;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.interactionStatus:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8);
+}
+
+.interactionIcon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.interactionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.interactionText {
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-shadow: 0 0 10px currentColor;
+}
+
+.elementComparison {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.vs {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: normal;
+}
+
+.swordStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(138, 43, 226, 0.2);
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(138, 43, 226, 0.6);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+}
+
+.swordIcon {
+  font-size: 1.4rem;
+  filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.8));
+}
+
+.swordInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.swordLevel {
+  color: #8a2be2;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+.mutationIndicator {
+  color: #ffd700;
+  font-size: 1rem;
+  margin-left: 0.25rem;
+  filter: drop-shadow(0 0 5px #ffd700);
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.skillHint {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
+.detailsTooltip {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  margin-left: 1rem;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 1rem;
+  min-width: 200px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.detailsTooltip h4 {
+  color: #ffffff;
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.detailsTooltip p {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0.25rem 0;
+  font-size: 0.8rem;
+}
+
+.warning {
+  color: #ff6b6b !important;
+  font-weight: bold;
+}
+
+.passiveIndicators {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.passiveIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  min-width: 80px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.passiveIndicator.primary {
+  border-width: 2px;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.elementSymbol {
+  font-weight: bold;
+  font-size: 0.8rem;
+  text-shadow: 0 0 5px currentColor;
+}
+
+.bonusValue {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .elementHUD {
+    top: 80px;
+    left: 10px;
+    gap: 0.75rem;
+  }
+
+  .interactionStatus,
+  .swordStatus {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .interactionIcon,
+  .swordIcon {
+    font-size: 1.2rem;
+  }
+
+  .interactionText,
+  .swordLevel {
+    font-size: 0.8rem;
+  }
+
+  .elementComparison,
+  .skillHint {
+    font-size: 0.7rem;
+  }
+
+  .detailsTooltip {
+    left: 0;
+    top: 100%;
+    margin-left: 0;
+    margin-top: 0.5rem;
+    min-width: 180px;
+  }
+
+  .passiveIndicator {
+    padding: 0.4rem 0.6rem;
+    min-width: 70px;
+  }
+
+  .elementSymbol {
+    font-size: 0.75rem;
+  }
+
+  .bonusValue {
+    font-size: 0.65rem;
+  }
+}

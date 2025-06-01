@@ -1,5 +1,6 @@
 // src/components/game/GameHeader.jsx
 import { useState } from "react";
+import elementService from "../../services/elementService";
 import styles from "./GameHeader.module.css";
 
 const GameHeader = ({ playerData, onBackToHome }) => {
@@ -24,7 +25,23 @@ const GameHeader = ({ playerData, onBackToHome }) => {
     return Math.min((progressExp / neededExp) * 100, 100);
   };
 
+  const getManaPercent = () => {
+    const mana = playerData.mana || 100;
+    const maxMana = playerData.maxMana || 100;
+    return (mana / maxMana) * 100;
+  };
+
+  const getPrimaryElementInfo = () => {
+    const primaryElement = playerData.primaryElement || "fire";
+    return {
+      name: elementService.getElementName(primaryElement),
+      color: elementService.getElementColor(primaryElement),
+      level: playerData.elementLevels?.[primaryElement] || 0,
+    };
+  };
+
   const cultivation = getCultivationLevel(playerData.level);
+  const primaryElement = getPrimaryElementInfo();
 
   return (
     <div className={styles.gameHeader}>
@@ -47,6 +64,12 @@ const GameHeader = ({ playerData, onBackToHome }) => {
             >
               {cultivation.name}
             </div>
+            <div
+              className={styles.element}
+              style={{ color: primaryElement.color }}
+            >
+              {primaryElement.name}属性 Lv.{primaryElement.level}
+            </div>
           </div>
         </div>
 
@@ -58,13 +81,36 @@ const GameHeader = ({ playerData, onBackToHome }) => {
             />
           </div>
           <div className={styles.expText}>
-            {playerData.experience || 0} / {playerData.level * 100}
+            经验: {playerData.experience || 0} / {playerData.level * 100}
+          </div>
+        </div>
+
+        <div className={styles.manaSection}>
+          <div className={styles.manaBar}>
+            <div
+              className={styles.manaFill}
+              style={{ width: `${getManaPercent()}%` }}
+            />
+          </div>
+          <div className={styles.manaText}>
+            灵气: {playerData.mana || 100} / {playerData.maxMana || 100}
           </div>
         </div>
       </div>
 
       <div className={styles.centerSection}>
-        {/* Center section can be used for game title or status indicators */}
+        <div className={styles.tianniSword}>
+          <div className={styles.swordIcon}>⚔️</div>
+          <div className={styles.swordInfo}>
+            <div className={styles.swordName}>天逆剑</div>
+            <div className={styles.swordLevel}>
+              Lv.{playerData.tianniSwordLevel || 1}
+              {playerData.hasTianniSwordMutation && (
+                <span className={styles.mutationBadge}>五行寂灭</span>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className={styles.rightSection}>
@@ -77,6 +123,13 @@ const GameHeader = ({ playerData, onBackToHome }) => {
           <div className={styles.resource}>
             <span className={styles.resourceIcon}>💎</span>
             <span className={styles.resourceValue}>{playerData.gems || 0}</span>
+          </div>
+
+          <div className={styles.resource}>
+            <span className={styles.resourceIcon}>🔮</span>
+            <span className={styles.resourceValue}>
+              {playerData.soulCount || 0}
+            </span>
           </div>
         </div>
       </div>

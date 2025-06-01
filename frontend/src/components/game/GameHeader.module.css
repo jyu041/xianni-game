@@ -77,8 +77,8 @@
 
 .avatar {
   position: relative;
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background: linear-gradient(45deg, #8a2be2, #9370db);
   display: flex;
@@ -90,7 +90,7 @@
 }
 
 .avatarIcon {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: bold;
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 
@@ -117,6 +117,7 @@
 .playerDetails {
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
 }
 
 .playerName {
@@ -135,19 +136,27 @@
   text-shadow: 0 0 8px currentColor;
 }
 
-.expSection {
+.element {
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin: 0;
+  text-shadow: 0 0 8px currentColor;
+  opacity: 0.9;
+}
+
+.expSection, .manaSection {
   display: flex;
   flex-direction: column;
   min-width: 120px;
+  gap: 0.25rem;
 }
 
-.expBar {
+.expBar, .manaBar {
   height: 8px;
   background: rgba(0, 0, 0, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   overflow: hidden;
-  margin-bottom: 0.25rem;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -160,7 +169,16 @@
   box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
 }
 
-.expFill::after {
+.manaFill {
+  height: 100%;
+  background: linear-gradient(90deg, #0ea5e9, #38bdf8, #7dd3fc);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+  position: relative;
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+}
+
+.expFill::after, .manaFill::after {
   content: '';
   position: absolute;
   top: 0;
@@ -171,15 +189,15 @@
     transparent, 
     rgba(255, 255, 255, 0.4), 
     transparent);
-  animation: expShimmer 2s infinite;
+  animation: barShimmer 2s infinite;
 }
 
-@keyframes expShimmer {
+@keyframes barShimmer {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
 
-.expText {
+.expText, .manaText {
   font-size: 0.7rem;
   color: rgba(255, 255, 255, 0.8);
   text-align: center;
@@ -190,8 +208,64 @@
 .centerSection {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
   flex: 0 0 auto;
+}
+
+.tianniSword {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 0.75rem 1rem;
+  border-radius: 15px;
+  border: 2px solid rgba(138, 43, 226, 0.6);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.swordIcon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.8));
+}
+
+.swordInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.swordName {
+  color: #8a2be2;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+.swordLevel {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.mutationBadge {
+  background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bcf7f, #4ecdc4, #45b7d1);
+  background-size: 200% 200%;
+  animation: rainbowFlow 3s ease infinite;
+  color: #000000;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  margin-left: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes rainbowFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .rightSection {
@@ -260,7 +334,7 @@
     order: 3;
   }
 
-  .expSection {
+  .expSection, .manaSection {
     min-width: 100px;
   }
 
@@ -269,22 +343,30 @@
     gap: 0.5rem;
   }
 
-  .dropdownMenu {
-    left: 0;
-    transform: none;
-    width: 100%;
+  .tianniSword {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .swordIcon {
+    font-size: 1.2rem;
+  }
+
+  .playerDetails {
+    gap: 0.1rem;
+  }
+
+  .element {
+    font-size: 0.7rem;
   }
 }
 
 /* Tablet Styles */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .expSection {
+  .expSection, .manaSection {
     min-width: 100px;
   }
 
-  .menuButton,
-  .allLevelsButton {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.8rem;
+  .tianniSword {
+    padding: 0.6rem 0.8rem;
   }
 }

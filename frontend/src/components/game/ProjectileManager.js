@@ -47,7 +47,12 @@ class ProjectileManager {
     projectile.destroy();
     
     // Get damage amount (from projectile or default)
-    const damage = projectile.damage || this.projectileDamage;
+    let damage = projectile.damage || this.projectileDamage;
+    
+    // Apply element effects if available
+    if (this.scene.applyElementEffects) {
+      damage = this.scene.applyElementEffects(damage, true);
+    }
     
     // Get crit values from debug settings or defaults
     const debugSettings = this.scene.debugSettings;
@@ -82,6 +87,43 @@ class ProjectileManager {
     }
   }
 
+  destroyEnemy(enemy) {
+    if (enemy.isDead) return; // Already dead
+    
+    // Mark as dead immediately to prevent multiple hits
+    enemy.isDead = true;
+    enemy.setVelocity(0, 0);
+    enemy.isAttacking = false;
+    
+    // Add score and experience immediately
+    if (this.scene.gameStateRef) {
+      let baseScore = 10;
+      let baseExp = 5;
+      
+      // Apply metal element bonus to resources
+      if (this.scene.metalResourceBonus) {
+        baseScore = Math.floor(baseScore * (1 + this.scene.metalResourceBonus));
+        baseExp = Math.floor(baseExp * (1 + this.scene.metalResourceBonus));
+      }
+      
+      this.scene.gameStateRef.score += baseScore;
+      this.scene.gameStateRef.experience += baseExp;
+    }
+
+    // Hide health bar if it exists
+    if (this.scene.enemyManager && this.scene.enemyManager.hideEnemyHealthBar) {
+      this.scene.enemyManager.hideEnemyHealthBar(enemy);
+    }
+
+    // Notify health regen manager of enemy kill
+    if (this.scene.onEnemyKilled) {
+      this.scene.onEnemyKilled();
+    }
+
+    // Start the death sequence
+    this.startDeathSequence(enemy);
+  }
+
   playEnemyHitAnimation(enemy) {
     if (enemy.enemyType && !enemy.isDead) {
       const hitAnimKey = `enemy_${enemy.enemyType}_hit_anim`;
@@ -106,29 +148,6 @@ class ProjectileManager {
         });
       }
     }
-  }
-
-  destroyEnemy(enemy) {
-    if (enemy.isDead) return; // Already dead
-    
-    // Mark as dead immediately to prevent multiple hits
-    enemy.isDead = true;
-    enemy.setVelocity(0, 0);
-    enemy.isAttacking = false;
-    
-    // Add score and experience immediately
-    if (this.scene.gameStateRef) {
-      this.scene.gameStateRef.score += 10;
-      this.scene.gameStateRef.experience += 5;
-    }
-
-    // Hide health bar if it exists
-    if (this.scene.enemyManager && this.scene.enemyManager.hideEnemyHealthBar) {
-      this.scene.enemyManager.hideEnemyHealthBar(enemy);
-    }
-
-    // Start the new death sequence
-    this.startDeathSequence(enemy);
   }
 
   startDeathSequence(enemy) {

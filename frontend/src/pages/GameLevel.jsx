@@ -3,8 +3,10 @@ import { useState, useEffect, useRef } from "react";
 import Phaser from "phaser";
 import GameLevelHeader from "../components/game/GameLevelHeader";
 import AbilitySidebars from "../components/game/AbilitySidebars";
+import ElementStatusHUD from "../components/game/ElementStatusHUD";
 import GameScene from "../components/game/GameScene";
 import playerService from "../services/playerService";
+import elementService from "../services/elementService";
 import styles from "./GameLevel.module.css";
 
 const GameLevel = ({ stageData, playerData, onGameEnd }) => {
@@ -38,12 +40,12 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
     vfxScale: 1.0,
     vfxRotation: 0,
     showDamageNumbers: true,
-    showEnemyHealthBars: true, // New setting for enemy health bars
-    critChance: 15, // Percentage (0-100)
+    showEnemyHealthBars: true,
+    critChance: 15,
     critDamageMultiplier: 1.5,
     playerMovementSpeed: 200,
     jianqiTravelSpeed: 300,
-    enemySpawnInterval: 2000, // milliseconds
+    enemySpawnInterval: 2000,
     invincibility: false,
   });
 
@@ -75,6 +77,7 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
       gameStateRef: gameStateRef,
       updateGameState: setGameState,
       stageData: stageData,
+      playerData: playerData,
       onDebugChange: handleDebugChange,
     });
 

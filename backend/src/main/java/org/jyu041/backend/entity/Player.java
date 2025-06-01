@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 @Document(collection = "players")
 public class Player {
@@ -29,10 +30,35 @@ public class Player {
     private List<String> skills;
     private List<String> achievements;
 
+    // New attribute system
+    private String primaryElement; // "metal", "wood", "water", "fire", "earth"
+    private Map<String, Integer> elementLevels; // Each element 0-100
+    private Map<String, Long> elementExperience; // Experience per element
+    private int mana; // Spiritual energy
+    private int maxMana;
+    private long soulCount; // Total souls collected
+
+    // Equipment system
+    private Map<String, Integer> treasureLevels; // 法宝 levels
+    private int tianniSwordLevel; // 天逆剑 level (1-10, with special 11th level)
+    private boolean hasTianniSwordMutation; // Special 11th level unlock
+
+    // Game statistics
+    private long totalEnemiesKilled;
+    private long totalDamageDealt;
+    private long totalSoulsCollected;
+    private long totalPlaytimeSeconds;
+
     // Constructors
-    public Player() {}
+    public Player() {
+        this.elementLevels = new HashMap<>();
+        this.elementExperience = new HashMap<>();
+        this.treasureLevels = new HashMap<>();
+        initializeElements();
+    }
 
     public Player(String playerName, String difficulty, String cultivation, String element) {
+        this();
         this.playerName = playerName;
         this.level = 1;
         this.experience = 0;
@@ -41,11 +67,41 @@ public class Player {
         this.difficulty = difficulty;
         this.cultivation = cultivation;
         this.element = element;
+        this.primaryElement = mapElementToPrimary(element);
         this.createdAt = LocalDateTime.now();
         this.lastPlayed = LocalDateTime.now();
         this.playtime = 0;
         this.currentStage = 1;
         this.unlockedStages = List.of(1);
+        this.mana = 100;
+        this.maxMana = 100;
+        this.soulCount = 0;
+        this.tianniSwordLevel = 1;
+        this.hasTianniSwordMutation = false;
+        this.totalEnemiesKilled = 0;
+        this.totalDamageDealt = 0;
+        this.totalSoulsCollected = 0;
+        this.totalPlaytimeSeconds = 0;
+    }
+
+    private void initializeElements() {
+        String[] elements = {"metal", "wood", "water", "fire", "earth"};
+        for (String elem : elements) {
+            this.elementLevels.put(elem, 0);
+            this.elementExperience.put(elem, 0L);
+        }
+    }
+
+    private String mapElementToPrimary(String element) {
+        // Map from cultivation element to primary element
+        switch (element.toLowerCase()) {
+            case "fire": return "fire";
+            case "water": return "water";
+            case "earth": return "earth";
+            case "metal": return "metal";
+            case "wood": return "wood";
+            default: return "fire"; // Default
+        }
     }
 
     // Getters and Setters
@@ -102,4 +158,44 @@ public class Player {
 
     public List<String> getAchievements() { return achievements; }
     public void setAchievements(List<String> achievements) { this.achievements = achievements; }
+
+    // New getters and setters
+    public String getPrimaryElement() { return primaryElement; }
+    public void setPrimaryElement(String primaryElement) { this.primaryElement = primaryElement; }
+
+    public Map<String, Integer> getElementLevels() { return elementLevels; }
+    public void setElementLevels(Map<String, Integer> elementLevels) { this.elementLevels = elementLevels; }
+
+    public Map<String, Long> getElementExperience() { return elementExperience; }
+    public void setElementExperience(Map<String, Long> elementExperience) { this.elementExperience = elementExperience; }
+
+    public int getMana() { return mana; }
+    public void setMana(int mana) { this.mana = mana; }
+
+    public int getMaxMana() { return maxMana; }
+    public void setMaxMana(int maxMana) { this.maxMana = maxMana; }
+
+    public long getSoulCount() { return soulCount; }
+    public void setSoulCount(long soulCount) { this.soulCount = soulCount; }
+
+    public Map<String, Integer> getTreasureLevels() { return treasureLevels; }
+    public void setTreasureLevels(Map<String, Integer> treasureLevels) { this.treasureLevels = treasureLevels; }
+
+    public int getTianniSwordLevel() { return tianniSwordLevel; }
+    public void setTianniSwordLevel(int tianniSwordLevel) { this.tianniSwordLevel = tianniSwordLevel; }
+
+    public boolean isHasTianniSwordMutation() { return hasTianniSwordMutation; }
+    public void setHasTianniSwordMutation(boolean hasTianniSwordMutation) { this.hasTianniSwordMutation = hasTianniSwordMutation; }
+
+    public long getTotalEnemiesKilled() { return totalEnemiesKilled; }
+    public void setTotalEnemiesKilled(long totalEnemiesKilled) { this.totalEnemiesKilled = totalEnemiesKilled; }
+
+    public long getTotalDamageDealt() { return totalDamageDealt; }
+    public void setTotalDamageDealt(long totalDamageDealt) { this.totalDamageDealt = totalDamageDealt; }
+
+    public long getTotalSoulsCollected() { return totalSoulsCollected; }
+    public void setTotalSoulsCollected(long totalSoulsCollected) { this.totalSoulsCollected = totalSoulsCollected; }
+
+    public long getTotalPlaytimeSeconds() { return totalPlaytimeSeconds; }
+    public void setTotalPlaytimeSeconds(long totalPlaytimeSeconds) { this.totalPlaytimeSeconds = totalPlaytimeSeconds; }
 }

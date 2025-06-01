@@ -417,9 +417,15 @@ class PlayerController {
     }
 
     this.lastHitTime = currentTime;
+    
+    // Apply element effects to incoming damage
+    let actualDamage = damage;
+    if (this.scene.applyElementEffects) {
+      actualDamage = this.scene.applyElementEffects(damage, false);
+    }
 
     if (this.scene.gameStateRef) {
-      this.scene.gameStateRef.player.health -= damage;
+      this.scene.gameStateRef.player.health -= actualDamage;
       if (this.scene.gameStateRef.player.health <= 0) {
         this.scene.gameStateRef.player.health = 0;
         this.scene.gameStateRef.isGameOver = true;
