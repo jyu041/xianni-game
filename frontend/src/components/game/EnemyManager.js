@@ -9,6 +9,7 @@ class EnemyManager {
     this.attackCooldown = 2000;
     this.enemyTypes = getAllEnemyTypes();
     this.healthBars = []; // Store health bar graphics
+    this.showHealthBars = true; // Default to showing health bars
   }
 
   update() {
@@ -38,8 +39,8 @@ class EnemyManager {
 
       const healthPercent = enemy.health / enemy.maxHealth;
       
-      // Only show health bar if not at full health
-      if (healthPercent < 1.0) {
+      // Only show health bar if not at full health AND if health bars are enabled
+      if (healthPercent < 1.0 && this.showHealthBars) {
         this.showEnemyHealthBar(enemy, healthPercent);
       } else {
         this.hideEnemyHealthBar(enemy);
@@ -268,46 +269,15 @@ class EnemyManager {
   }
 
   getRandomSpawnPosition() {
-    // Get camera bounds for viewport-aware spawning
-    const camera = this.scene.cameras.main;
-    const cameraX = camera.worldView.x;
-    const cameraY = camera.worldView.y;
-    const cameraWidth = camera.worldView.width;
-    const cameraHeight = camera.worldView.height;
-    
-    const margin = 100; // Spawn margin outside visible area
-    
-    // Spawn positions around the current camera view
+    const margin = 50;
     const spawnPositions = [
-      // Top edge
-      { 
-        x: Phaser.Math.Between(cameraX - margin, cameraX + cameraWidth + margin), 
-        y: cameraY - margin 
-      },
-      // Right edge
-      { 
-        x: cameraX + cameraWidth + margin, 
-        y: Phaser.Math.Between(cameraY - margin, cameraY + cameraHeight + margin) 
-      },
-      // Bottom edge
-      { 
-        x: Phaser.Math.Between(cameraX - margin, cameraX + cameraWidth + margin), 
-        y: cameraY + cameraHeight + margin 
-      },
-      // Left edge
-      { 
-        x: cameraX - margin, 
-        y: Phaser.Math.Between(cameraY - margin, cameraY + cameraHeight + margin) 
-      }
+      { x: Phaser.Math.Between(margin, this.scene.cameras.main.width - margin), y: -margin },
+      { x: this.scene.cameras.main.width + margin, y: Phaser.Math.Between(margin, this.scene.cameras.main.height - margin) },
+      { x: Phaser.Math.Between(margin, this.scene.cameras.main.width - margin), y: this.scene.cameras.main.height + margin },
+      { x: -margin, y: Phaser.Math.Between(margin, this.scene.cameras.main.height - margin) }
     ];
 
-    const position = Phaser.Utils.Array.GetRandom(spawnPositions);
-    
-    // Clamp to world bounds
-    position.x = Phaser.Math.Clamp(position.x, 0, this.scene.worldSize.width);
-    position.y = Phaser.Math.Clamp(position.y, 0, this.scene.worldSize.height);
-    
-    return position;
+    return Phaser.Utils.Array.GetRandom(spawnPositions);
   }
 
   createEnemy(spawnPos, enemyType) {
@@ -340,7 +310,7 @@ class EnemyManager {
     enemy.lastHorizontalDirection = 'right'; // Default facing right
     enemy.lastAttackTime = 0;
 
-    enemy.setCollideWorldBounds(true); // Keep enemies within world bounds
+    enemy.setCollideWorldBounds(false);
     enemy.setBounce(0);
     enemy.setDrag(50);
 

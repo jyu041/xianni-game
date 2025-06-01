@@ -28,14 +28,17 @@ class GameScene extends Phaser.Scene {
       vfxScale: 1.0,
       vfxRotation: 0,
       showDamageNumbers: true,
+      showEnemyHealthBars: true, // New setting for enemy health bars
       critChance: 15, // Percentage (0-100)
       critDamageMultiplier: 1.5,
       playerMovementSpeed: 200,
-      jianqiTravelSpeed: 300
+      jianqiTravelSpeed: 300,
+      enemySpawnInterval: 2000, // milliseconds
+      invincibility: false
     };
     
     // World settings
-    this.worldSize = { width: 2400, height: 1800 }; // Larger virtual world
+    this.worldSize = { width: 4800, height: 3600 }; // Much larger virtual world
     this.viewportSize = { width: 0, height: 0 }; // Will be set in create()
     this.cameraFollowBorder = 150; // How close to edge before camera moves
   }
@@ -172,7 +175,25 @@ class GameScene extends Phaser.Scene {
     // Set zoom level for better view
     camera.setZoom(1.0);
     
+    // Constrain player to stay within camera bounds
+    this.constrainPlayerToBounds();
+    
     console.log(`Camera setup: World ${this.worldSize.width}x${this.worldSize.height}, Viewport ${this.viewportSize.width}x${this.viewportSize.height}`);
+  }
+
+  constrainPlayerToBounds() {
+    // Set player physics world bounds to match the world size
+    const player = this.playerController.player;
+    const margin = 32; // Half of player size to prevent going off-screen
+    
+    // Override the default world bounds collision for better control
+    this.physics.world.on('worldbounds', (event, body) => {
+      if (body.gameObject === player) {
+        // Manually constrain player position
+        player.x = Phaser.Math.Clamp(player.x, margin, this.worldSize.width - margin);
+        player.y = Phaser.Math.Clamp(player.y, margin, this.worldSize.height - margin);
+      }
+    });
   }
 
   updateDebugSettings(key, value) {
@@ -196,6 +217,23 @@ class GameScene extends Phaser.Scene {
     // Handle damage numbers toggle
     if (key === 'showDamageNumbers' && this.damageNumberManager) {
       this.damageNumberManager.setShowDamageNumbers(value);
+    }
+    
+    // Handle enemy spawn interval changes
+    if (key === 'enemySpawnInterval' && this.enemySpawnTimer) {
+      const limitedValue = Math.max(100, value); // Minimum 100ms
+      this.enemySpawnTimer.delay = limitedValue;
+      this.debugSettings[key] = limitedValue;
+    }
+    
+    // Handle invincibility toggle
+    if (key === 'invincibility' && this.playerController) {
+      this.playerController.isInvincible = value;
+    }
+    
+    // Handle enemy health bar display toggle
+    if (key === 'showEnemyHealthBars' && this.enemyManager) {
+      this.enemyManager.showHealthBars = value;
     }
   }
 
@@ -245,8 +283,9 @@ class GameScene extends Phaser.Scene {
       loop: true
     });
 
-    // Enemy spawn timer with stage-specific rate
-    const spawnRate = this.enemySpawnRate || 2000;
+    // Enemy spawn timer with stage-specific rate and debug settings
+    const baseSpawnRate = this.enemySpawnRate || 2000;
+    const spawnRate = this.debugSettings.enemySpawnInterval || baseSpawnRate;
     this.enemySpawnTimer = this.time.addEvent({
       delay: spawnRate,
       callback: () => this.enemyManager.spawnEnemy(),
@@ -296,14 +335,45 @@ class GameScene extends Phaser.Scene {
     // Update debug settings real-time with minimum enforcement
     const limitedAttackSpeed = Math.max(50, this.debugSettings.playerAttackSpeed);
     this.autoFireTimer.delay = limitedAttackSpeed;
+    
+    // Update enemy spawn interval in real-time
+    const limitedSpawnInterval = Math.max(100, this.debugSettings.enemySpawnInterval);
+    this.enemySpawnTimer.delay = limitedSpawnInterval;
 
     this.playerController.update();
     this.enemyManager.update();
     this.projectileManager.update();
     this.vfxManager.update();
     this.damageNumberManager.update();
+    
+    // Manually enforce player bounds
+    this.enforcePlayerBounds();
+    
     this.updateGameStateData();
     this.updateDebugStats();
+  }
+
+  enforcePlayerBounds() {
+    const player = this.playerController.player;
+    const margin = 64; // Larger margin to ensure player stays fully visible
+    
+    // Constrain player position
+    if (player.x < margin) {
+      player.x = margin;
+      player.setVelocityX(0);
+    }
+    if (player.x > this.worldSize.width - margin) {
+      player.x = this.worldSize.width - margin;
+      player.setVelocityX(0);
+    }
+    if (player.y < margin) {
+      player.y = margin;
+      player.setVelocityY(0);
+    }
+    if (player.y > this.worldSize.height - margin) {
+      player.y = this.worldSize.height - margin;
+      player.setVelocityY(0);
+    }
   }
 
   updateDebugStats() {

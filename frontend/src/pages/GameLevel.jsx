@@ -38,10 +38,13 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
     vfxScale: 1.0,
     vfxRotation: 0,
     showDamageNumbers: true,
+    showEnemyHealthBars: true, // New setting for enemy health bars
     critChance: 15, // Percentage (0-100)
     critDamageMultiplier: 1.5,
     playerMovementSpeed: 200,
     jianqiTravelSpeed: 300,
+    enemySpawnInterval: 2000, // milliseconds
+    invincibility: false,
   });
 
   // Global game state reference for Phaser
@@ -258,6 +261,19 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
                 checked={debugSettings.showDamageNumbers}
                 onChange={(e) =>
                   handleDebugChange("showDamageNumbers", e.target.checked)
+                }
+              />
+            </div>
+
+            {/* Enemy Health Bars Toggle */}
+            <div className={styles.damageToggle}>
+              <label htmlFor="enemyHealthBarsToggle">显示敌人血条</label>
+              <input
+                id="enemyHealthBarsToggle"
+                type="checkbox"
+                checked={debugSettings.showEnemyHealthBars}
+                onChange={(e) =>
+                  handleDebugChange("showEnemyHealthBars", e.target.checked)
                 }
               />
             </div>

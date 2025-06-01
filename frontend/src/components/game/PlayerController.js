@@ -16,6 +16,7 @@ class PlayerController {
     this.attackCooldown = 400; // milliseconds
     this.attackCooldownBar = null;
     this.attackCooldownBg = null;
+    this.isInvincible = false; // Debug invincibility
     
     // 剑气 properties
     this.jianqiConfig = {
@@ -80,9 +81,11 @@ class PlayerController {
 
     const currentTime = this.scene.time.now;
     const timeSinceAttack = currentTime - this.lastAttackTime;
+    const debugSettings = this.scene.debugSettings;
+    const cooldown = debugSettings?.playerAttackSpeed || this.attackCooldown;
     
     // Always show the bars and update progress
-    const progress = Math.min(timeSinceAttack / this.attackCooldown, 1.0);
+    const progress = Math.min(timeSinceAttack / cooldown, 1.0);
     const fillWidth = 28 * progress;
     
     this.attackCooldownBar.setDisplaySize(fillWidth, 2);
@@ -114,8 +117,17 @@ class PlayerController {
     this.updateDebugRange();
     this.updateAttackRange();
     this.updateSoulCollectionRange();
+    this.updateInvincibility();
     this.checkSoulCollection();
     this.updateAttackCooldownBar();
+  }
+
+  updateInvincibility() {
+    // Update invincibility from debug settings
+    const debugSettings = this.scene.debugSettings;
+    if (debugSettings && debugSettings.invincibility !== undefined) {
+      this.isInvincible = debugSettings.invincibility;
+    }
   }
 
   updateDebugRange() {
@@ -248,7 +260,9 @@ class PlayerController {
 
   canAttack() {
     const currentTime = this.scene.time.now;
-    return currentTime - this.lastAttackTime >= this.attackCooldown;
+    const debugSettings = this.scene.debugSettings;
+    const cooldown = debugSettings?.playerAttackSpeed || this.attackCooldown;
+    return currentTime - this.lastAttackTime >= cooldown;
   }
 
   autoFire() {
@@ -350,29 +364,42 @@ class PlayerController {
       return;
     }
     
+    // Create a more visible 剑气 using Phaser's built-in graphics
     const graphics = this.scene.add.graphics();
     
-    // Draw sword energy shape with proper coordinates
-    graphics.fillStyle(0x88ddff, 1.0); // Light blue color
-    graphics.fillEllipse(10, 20, 8, 30); // Main blade (centered in 20x40 area)
-    graphics.fillEllipse(10, 15, 12, 20); // Wider center
-    graphics.fillEllipse(10, 10, 6, 10); // Tip
+    // Set the graphics position and create a larger, more visible sword energy
+    graphics.clear();
     
-    // Add energy trails for visual effect
-    graphics.fillStyle(0xaaeeff, 0.7);
-    graphics.fillEllipse(8, 18, 4, 24);
-    graphics.fillEllipse(12, 18, 4, 24);
+    // Main sword blade - bright blue
+    graphics.fillStyle(0x00aaff, 1.0);
+    graphics.fillRect(8, 5, 4, 30); // Main vertical blade
     
-    // Add outer glow
-    graphics.fillStyle(0xffffff, 0.3);
-    graphics.fillEllipse(10, 20, 14, 34);
+    // Sword tip
+    graphics.fillStyle(0x88ddff, 1.0);
+    graphics.fillRect(7, 2, 6, 8); // Wider top
     
+    // Energy trails on sides
+    graphics.fillStyle(0x44bbff, 0.8);
+    graphics.fillRect(5, 8, 2, 24); // Left trail
+    graphics.fillRect(13, 8, 2, 24); // Right trail
+    
+    // Outer glow effect
+    graphics.fillStyle(0xaaeeff, 0.4);
+    graphics.fillRect(4, 6, 12, 28); // Outer glow
+    
+    // Generate texture from graphics
     graphics.generateTexture('jianqi', 20, 40);
     graphics.destroy();
-    console.log('Created jianqi texture');
+    
+    console.log('Successfully created jianqi texture');
   }
 
   takeDamage(damage) {
+    // Check for debug invincibility
+    if (this.isInvincible) {
+      return; // No damage when invincible
+    }
+    
     const currentTime = this.scene.time.now;
     
     // Check invincibility frames

@@ -129,6 +129,12 @@ const DebugMenu = ({
     onDebugChange("critDamageMultiplier", value);
   };
 
+  const handleEnemySpawnIntervalChange = (e) => {
+    const value = parseInt(e.target.value);
+    const limitedValue = Math.max(100, value);
+    onDebugChange("enemySpawnInterval", limitedValue);
+  };
+
   const handleCastVfx = () => {
     if (debugSettings.selectedVfxEffect && onCastVfx) {
       const options = {
@@ -203,6 +209,41 @@ const DebugMenu = ({
                 Show Soul Collection Range
               </span>
             </label>
+
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                checked={debugSettings.invincibility ?? false}
+                onChange={(e) => {
+                  onDebugChange("invincibility", e.target.checked);
+                }}
+              />
+              <span className="game-text-small">Player Invincibility</span>
+            </label>
+          </div>
+
+          <div className={styles.debugSection}>
+            <h4 className="game-text-large">Enemy Settings</h4>
+
+            <div className={styles.sliderGroup}>
+              <label className="game-text-small">
+                Enemy Spawn Interval: {debugSettings.enemySpawnInterval || 2000}
+                ms
+              </label>
+              <input
+                type="range"
+                min="100"
+                max="10000"
+                step="100"
+                value={debugSettings.enemySpawnInterval || 2000}
+                onChange={handleEnemySpawnIntervalChange}
+                className={styles.slider}
+              />
+              <div className={styles.sliderLabels}>
+                <span className="game-text-small">100ms</span>
+                <span className="game-text-small">10000ms</span>
+              </div>
+            </div>
           </div>
 
           <div className={styles.debugSection}>
