@@ -32,10 +32,6 @@ class VfxManager {
       return null;
     }
 
-    // Apply offset
-    const finalX = x + (config.offset.x || 0);
-    const finalY = y + (config.offset.y || 0);
-
     // Create DOM element for GIF animation
     const gifElement = document.createElement('img');
     gifElement.src = config.path;
@@ -61,21 +57,20 @@ class VfxManager {
       gifElement.style.opacity = options.alpha;
     }
 
-    // Position the element relative to the game canvas
-    const gameCanvas = this.scene.game.canvas;
-    const canvasRect = gameCanvas.getBoundingClientRect();
-    
-    gifElement.style.left = `${canvasRect.left + finalX - scaledWidth / 2}px`;
-    gifElement.style.top = `${canvasRect.top + finalY - scaledHeight / 2}px`;
-
     // Add to DOM
     document.body.appendChild(gifElement);
 
     // Create a wrapper object to track this effect
     const effect = {
       domElement: gifElement,
-      x: finalX,
-      y: finalY,
+      targetX: x, // Base target position
+      targetY: y,
+      offsetX: config.offset.x || 0, // Static offset from config
+      offsetY: config.offset.y || 0,
+      followTarget: options.followTarget || null, // Object to follow (like player)
+      isRelativeToTarget: options.followTarget !== null, // Whether to follow target
+      scaledWidth: scaledWidth,
+      scaledHeight: scaledHeight,
       active: true,
       destroy: () => {
         if (gifElement.parentNode) {
@@ -88,6 +83,9 @@ class VfxManager {
     // Add to active effects
     this.activeEffects.add(effect);
 
+    // Initial position update
+    this.updateEffectPosition(effect);
+
     // Auto destroy after duration (only if not looping)
     if (config.autoDestroy && !config.looping) {
       const destroyDelay = config.duration || 2000; // Default 2 seconds
@@ -96,11 +94,11 @@ class VfxManager {
       });
     }
 
-    console.log(`VFX effect created: ${effectKey} at (${finalX}, ${finalY}) with scale ${baseScale}`);
+    console.log(`VFX effect created: ${effectKey} at (${x}, ${y}) with scale ${baseScale}${options.followTarget ? ' (following target)' : ''}`);
     return effect;
   }
 
-  // Play effect at player location
+  // Play effect at player location that follows the player
   playEffectAtPlayer(effectKey, options = {}) {
     if (!this.scene.playerController || !this.scene.playerController.player) {
       console.warn('Player not available for VFX');
@@ -108,17 +106,31 @@ class VfxManager {
     }
 
     const player = this.scene.playerController.player;
+    
+    // Set the player as the follow target
+    options.followTarget = player;
+    
     return this.playEffect(effectKey, player.x, player.y, options);
   }
 
-  // Play effect at target location
+  // Play effect at target location that follows the target
   playEffectAtTarget(effectKey, target, options = {}) {
     if (!target || !target.x || !target.y) {
       console.warn('Invalid target for VFX');
       return null;
     }
 
+    // Set the target as the follow target
+    options.followTarget = target;
+
     return this.playEffect(effectKey, target.x, target.y, options);
+  }
+
+  // Play effect at static location (doesn't follow anything)
+  playEffectAtLocation(effectKey, x, y, options = {}) {
+    // Explicitly don't follow any target
+    options.followTarget = null;
+    return this.playEffect(effectKey, x, y, options);
   }
 
   // Destroy specific effect
@@ -139,20 +151,20 @@ class VfxManager {
     this.activeEffects.clear();
   }
 
-  // Update method (called from scene) - Update positions relative to camera
+  // Update method (called from scene) - Update positions for following effects
   update() {
-    // Remove destroyed effects from our tracking
+    // Remove destroyed effects from our tracking and update positions
     this.activeEffects.forEach(effect => {
       if (!effect.active) {
         this.activeEffects.delete(effect);
       } else {
-        // Update position relative to canvas if canvas moved
+        // Update position - either following target or static
         this.updateEffectPosition(effect);
       }
     });
   }
 
-  // Update effect position relative to game canvas
+  // Update effect position relative to game canvas and target
   updateEffectPosition(effect) {
     if (!effect.domElement || !effect.domElement.parentNode) {
       effect.active = false;
@@ -162,11 +174,24 @@ class VfxManager {
     const gameCanvas = this.scene.game.canvas;
     const canvasRect = gameCanvas.getBoundingClientRect();
     
-    const elementWidth = parseFloat(effect.domElement.style.width);
-    const elementHeight = parseFloat(effect.domElement.style.height);
+    let worldX, worldY;
+
+    if (effect.isRelativeToTarget && effect.followTarget && effect.followTarget.active) {
+      // Follow the target (like player) - update world position based on target's current position
+      worldX = effect.followTarget.x + effect.offsetX;
+      worldY = effect.followTarget.y + effect.offsetY;
+    } else {
+      // Static position - use original target coordinates
+      worldX = effect.targetX + effect.offsetX;
+      worldY = effect.targetY + effect.offsetY;
+    }
+
+    // Convert world coordinates to screen coordinates and center the effect
+    const screenX = canvasRect.left + worldX - effect.scaledWidth / 2;
+    const screenY = canvasRect.top + worldY - effect.scaledHeight / 2;
     
-    effect.domElement.style.left = `${canvasRect.left + effect.x - elementWidth / 2}px`;
-    effect.domElement.style.top = `${canvasRect.top + effect.y - elementHeight / 2}px`;
+    effect.domElement.style.left = `${screenX}px`;
+    effect.domElement.style.top = `${screenY}px`;
   }
 
   // Get all available effect keys for UI
