@@ -1,5 +1,5 @@
-// frontend/src/components/game/TianniSwordManager.js
-import elementService from '../../services/elementService';
+// frontend/src/components/game/scripts/TianniSwordManager.js
+import elementService from '/src/services/elementService';
 
 class TianniSwordManager {
   constructor(scene) {

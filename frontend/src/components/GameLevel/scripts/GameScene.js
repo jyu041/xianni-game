@@ -1,4 +1,4 @@
-// frontend/src/components/game/GameScene.js
+// frontend/src/components/game/scripts/GameScene.js
 import Phaser from "phaser";
 import AssetLoader from "./AssetLoader";
 import AnimationManager from "./AnimationManager";
@@ -9,7 +9,7 @@ import VfxManager from "./VfxManager";
 import DamageNumberManager from "./DamageNumberManager";
 import TianniSwordManager from "./TianniSwordManager";
 import HealthRegenManager from "./HealthRegenManager";
-import elementService from "../../services/elementService";
+import elementService from "/src/services/elementService";
 
 class GameScene extends Phaser.Scene {
   constructor() {

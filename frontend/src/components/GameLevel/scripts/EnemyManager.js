@@ -1,5 +1,5 @@
-// frontend/src/components/game/EnemyManager.js
-import { getAllEnemyTypes, getRandomEnemyType } from './config/EnemyTypes.js';
+// frontend/src/components/game/scripts/EnemyManager.js
+import { getAllEnemyTypes, getRandomEnemyType } from '../config/EnemyTypes.js';
 
 class EnemyManager {
   constructor(scene) {

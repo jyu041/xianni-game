@@ -1,4 +1,4 @@
-// frontend/src/components/game/DamageNumberManager.js
+// frontend/src/components/game/scripts/DamageNumberManager.js
 class DamageNumberManager {
   constructor(scene) {
     this.scene = scene;

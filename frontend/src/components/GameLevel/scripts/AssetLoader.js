@@ -1,5 +1,5 @@
-// frontend/src/components/game/AssetLoader.js
-import { MAIN_CHARACTER_ASSETS, getAllEnemyAssets } from './config/AssetConfigs.js';
+// frontend/src/components/game/scripts/AssetLoader.js
+import { MAIN_CHARACTER_ASSETS, getAllEnemyAssets } from '../config/AssetConfigs.js';
 
 class AssetLoader {
   constructor(scene) {

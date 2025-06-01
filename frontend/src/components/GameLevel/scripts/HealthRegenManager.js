@@ -1,4 +1,4 @@
-// frontend/src/components/game/HealthRegenManager.js
+// frontend/src/components/game/scripts/HealthRegenManager.js
 class HealthRegenManager {
   constructor(scene) {
     this.scene = scene;

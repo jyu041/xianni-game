@@ -1,4 +1,4 @@
-// frontend/src/components/game/ProjectileManager.js
+// frontend/src/components/game/scripts/ProjectileManager.js
 class ProjectileManager {
   constructor(scene) {
     this.scene = scene;

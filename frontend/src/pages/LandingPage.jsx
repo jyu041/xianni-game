@@ -1,14 +1,14 @@
-// frontend/src/pages/HomePage.jsx
+// frontend/src/pages/LandingPage.jsx
 import { useState, useEffect } from "react";
-import Card from "../components/ui/Card";
-import Button from "../components/ui/Button";
-import ResponsiveLayout from "../components/layout/ResponsiveLayout";
-import playerService from "../services/playerService";
-import SaveSlotModal from "../components/saves/SaveSlotModal";
-import GameControlsModal from "../components/modals/GameControlsModal";
-import styles from "./HomePage.module.css";
+import Card from "/src/components/ui/Card";
+import Button from "/src/components/ui/Button";
+import ResponsiveLayout from "/src/components/layout/ResponsiveLayout";
+import playerService from "/src/services/playerService";
+import SaveSlotModal from "/src/components/Landing/SaveSlotModal";
+import GameControlsModal from "/src/components/Landing/GameControlsModal";
+import styles from "./LandingPage.module.css";
 
-const HomePage = ({ onNavigate }) => {
+const LandingPage = ({ onNavigate }) => {
   const [saves, setSaves] = useState([]);
   const [latestSave, setLatestSave] = useState(null);
   const [showSaveModal, setShowSaveModal] = useState(false);
@@ -206,4 +206,4 @@ const HomePage = ({ onNavigate }) => {
   );
 };
 
-export default HomePage;
+export default LandingPage;

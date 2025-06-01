@@ -1,14 +1,14 @@
 // frontend/src/pages/GameHome.jsx
 import { useState, useEffect } from "react";
-import GameHeader from "../components/game/GameHeader";
-import StageSelection from "../components/game/StageSelection";
-import ElementDisplay from "../components/elements/ElementDisplay";
-import TreasureInventory from "../components/inventory/TreasureInventory";
-import ResponsiveLayout from "../components/layout/ResponsiveLayout";
-import Card from "../components/ui/Card";
-import Button from "../components/ui/Button";
-import playerService from "../services/playerService";
-import stageService from "../services/stageService";
+import GameHeader from "/src/components/GameHome/GameHeader";
+import StageSelection from "/src/components/GameHome/StageSelection";
+import ElementDisplay from "/src/components/GameHome/ElementDisplay";
+import TreasureInventory from "/src/components/GameHome/TreasureInventory";
+import ResponsiveLayout from "/src/components/layout/ResponsiveLayout";
+import Card from "/src/components/ui/Card";
+import Button from "/src/components/ui/Button";
+import playerService from "/src/services/playerService";
+import stageService from "/src/services/stageService";
 import styles from "./GameHome.module.css";
 
 const GameHome = ({ saveData, onNavigate }) => {

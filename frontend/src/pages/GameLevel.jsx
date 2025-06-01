@@ -1,12 +1,12 @@
 // frontend/src/pages/GameLevel.jsx
 import { useState, useEffect, useRef } from "react";
 import Phaser from "phaser";
-import GameLevelHeader from "../components/game/GameLevelHeader";
-import AbilitySidebars from "../components/game/AbilitySidebars";
-import ElementStatusHUD from "../components/game/ElementStatusHUD";
-import GameScene from "../components/game/GameScene";
-import playerService from "../services/playerService";
-import elementService from "../services/elementService";
+import GameLevelHeader from "/src/components/GameLevel/GameLevelHeader";
+import AbilitySidebars from "/src/components/GameLevel/AbilitySidebars";
+import ElementStatusHUD from "/src/components/GameLevel/ElementStatusHUD";
+import GameScene from "/src/components/GameLevel/scripts/GameScene";
+import playerService from "/src/services/playerService";
+import elementService from "/src/services/elementService";
 import styles from "./GameLevel.module.css";
 
 const GameLevel = ({ stageData, playerData, onGameEnd }) => {

@@ -1,4 +1,4 @@
-// frontend/src/components/game/PlayerController.js
+// frontend/src/components/game/scripts/PlayerController.js
 class PlayerController {
   constructor(scene) {
     this.scene = scene;

@@ -1,6 +1,6 @@
 // src/App.jsx
 import { useState } from "react";
-import HomePage from "./pages/HomePage";
+import LandingPage from "./pages/LandingPage";
 import CreateSaveSlot from "./pages/CreateSaveSlot";
 import GameHome from "./pages/GameHome";
 import GameLevel from "./pages/GameLevel";
@@ -35,7 +35,7 @@ function App() {
   const renderCurrentPage = () => {
     switch (currentPage) {
       case "home":
-        return <HomePage onNavigate={navigateTo} />;
+        return <LandingPage onNavigate={navigateTo} />;
       case "createSave":
         return (
           <CreateSaveSlot onNavigate={navigateTo} onSaveCreated={selectSave} />
@@ -51,7 +51,7 @@ function App() {
           />
         );
       default:
-        return <HomePage onNavigate={navigateTo} />;
+        return <LandingPage onNavigate={navigateTo} />;
     }
   };
 

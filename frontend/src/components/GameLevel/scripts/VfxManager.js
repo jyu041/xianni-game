@@ -1,5 +1,5 @@
-// frontend/src/components/game/VfxManager.js
-import { getAllVfxConfigs, getVfxConfig } from './config/VfxConfigs.js';
+// frontend/src/components/game/scripts/VfxManager.js
+import { getAllVfxConfigs, getVfxConfig } from '../config/VfxConfigs.js';
 
 class VfxManager {
   constructor(scene) {

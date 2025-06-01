@@ -1,5 +1,5 @@
-// frontend/src/components/game/AnimationManager.js
-import { getMainCharacterAnimations, ENEMY_ANIMATIONS } from './config/AnimationConfigs.js';
+// frontend/src/components/game/scripts/AnimationManager.js
+import { getMainCharacterAnimations, ENEMY_ANIMATIONS } from '../config/AnimationConfigs.js';
 
 class AnimationManager {
   constructor(scene) {
