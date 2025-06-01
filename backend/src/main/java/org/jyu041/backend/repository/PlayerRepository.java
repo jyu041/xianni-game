@@ -23,5 +23,9 @@ public interface PlayerRepository extends MongoRepository<Player, String> {
     @Query("{ 'currentStage' : ?0 }")
     List<Player> findPlayersByCurrentStage(int stage);
 
-    long countByDifficulty(String difficulty);
+    // Removed countByDifficulty as Player doesn't have difficulty property
+    // If we need this in the future, we can add difficulty to Player entity
+
+    // Count players by primary element instead
+    long countByPrimaryElement(String primaryElement);
 }
