@@ -17,9 +17,7 @@ public class Player {
     private long experience;
     private long gold;
     private long gems;
-    private String difficulty;
-    private String cultivation;
-    private String element;
+    private String element; // Player's chosen element
     private LocalDateTime createdAt;
     private LocalDateTime lastPlayed;
     private long playtime;
@@ -57,17 +55,15 @@ public class Player {
         initializeElements();
     }
 
-    public Player(String playerName, String difficulty, String cultivation, String element) {
+    public Player(String playerName, String element) {
         this();
         this.playerName = playerName;
         this.level = 1;
         this.experience = 0;
         this.gold = 100;
         this.gems = 0;
-        this.difficulty = difficulty;
-        this.cultivation = cultivation;
         this.element = element;
-        this.primaryElement = mapElementToPrimary(element);
+        this.primaryElement = element; // Set primary element same as chosen element
         this.createdAt = LocalDateTime.now();
         this.lastPlayed = LocalDateTime.now();
         this.playtime = 0;
@@ -92,18 +88,6 @@ public class Player {
         }
     }
 
-    private String mapElementToPrimary(String element) {
-        // Map from cultivation element to primary element
-        switch (element.toLowerCase()) {
-            case "fire": return "fire";
-            case "water": return "water";
-            case "earth": return "earth";
-            case "metal": return "metal";
-            case "wood": return "wood";
-            default: return "fire"; // Default
-        }
-    }
-
     // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
@@ -122,12 +106,6 @@ public class Player {
 
     public long getGems() { return gems; }
     public void setGems(long gems) { this.gems = gems; }
-
-    public String getDifficulty() { return difficulty; }
-    public void setDifficulty(String difficulty) { this.difficulty = difficulty; }
-
-    public String getCultivation() { return cultivation; }
-    public void setCultivation(String cultivation) { this.cultivation = cultivation; }
 
     public String getElement() { return element; }
     public void setElement(String element) { this.element = element; }

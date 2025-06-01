@@ -35,8 +35,6 @@ public class PlayerController {
     public ResponseEntity<Player> createPlayer(@RequestBody Map<String, Object> playerData) {
         try {
             String playerName = (String) playerData.get("playerName");
-            String difficulty = (String) playerData.get("difficulty");
-            String cultivation = (String) playerData.get("cultivation");
             String element = (String) playerData.get("element");
 
             if (playerName == null || playerName.trim().isEmpty()) {
@@ -48,7 +46,7 @@ public class PlayerController {
                 return ResponseEntity.badRequest().build();
             }
 
-            Player player = playerService.createPlayer(playerName, difficulty, cultivation, element);
+            Player player = playerService.createPlayer(playerName, element);
             return ResponseEntity.ok(player);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

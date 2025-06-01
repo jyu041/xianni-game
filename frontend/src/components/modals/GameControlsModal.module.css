@@ -1,0 +1,227 @@
+/* frontend/src/components/modals/GameControlsModal.module.css */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+.modalContent {
+  background: rgba(0, 0, 0, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  backdrop-filter: blur(25px);
+  max-width: 900px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8),
+              0 0 40px rgba(255, 255, 255, 0.1);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modalHeader h2 {
+  color: #ffffff;
+  margin: 0;
+  font-size: 1.5rem;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.closeButton:hover {
+  background: rgba(244, 67, 54, 0.3);
+  color: #ffffff;
+}
+
+.controlsList {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.controlSection {
+  padding: 1.5rem;
+  height: fit-content;
+}
+
+.sectionTitle {
+  color: #8a2be2;
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+  text-align: center;
+  border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+.controlItems {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.controlItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.controlItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(138, 43, 226, 0.3);
+}
+
+.controlKey {
+  background: linear-gradient(45deg, 
+    rgba(138, 43, 226, 0.8), 
+    rgba(147, 112, 219, 0.8));
+  color: #ffffff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  min-width: 80px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(138, 43, 226, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.controlDescription {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.modalFooter {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.gameInfo {
+  flex: 1;
+}
+
+.gameInfo h4 {
+  color: #8a2be2;
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+.gameInfo ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.gameInfo li {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+/* Custom scrollbar */
+.controlsList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.controlsList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.controlsList::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, 
+    rgba(138, 43, 226, 0.6), 
+    rgba(147, 112, 219, 0.6));
+  border-radius: 4px;
+}
+
+.controlsList::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, 
+    rgba(138, 43, 226, 0.8), 
+    rgba(147, 112, 219, 0.8));
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: 1rem;
+  }
+
+  .modalContent {
+    max-height: 90vh;
+  }
+
+  .controlsList {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .modalFooter {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .gameInfo ul {
+    text-align: left;
+  }
+
+  .controlItem {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .controlKey {
+    min-width: auto;
+  }
+}

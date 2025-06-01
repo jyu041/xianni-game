@@ -33,8 +33,8 @@ public class PlayerService {
         return playerRepository.findByPlayerName(playerName);
     }
 
-    public Player createPlayer(String playerName, String difficulty, String cultivation, String element) {
-        Player player = new Player(playerName, difficulty, cultivation, element);
+    public Player createPlayer(String playerName, String element) {
+        Player player = new Player(playerName, element);
         return playerRepository.save(player);
     }
 

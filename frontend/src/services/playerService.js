@@ -13,8 +13,6 @@ class PlayerService {
   async createPlayer(playerData) {
     const saveData = {
       playerName: playerData.playerName,
-      difficulty: playerData.difficulty,
-      cultivation: playerData.cultivation,
       element: playerData.element,
     };
     

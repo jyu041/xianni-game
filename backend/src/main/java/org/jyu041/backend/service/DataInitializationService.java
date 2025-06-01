@@ -24,7 +24,7 @@ public class DataInitializationService implements CommandLineRunner {
 
     private void initializeSamplePlayers() {
         // Create sample players for testing
-        Player player1 = new Player("逆天修士", "normal", "talented", "fire");
+        Player player1 = new Player("逆天修士", "fire");
         player1.setLevel(15);
         player1.setExperience(2000);
         player1.setGold(500);
@@ -32,7 +32,7 @@ public class DataInitializationService implements CommandLineRunner {
         player1.setCurrentStage(3);
         player1.setUnlockedStages(List.of(1, 2, 3));
 
-        Player player2 = new Player("仙道至尊", "easy", "mortal", "water");
+        Player player2 = new Player("仙道至尊", "water");
         player2.setLevel(8);
         player2.setExperience(800);
         player2.setGold(200);
@@ -43,6 +43,6 @@ public class DataInitializationService implements CommandLineRunner {
         playerRepository.save(player1);
         playerRepository.save(player2);
 
-        System.out.println("Initialized sample players in database - no game sessions needed!");
+        System.out.println("Initialized sample players in database - simplified character creation!");
     }
 }
