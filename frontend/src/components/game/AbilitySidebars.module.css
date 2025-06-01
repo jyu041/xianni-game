@@ -1,5 +1,17 @@
 /* frontend/src/components/game/AbilitySidebars.module.css */
 
+/* Add new styles for Tianni Sword and improved interactions */
+@keyframes abilityActivate {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 215, 0, 0.5); }
+  50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 215, 0, 0.5); }
+}
+
+@keyframes mutationPulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
 .leftSidebar,
 .rightSidebar {
   position: fixed;
@@ -58,7 +70,7 @@
 
 .abilitySlot {
   position: relative;
-  height: 60px;
+  height: 70px;
   border-radius: 8px;
   border: 2px solid rgba(255, 255, 255, 0.2);
   background: rgba(0, 0, 0, 0.6);
@@ -93,6 +105,21 @@
   box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
 }
 
+.lockedSlot {
+  border-color: rgba(255, 215, 0, 0.6);
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.2), 
+    rgba(255, 140, 0, 0.1));
+}
+
+.lockedSlot:hover {
+  border-color: rgba(255, 215, 0, 0.8);
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.3), 
+    rgba(255, 140, 0, 0.2));
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
 .emptySlotContent {
   display: flex;
   flex-direction: column;
@@ -103,9 +130,11 @@
 }
 
 .slotNumber {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: bold;
   margin-bottom: 0.25rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
 .slotType {
@@ -122,17 +151,38 @@
 }
 
 .abilityIcon {
-  width: 40px;
-  height: 40px;
+  position: relative;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   background: rgba(138, 43, 226, 0.3);
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   margin-right: 0.75rem;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.lockedIcon {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 0.8rem;
+  color: #ffd700;
+  filter: drop-shadow(0 0 5px #ffd700);
+}
+
+.mutationGlow {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  font-size: 1rem;
+  color: #ffd700;
+  animation: mutationPulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px #ffd700);
 }
 
 .abilityInfo {
@@ -140,20 +190,75 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 0.2rem;
 }
 
 .abilityName {
   color: #ffffff;
   font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.1rem;
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.mutationBadge {
+  color: #ffd700;
+  font-size: 0.9rem;
+  margin-left: 0.3rem;
+  animation: mutationPulse 2s ease-in-out infinite;
 }
 
 .abilityLevel {
   color: rgba(255, 215, 0, 0.9);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 500;
+}
+
+.hotkey {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  font-weight: bold;
+  align-self: flex-start;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-align: center;
+  min-width: 20px;
+}
+
+.abilityDescription {
+  margin-top: 0.3rem;
+}
+
+.skillInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.skillName {
+  color: #8a2be2;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-shadow: 0 0 5px rgba(138, 43, 226, 0.5);
+}
+
+.skillDamage {
+  color: #ff6b6b;
+  font-size: 0.65rem;
+  font-weight: 500;
+}
+
+.elementIndicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  font-weight: bold;
+  border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 .cooldownOverlay {
@@ -178,6 +283,13 @@
 .slotCount {
   color: rgba(255, 255, 255, 0.8);
   font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.hotkeyHint {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.7rem;
+  font-style: italic;
 }
 
 /* Custom scrollbar for ability list */
@@ -211,21 +323,25 @@
   }
   
   .abilitySlot {
-    height: 50px;
+    height: 60px;
   }
   
   .abilityIcon {
-    width: 32px;
-    height: 32px;
-    font-size: 1.2rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
     margin-right: 0.5rem;
   }
   
   .abilityName {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
   
   .abilityLevel {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
+  }
+
+  .hotkey {
+    font-size: 0.55rem;
   }
 }
