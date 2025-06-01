@@ -126,11 +126,6 @@ const ElementDisplay = ({ playerData, onElementChange }) => {
 
   return (
     <div className={styles.elementDisplay}>
-      <div className={styles.header}>
-        <h3>元素修炼</h3>
-        <p>选择你的主要元素属性</p>
-      </div>
-
       <div className={styles.elementGrid}>
         {Object.keys(elementInfo.names).map((element) => {
           const level = getElementLevel(element);

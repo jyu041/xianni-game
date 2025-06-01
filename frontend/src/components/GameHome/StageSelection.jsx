@@ -107,11 +107,6 @@ const StageSelection = ({ playerData, onStageSelect, onNavigate }) => {
 
   return (
     <div className={styles.stageSelection}>
-      <div className={styles.header}>
-        <h2>选择关卡</h2>
-        <p>选择你要挑战的修炼之地</p>
-      </div>
-
       <div className={styles.stageGrid}>
         {stages.map((stage) => {
           const unlocked = isStageUnlocked(stage.stageId);

@@ -235,14 +235,6 @@ const GameHome = ({ saveData, onNavigate }) => {
           {/* Main Content Panel */}
           <div className={styles.mainPanel}>
             <div className={styles.mainContent}>
-              {/* Content Header */}
-              <div className={styles.contentHeader}>
-                <h2 className={styles.contentTitle}>
-                  <span className={styles.contentIcon}>{getContentIcon()}</span>
-                  {getContentTitle()}
-                </h2>
-              </div>
-
               {/* Content Body */}
               <div className={styles.contentBody}>{renderMainContent()}</div>
             </div>

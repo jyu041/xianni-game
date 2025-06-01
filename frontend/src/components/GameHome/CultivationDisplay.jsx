@@ -130,11 +130,6 @@ const CultivationDisplay = ({ playerData }) => {
 
   return (
     <div className={styles.cultivationDisplay}>
-      <div className={styles.header}>
-        <h3>修为境界</h3>
-        <p>查看你的修炼进度和境界状态</p>
-      </div>
-
       {/* Current Cultivation Realm */}
       <div className={styles.currentRealm}>
         <div className={styles.realmCard}>
@@ -178,34 +173,6 @@ const CultivationDisplay = ({ playerData }) => {
               <div className={styles.statValue} style={{ color: stat.color }}>
                 {stat.value}
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Achievements */}
-      <div className={styles.achievementsSection}>
-        <h4>修炼成就</h4>
-        <div className={styles.achievementsList}>
-          {getAchievements().map((achievement, index) => (
-            <div
-              key={index}
-              className={`${styles.achievementCard} ${
-                achievement.unlocked ? styles.unlocked : styles.locked
-              }`}
-            >
-              <div className={styles.achievementIcon}>
-                {achievement.unlocked ? "🏆" : "🔒"}
-              </div>
-              <div className={styles.achievementInfo}>
-                <div className={styles.achievementName}>{achievement.name}</div>
-                <div className={styles.achievementDesc}>
-                  {achievement.description}
-                </div>
-              </div>
-              {achievement.unlocked && (
-                <div className={styles.unlockedBadge}>已解锁</div>
-              )}
             </div>
           ))}
         </div>

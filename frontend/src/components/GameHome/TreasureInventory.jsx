@@ -169,11 +169,6 @@ const TreasureInventory = ({ playerData, onTreasureUpgrade }) => {
 
   return (
     <div className={styles.treasureInventory}>
-      <div className={styles.header}>
-        <h2>法宝背包</h2>
-        <p>管理你的修仙法宝</p>
-      </div>
-
       <div className={styles.content}>
         {/* Treasure List */}
         <div className={styles.treasureList}>

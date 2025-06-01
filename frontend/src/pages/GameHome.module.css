@@ -131,13 +131,6 @@
   pointer-events: none;
 }
 
-.contentHeader {
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  position: relative;
-  z-index: 1;
-}
-
 .contentIcon {
   font-size: 2rem;
   color: rgba(138, 43, 226, 0.9);
@@ -232,11 +225,6 @@
   .comingSoon p {
     font-size: 0.9rem;
   }
-
-  .contentHeader {
-    padding: 1rem 1.5rem;
-  }
-
 
   .contentIcon {
     font-size: 1.7rem;
