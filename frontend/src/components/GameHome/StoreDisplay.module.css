@@ -1,0 +1,333 @@
+/* frontend/src/components/GameHome/StoreDisplay.module.css */
+
+.storeDisplay {
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(26, 13, 38, 0.9));
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8),
+              0 0 30px rgba(255, 255, 255, 0.1);
+  min-height: 600px;
+}
+
+.storeHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.storeHeader h2 {
+  color: #ffffff;
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.storeHeader p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+  margin: 0;
+  font-style: italic;
+}
+
+.categoryTabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.categoryTab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.categoryTab:hover {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+.categoryTab.active {
+  background: rgba(33, 150, 243, 0.3);
+  border-color: rgba(33, 150, 243, 0.6);
+  box-shadow: 0 0 20px rgba(33, 150, 243, 0.3);
+}
+
+.categoryIcon {
+  font-size: 1.2rem;
+}
+
+.categoryName {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.storeContent {
+  min-height: 400px;
+}
+
+.itemGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.storeItem {
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.storeItem:hover:not(.unaffordable) {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(33, 150, 243, 0.3);
+}
+
+.storeItem.unaffordable {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.itemIcon {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.rarityBadge {
+  color: #000000;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.itemInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.itemName {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 0 0 10px currentColor;
+}
+
+.itemDescription {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+  flex: 1;
+}
+
+.itemPrice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.priceIcon {
+  font-size: 1.1rem;
+}
+
+.priceAmount {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.requirement {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+}
+
+.requirementText {
+  color: #ffeb3b;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.itemDetail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+.detailPanel {
+  max-width: 500px;
+  width: 100%;
+  padding: 2rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.detailHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.detailIcon {
+  font-size: 3rem;
+  filter: drop-shadow(0 0 15px currentColor);
+}
+
+.detailInfo h3 {
+  font-size: 1.5rem;
+  margin: 0 0 0.25rem 0;
+  text-shadow: 0 0 15px currentColor;
+}
+
+.detailRarity {
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.detailDescription {
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.detailPrice {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.detailPrice h4 {
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.priceInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.2rem;
+}
+
+.detailActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .storeDisplay {
+    padding: 1rem;
+  }
+
+  .storeHeader h2 {
+    font-size: 1.5rem;
+  }
+
+  .storeHeader p {
+    font-size: 1rem;
+  }
+
+  .categoryTabs {
+    gap: 0.5rem;
+  }
+
+  .categoryTab {
+    padding: 0.5rem 1rem;
+    min-width: 100px;
+  }
+
+  .categoryName {
+    font-size: 0.8rem;
+  }
+
+  .itemGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .storeItem {
+    padding: 1rem;
+    min-height: 180px;
+  }
+
+  .itemIcon {
+    font-size: 2rem;
+  }
+
+  .itemName {
+    font-size: 1.1rem;
+  }
+
+  .itemDetail {
+    padding: 1rem;
+  }
+
+  .detailPanel {
+    padding: 1.5rem;
+  }
+
+  .detailActions {
+    flex-direction: column;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .itemGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.2rem;
+  }
+}

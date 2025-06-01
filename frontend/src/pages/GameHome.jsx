@@ -6,6 +6,9 @@ import StageSelection from "/src/components/GameHome/StageSelection";
 import ElementDisplay from "/src/components/GameHome/ElementDisplay";
 import TreasureInventory from "/src/components/GameHome/TreasureInventory";
 import CultivationDisplay from "/src/components/GameHome/CultivationDisplay";
+import StoreDisplay from "/src/components/GameHome/StoreDisplay";
+import GachaDisplay from "/src/components/GameHome/GachaDisplay";
+import AchievementsDisplay from "/src/components/GameHome/AchievementsDisplay";
 import playerService from "/src/services/playerService";
 import stageService from "/src/services/stageService";
 import styles from "./GameHome.module.css";
@@ -77,6 +80,89 @@ const GameHome = ({ saveData, onNavigate }) => {
     }
   };
 
+  const handleStorePurchase = async (item) => {
+    try {
+      // Simulate store purchase - in real implementation, this would call an API
+      console.log("Purchasing item:", item);
+
+      // Deduct cost
+      const updatedPlayerData = { ...playerData };
+      if (item.price.type === "gold") {
+        updatedPlayerData.gold -= item.price.amount;
+      } else if (item.price.type === "gems") {
+        updatedPlayerData.gems -= item.price.amount;
+      }
+
+      // Add rewards
+      if (item.reward.type === "gold") {
+        updatedPlayerData.gold += item.reward.amount;
+      } else if (item.reward.type === "experience") {
+        updatedPlayerData.experience += item.reward.amount;
+      } else if (item.reward.type === "sword_upgrade") {
+        // Upgrade sword if possible
+        if (updatedPlayerData.tianniSwordLevel < 10) {
+          updatedPlayerData.tianniSwordLevel += 1;
+        }
+      }
+
+      setPlayerData(updatedPlayerData);
+
+      // In real implementation, update player via API
+      // await playerService.updatePlayer(playerData.id, updatedPlayerData);
+    } catch (error) {
+      console.error("Failed to purchase item:", error);
+    }
+  };
+
+  const handleGachaPull = async (pullData) => {
+    try {
+      console.log("Gacha pull:", pullData);
+
+      // Deduct gems
+      const updatedPlayerData = { ...playerData };
+      updatedPlayerData.gems -= pullData.cost;
+
+      // Add rewards based on results
+      pullData.results.forEach((result) => {
+        if (result.type === "currency") {
+          updatedPlayerData.gold += 100; // Example reward
+        } else if (result.type === "experience") {
+          updatedPlayerData.experience += 50; // Example reward
+        }
+        // Add other reward types as needed
+      });
+
+      setPlayerData(updatedPlayerData);
+    } catch (error) {
+      console.error("Failed to process gacha pull:", error);
+    }
+  };
+
+  const handleAchievementClaim = async (achievement) => {
+    try {
+      console.log("Claiming achievement:", achievement);
+
+      // Add rewards
+      const updatedPlayerData = { ...playerData };
+      if (achievement.rewards.gold) {
+        updatedPlayerData.gold += achievement.rewards.gold;
+      }
+      if (achievement.rewards.experience) {
+        updatedPlayerData.experience += achievement.rewards.experience;
+      }
+      if (achievement.rewards.gems) {
+        updatedPlayerData.gems += achievement.rewards.gems;
+      }
+
+      // Mark achievement as claimed
+      achievement.claimed = true;
+
+      setPlayerData(updatedPlayerData);
+    } catch (error) {
+      console.error("Failed to claim achievement:", error);
+    }
+  };
+
   const renderMainContent = () => {
     if (isLoading) {
       return (
@@ -117,36 +203,21 @@ const GameHome = ({ saveData, onNavigate }) => {
         );
       case "store":
         return (
-          <div className={styles.menuContent}>
-            <div className={styles.comingSoon}>
-              <div className={styles.comingSoonIcon}>🏪</div>
-              <h3>修仙商店</h3>
-              <p>购买珍贵的修炼资源和法宝</p>
-              <p>即将开放，敬请期待！</p>
-            </div>
-          </div>
+          <StoreDisplay
+            playerData={playerData}
+            onPurchase={handleStorePurchase}
+          />
         );
       case "gacha":
         return (
-          <div className={styles.menuContent}>
-            <div className={styles.comingSoon}>
-              <div className={styles.comingSoonIcon}>🎲</div>
-              <h3>天机抽取</h3>
-              <p>消耗天机石获得稀有法宝和功法</p>
-              <p>即将开放，敬请期待！</p>
-            </div>
-          </div>
+          <GachaDisplay playerData={playerData} onGachaPull={handleGachaPull} />
         );
       case "achievements":
         return (
-          <div className={styles.menuContent}>
-            <div className={styles.comingSoon}>
-              <div className={styles.comingSoonIcon}>🏆</div>
-              <h3>修仙成就</h3>
-              <p>查看你的修炼成就和里程碑</p>
-              <p>即将开放，敬请期待！</p>
-            </div>
-          </div>
+          <AchievementsDisplay
+            playerData={playerData}
+            onClaimReward={handleAchievementClaim}
+          />
         );
       default:
         return (
