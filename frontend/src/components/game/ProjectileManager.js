@@ -13,11 +13,16 @@ class ProjectileManager {
     this.scene.projectiles.children.entries.forEach(projectile => {
       if (!projectile.active) return;
 
-      // Remove projectiles that go off screen
+      // Remove projectiles that go outside the world bounds (not camera bounds)
       const margin = 100;
-      if (projectile.x < -margin || projectile.x > this.scene.cameras.main.width + margin ||
-          projectile.y < -margin || projectile.y > this.scene.cameras.main.height + margin) {
+      const worldBounds = this.scene.physics.world.bounds;
+      
+      if (projectile.x < worldBounds.x - margin || 
+          projectile.x > worldBounds.x + worldBounds.width + margin ||
+          projectile.y < worldBounds.y - margin || 
+          projectile.y > worldBounds.y + worldBounds.height + margin) {
         projectile.destroy();
+        return;
       }
 
       // Remove projectiles that have traveled max distance (for 剑气)
