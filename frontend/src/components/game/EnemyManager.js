@@ -49,23 +49,23 @@ class EnemyManager {
 
   showEnemyHealthBar(enemy, healthPercent) {
     if (!enemy.healthBarBg) {
-      // Create health bar background
+      // Create health bar background - positioned closer to enemy
       enemy.healthBarBg = this.scene.add.rectangle(
-        enemy.x, enemy.y - enemy.displayHeight/2 - 15, 
+        enemy.x, enemy.y - enemy.displayHeight/2 - 8, // Reduced from -15 to -8
         40, 6, 0x000000, 0.7
       );
       enemy.healthBarBg.setStrokeStyle(1, 0xffffff, 0.5);
       
       // Create health bar fill
       enemy.healthBarFill = this.scene.add.rectangle(
-        enemy.x, enemy.y - enemy.displayHeight/2 - 15, 
+        enemy.x, enemy.y - enemy.displayHeight/2 - 8, // Reduced from -15 to -8
         38, 4, 0x00ff00
       );
     }
 
-    // Update position
-    enemy.healthBarBg.setPosition(enemy.x, enemy.y - enemy.displayHeight/2 - 15);
-    enemy.healthBarFill.setPosition(enemy.x, enemy.y - enemy.displayHeight/2 - 15);
+    // Update position - closer to enemy
+    enemy.healthBarBg.setPosition(enemy.x, enemy.y - enemy.displayHeight/2 - 8);
+    enemy.healthBarFill.setPosition(enemy.x, enemy.y - enemy.displayHeight/2 - 8);
     
     // Update fill width and color based on health
     const fillWidth = 38 * healthPercent;
@@ -229,6 +229,19 @@ class EnemyManager {
       const damage = enemy.enemyDamage || 10;
       this.scene.playerController.takeDamage(damage);
       this.createAttackEffect(enemy, player);
+      
+      // Show damage number on player
+      if (this.scene.damageNumberManager) {
+        this.scene.damageNumberManager.showDamageNumber(
+          player.x, 
+          player.y - 20, 
+          damage, 
+          { 
+            color: 0xff4444,
+            isHeal: false
+          }
+        );
+      }
     }
   }
 
@@ -255,15 +268,46 @@ class EnemyManager {
   }
 
   getRandomSpawnPosition() {
-    const margin = 50;
+    // Get camera bounds for viewport-aware spawning
+    const camera = this.scene.cameras.main;
+    const cameraX = camera.worldView.x;
+    const cameraY = camera.worldView.y;
+    const cameraWidth = camera.worldView.width;
+    const cameraHeight = camera.worldView.height;
+    
+    const margin = 100; // Spawn margin outside visible area
+    
+    // Spawn positions around the current camera view
     const spawnPositions = [
-      { x: Phaser.Math.Between(margin, this.scene.cameras.main.width - margin), y: -margin },
-      { x: this.scene.cameras.main.width + margin, y: Phaser.Math.Between(margin, this.scene.cameras.main.height - margin) },
-      { x: Phaser.Math.Between(margin, this.scene.cameras.main.width - margin), y: this.scene.cameras.main.height + margin },
-      { x: -margin, y: Phaser.Math.Between(margin, this.scene.cameras.main.height - margin) }
+      // Top edge
+      { 
+        x: Phaser.Math.Between(cameraX - margin, cameraX + cameraWidth + margin), 
+        y: cameraY - margin 
+      },
+      // Right edge
+      { 
+        x: cameraX + cameraWidth + margin, 
+        y: Phaser.Math.Between(cameraY - margin, cameraY + cameraHeight + margin) 
+      },
+      // Bottom edge
+      { 
+        x: Phaser.Math.Between(cameraX - margin, cameraX + cameraWidth + margin), 
+        y: cameraY + cameraHeight + margin 
+      },
+      // Left edge
+      { 
+        x: cameraX - margin, 
+        y: Phaser.Math.Between(cameraY - margin, cameraY + cameraHeight + margin) 
+      }
     ];
 
-    return Phaser.Utils.Array.GetRandom(spawnPositions);
+    const position = Phaser.Utils.Array.GetRandom(spawnPositions);
+    
+    // Clamp to world bounds
+    position.x = Phaser.Math.Clamp(position.x, 0, this.scene.worldSize.width);
+    position.y = Phaser.Math.Clamp(position.y, 0, this.scene.worldSize.height);
+    
+    return position;
   }
 
   createEnemy(spawnPos, enemyType) {
@@ -296,7 +340,7 @@ class EnemyManager {
     enemy.lastHorizontalDirection = 'right'; // Default facing right
     enemy.lastAttackTime = 0;
 
-    enemy.setCollideWorldBounds(false);
+    enemy.setCollideWorldBounds(true); // Keep enemies within world bounds
     enemy.setBounce(0);
     enemy.setDrag(50);
 

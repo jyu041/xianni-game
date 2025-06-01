@@ -13,8 +13,8 @@
 .gameCanvas {
   position: absolute;
   top: 80px; /* Account for header height */
-  left: 0;
-  width: 100vw;
+  left: 200px; /* Account for left sidebar */
+  width: calc(100vw - 400px); /* Subtract both sidebars */
   height: calc(100vh - 80px);
   border: none;
   background: #001122;
@@ -179,6 +179,30 @@
               0 0 35px rgba(244, 67, 54, 0.4);
 }
 
+/* Add damage numbers toggle to pause menu */
+.damageToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.damageToggle label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.damageToggle input[type="checkbox"] {
+  transform: scale(1.2);
+  accent-color: rgba(138, 43, 226, 0.8);
+  cursor: pointer;
+}
+
 .gameOver {
   width: 100vw;
   height: 100vh;
@@ -309,9 +333,18 @@
 }
 
 /* Mobile Styles */
+@media (max-width: 1200px) {
+  .gameCanvas {
+    left: 160px;
+    width: calc(100vw - 320px);
+  }
+}
+
 @media (max-width: 768px) {
   .gameCanvas {
     top: 70px;
+    left: 0;
+    width: 100vw;
     height: calc(100vh - 70px);
   }
 

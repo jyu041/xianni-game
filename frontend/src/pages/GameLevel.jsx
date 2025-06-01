@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import Phaser from "phaser";
 import GameLevelHeader from "../components/game/GameLevelHeader";
+import AbilitySidebars from "../components/game/AbilitySidebars";
 import GameScene from "../components/game/GameScene";
 import playerService from "../services/playerService";
 import styles from "./GameLevel.module.css";
@@ -36,17 +37,18 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
     selectedVfxEffect: "",
     vfxScale: 1.0,
     vfxRotation: 0,
+    showDamageNumbers: true,
   });
 
   // Global game state reference for Phaser
   let gameStateRef = gameState;
 
-  // Create Phaser game
+  // Create Phaser game with adjusted canvas size
   const createPhaserGame = () => {
     const config = {
       type: Phaser.AUTO,
-      width: window.innerWidth,
-      height: window.innerHeight - 80,
+      width: window.innerWidth - 400, // Subtract width of both sidebars
+      height: window.innerHeight - 80, // Subtract header height
       parent: gameRef.current,
       backgroundColor: "#001122",
       physics: {
@@ -230,6 +232,8 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
         phaserGameRef={phaserGameRef}
       />
 
+      <AbilitySidebars playerData={playerData} gameState={gameState} />
+
       <div ref={gameRef} className={styles.gameCanvas} />
 
       {gameState.isPaused && (
@@ -240,6 +244,20 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
             <p>当前得分: {gameState.score}</p>
             <p>存活时间: {Math.floor(gameState.time)}秒</p>
             <p>收集魂魄: {gameState.soulCount}</p>
+
+            {/* Damage Numbers Toggle */}
+            <div className={styles.damageToggle}>
+              <label htmlFor="damageNumbersToggle">显示伤害数字</label>
+              <input
+                id="damageNumbersToggle"
+                type="checkbox"
+                checked={debugSettings.showDamageNumbers}
+                onChange={(e) =>
+                  handleDebugChange("showDamageNumbers", e.target.checked)
+                }
+              />
+            </div>
+
             <div className={styles.pauseActions}>
               <button onClick={pauseGame}>继续修炼</button>
               <button onClick={quitGame}>结束修炼</button>

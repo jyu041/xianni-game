@@ -10,6 +10,21 @@ class PlayerController {
     this.lastHitTime = 0;
     this.debugGraphics = null;
     this.soulCollectionRange = 50; // Range for soul collection
+    
+    // Attack cooldown system
+    this.lastAttackTime = 0;
+    this.attackCooldown = 400; // milliseconds
+    this.attackCooldownBar = null;
+    this.attackCooldownBg = null;
+    
+    // 剑气 properties
+    this.jianqiConfig = {
+      size: 1.0,
+      speed: 300,
+      distance: 400,
+      damage: 25,
+      count: 1
+    };
   }
   
   createPlayer() {
@@ -29,8 +44,65 @@ class PlayerController {
       console.log('Using actual player sprite with animation');
     }
 
+    // Create attack cooldown bar
+    this.createAttackCooldownBar();
+
     // Store reference in scene for other managers
     this.scene.playerController = this;
+  }
+
+  createAttackCooldownBar() {
+    // Create background bar
+    this.attackCooldownBg = this.scene.add.rectangle(
+      this.player.x, 
+      this.player.y + this.player.displayHeight/2 + 10, 
+      30, 4, 
+      0x000000, 
+      0.6
+    );
+    this.attackCooldownBg.setStrokeStyle(1, 0xffffff, 0.3);
+
+    // Create fill bar
+    this.attackCooldownBar = this.scene.add.rectangle(
+      this.player.x, 
+      this.player.y + this.player.displayHeight/2 + 10, 
+      28, 2, 
+      0x00ff88
+    );
+    
+    // Initially hide the bars
+    this.attackCooldownBg.setVisible(false);
+    this.attackCooldownBar.setVisible(false);
+  }
+
+  updateAttackCooldownBar() {
+    if (!this.attackCooldownBar || !this.attackCooldownBg) return;
+
+    const currentTime = this.scene.time.now;
+    const timeSinceAttack = currentTime - this.lastAttackTime;
+    
+    // Show bar only when on cooldown
+    if (timeSinceAttack < this.attackCooldown) {
+      const progress = timeSinceAttack / this.attackCooldown;
+      const fillWidth = 28 * progress;
+      
+      this.attackCooldownBg.setVisible(true);
+      this.attackCooldownBar.setVisible(true);
+      this.attackCooldownBar.setDisplaySize(fillWidth, 2);
+      
+      // Update position to follow player
+      this.attackCooldownBg.setPosition(
+        this.player.x, 
+        this.player.y + this.player.displayHeight/2 + 10
+      );
+      this.attackCooldownBar.setPosition(
+        this.player.x, 
+        this.player.y + this.player.displayHeight/2 + 10
+      );
+    } else {
+      this.attackCooldownBg.setVisible(false);
+      this.attackCooldownBar.setVisible(false);
+    }
   }
 
   setupInput() {
@@ -50,6 +122,7 @@ class PlayerController {
     this.updateAttackRange();
     this.updateSoulCollectionRange();
     this.checkSoulCollection();
+    this.updateAttackCooldownBar();
   }
 
   updateDebugRange() {
@@ -89,7 +162,6 @@ class PlayerController {
     const debugSettings = this.scene.debugSettings;
     if (debugSettings && debugSettings.soulCollectionRange) {
       this.soulCollectionRange = debugSettings.soulCollectionRange;
-      // console.log('Updated soul collection range to:', this.soulCollectionRange);
     }
   }
 
@@ -177,7 +249,13 @@ class PlayerController {
     }
   }
 
+  canAttack() {
+    const currentTime = this.scene.time.now;
+    return currentTime - this.lastAttackTime >= this.attackCooldown;
+  }
+
   autoFire() {
+    if (!this.canAttack()) return;
     if (this.scene.enemies.children.size === 0) return;
 
     // Find nearest ALIVE enemy within attack range
@@ -201,11 +279,14 @@ class PlayerController {
 
     if (!nearest) return; // No alive enemies in range
 
+    // Update last attack time
+    this.lastAttackTime = this.scene.time.now;
+
     // Trigger attack animation
     this.triggerAttackAnimation();
 
-    // Create projectile
-    this.createProjectile(nearest);
+    // Create 剑气 projectiles
+    this.createJianqi(nearest);
   }
 
   triggerAttackAnimation() {
@@ -229,26 +310,63 @@ class PlayerController {
     }
   }
 
-  createProjectile(target) {
-    const projectile = this.scene.projectiles.create(this.player.x, this.player.y, 'projectile');
-    projectile.setDisplaySize(10, 10); // Slightly increased from 8
-    projectile.setTint(0xffff00);
-
-    const angle = Phaser.Math.Angle.Between(
-      this.player.x, this.player.y, target.x, target.y
-    );
-
-    projectile.setVelocity(
-      Math.cos(angle) * 300,
-      Math.sin(angle) * 300
-    );
-
-    // Auto-destroy after 2 seconds
-    this.scene.time.delayedCall(2000, () => {
-      if (projectile && projectile.active) {
-        projectile.destroy();
+  createJianqi(target) {
+    for (let i = 0; i < this.jianqiConfig.count; i++) {
+      const jianqi = this.scene.projectiles.create(this.player.x, this.player.y, 'jianqi');
+      
+      // Create 剑气 SVG if it doesn't exist
+      if (!this.scene.textures.exists('jianqi')) {
+        this.createJianqiTexture();
+        jianqi.setTexture('jianqi');
       }
-    });
+      
+      jianqi.setDisplaySize(20 * this.jianqiConfig.size, 40 * this.jianqiConfig.size);
+      jianqi.setTint(0x88ddff); // Light blue sword energy color
+
+      const angle = Phaser.Math.Angle.Between(
+        this.player.x, this.player.y, target.x, target.y
+      ) + (i * 0.2 - 0.1); // Slight spread for multiple projectiles
+
+      // Rotate the sprite to match direction
+      jianqi.setRotation(angle + Math.PI / 2);
+
+      jianqi.setVelocity(
+        Math.cos(angle) * this.jianqiConfig.speed,
+        Math.sin(angle) * this.jianqiConfig.speed
+      );
+
+      // Store jianqi properties
+      jianqi.damage = this.jianqiConfig.damage;
+      jianqi.maxDistance = this.jianqiConfig.distance;
+      jianqi.startX = this.player.x;
+      jianqi.startY = this.player.y;
+
+      // Auto-destroy after max distance
+      this.scene.time.delayedCall(this.jianqiConfig.distance / this.jianqiConfig.speed * 1000, () => {
+        if (jianqi && jianqi.active) {
+          jianqi.destroy();
+        }
+      });
+    }
+  }
+
+  createJianqiTexture() {
+    // Create SVG for 剑气 (sword energy)
+    const graphics = this.scene.add.graphics();
+    
+    // Draw sword energy shape
+    graphics.fillStyle(0xffffff);
+    graphics.fillEllipse(0, -15, 8, 30); // Main blade
+    graphics.fillEllipse(0, -10, 12, 20); // Wider center
+    graphics.fillEllipse(0, -5, 6, 10); // Tip
+    
+    // Add energy trails
+    graphics.fillStyle(0xccddff, 0.7);
+    graphics.fillEllipse(-2, -12, 4, 24);
+    graphics.fillEllipse(2, -12, 4, 24);
+    
+    graphics.generateTexture('jianqi', 20, 40);
+    graphics.destroy();
   }
 
   takeDamage(damage) {
@@ -316,7 +434,6 @@ class PlayerController {
     
     if (this.scene.gameStateRef) {
       this.scene.gameStateRef.soulCount = (this.scene.gameStateRef.soulCount || 0) + soul.soulValue;
-      // console.log('Soul collected! Total souls:', this.scene.gameStateRef.soulCount);
     }
     
     // Create enhanced collection animation

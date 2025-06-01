@@ -19,6 +19,18 @@ class ProjectileManager {
           projectile.y < -margin || projectile.y > this.scene.cameras.main.height + margin) {
         projectile.destroy();
       }
+
+      // Remove projectiles that have traveled max distance (for 剑气)
+      if (projectile.maxDistance && projectile.startX !== undefined && projectile.startY !== undefined) {
+        const traveledDistance = Phaser.Math.Distance.Between(
+          projectile.startX, projectile.startY,
+          projectile.x, projectile.y
+        );
+        
+        if (traveledDistance >= projectile.maxDistance) {
+          projectile.destroy();
+        }
+      }
     });
   }
 
@@ -29,8 +41,32 @@ class ProjectileManager {
     // Destroy projectile immediately
     projectile.destroy();
     
+    // Get damage amount (from projectile or default)
+    const damage = projectile.damage || this.projectileDamage;
+    
     // Deal damage to enemy
-    enemy.health -= this.projectileDamage;
+    enemy.health -= damage;
+    
+    // Show damage number
+    if (this.scene.damageNumberManager) {
+      const isCritical = Math.random() < 0.15; // 15% critical chance
+      const actualDamage = isCritical ? damage * 1.5 : damage;
+      
+      // Update enemy health with actual damage
+      if (isCritical) {
+        enemy.health -= damage * 0.5; // Additional damage for critical
+      }
+      
+      this.scene.damageNumberManager.showDamageNumber(
+        enemy.x, 
+        enemy.y - 20, 
+        actualDamage, 
+        { 
+          isCritical: isCritical,
+          color: isCritical ? 0xff4444 : 0xffff00
+        }
+      );
+    }
     
     if (enemy.health <= 0) {
       this.destroyEnemy(enemy);

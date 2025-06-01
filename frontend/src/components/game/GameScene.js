@@ -6,6 +6,7 @@ import PlayerController from "./PlayerController";
 import EnemyManager from "./EnemyManager";
 import ProjectileManager from "./ProjectileManager";
 import VfxManager from "./VfxManager";
+import DamageNumberManager from "./DamageNumberManager";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -25,8 +26,14 @@ class GameScene extends Phaser.Scene {
       soulCount: 0,
       selectedVfxEffect: '',
       vfxScale: 1.0,
-      vfxRotation: 0
+      vfxRotation: 0,
+      showDamageNumbers: true
     };
+    
+    // World settings
+    this.worldSize = { width: 2400, height: 1800 }; // Larger virtual world
+    this.viewportSize = { width: 0, height: 0 }; // Will be set in create()
+    this.cameraFollowBorder = 150; // How close to edge before camera moves
   }
 
   init(data) {
@@ -59,24 +66,38 @@ class GameScene extends Phaser.Scene {
   create() {
     console.log('Creating game scene...');
 
-    // Enable world bounds
-    this.physics.world.setBounds(0, 0, this.cameras.main.width, this.cameras.main.height);
+    // Set viewport size based on available space (accounting for sidebars)
+    this.viewportSize.width = this.cameras.main.width;
+    this.viewportSize.height = this.cameras.main.height;
+
+    // Set world bounds to larger virtual world
+    this.physics.world.setBounds(0, 0, this.worldSize.width, this.worldSize.height);
+
+    // Create checkerboard background for explorable area
+    this.createCheckerboardBackground();
 
     // Initialize managers
     this.animationManager = new AnimationManager(this);
     this.playerController = new PlayerController(this);
     this.enemyManager = new EnemyManager(this);
     this.projectileManager = new ProjectileManager(this);
+    this.damageNumberManager = new DamageNumberManager(this);
     // VfxManager is already initialized in preload
 
     // Create animations first
     this.animationManager.createAllAnimations();
     
-    // VFX Manager doesn't need to create animations for DOM-based approach
     console.log('VFX Manager ready for DOM-based GIF effects');
 
-    // Create player
+    // Create player in center of world
     this.playerController.createPlayer();
+    this.playerController.player.setPosition(
+      this.worldSize.width / 2, 
+      this.worldSize.height / 2
+    );
+
+    // Setup camera to follow player with bounds
+    this.setupCamera();
 
     // Create groups
     this.enemies = this.physics.add.group();
@@ -98,28 +119,79 @@ class GameScene extends Phaser.Scene {
     console.log('Scene creation complete');
   }
 
+  createCheckerboardBackground() {
+    // Create graphics for checkerboard pattern
+    const graphics = this.add.graphics();
+    
+    // Checkerboard settings
+    const tileSize = 64;
+    const color1 = 0x001122; // Dark blue
+    const color2 = 0x002244; // Slightly lighter blue
+    
+    // Draw checkerboard pattern across the entire world
+    for (let x = 0; x < this.worldSize.width; x += tileSize) {
+      for (let y = 0; y < this.worldSize.height; y += tileSize) {
+        const isEven = ((x / tileSize) + (y / tileSize)) % 2 === 0;
+        graphics.fillStyle(isEven ? color1 : color2);
+        graphics.fillRect(x, y, tileSize, tileSize);
+      }
+    }
+    
+    // Add subtle grid lines
+    graphics.lineStyle(1, 0x003366, 0.3);
+    for (let x = 0; x <= this.worldSize.width; x += tileSize) {
+      graphics.moveTo(x, 0);
+      graphics.lineTo(x, this.worldSize.height);
+    }
+    for (let y = 0; y <= this.worldSize.height; y += tileSize) {
+      graphics.moveTo(0, y);
+      graphics.lineTo(this.worldSize.width, y);
+    }
+    graphics.strokePath();
+    
+    // Set depth to be behind everything else
+    graphics.setDepth(-1000);
+  }
+
+  setupCamera() {
+    const camera = this.cameras.main;
+    
+    // Set camera bounds to world size
+    camera.setBounds(0, 0, this.worldSize.width, this.worldSize.height);
+    
+    // Start following player
+    camera.startFollow(this.playerController.player);
+    
+    // Set smooth following
+    camera.setLerp(0.1, 0.1);
+    
+    // Set zoom level for better view
+    camera.setZoom(1.0);
+    
+    console.log(`Camera setup: World ${this.worldSize.width}x${this.worldSize.height}, Viewport ${this.viewportSize.width}x${this.viewportSize.height}`);
+  }
+
   updateDebugSettings(key, value) {
-    // console.log('Updating debug setting:', key, '=', value);
     this.debugSettings[key] = value;
     
     // Apply real-time changes
     if (key === 'playerAttackSpeed' && this.autoFireTimer) {
-      // Ensure minimum of 50ms
       const limitedValue = Math.max(50, value);
       this.autoFireTimer.delay = limitedValue;
-      this.debugSettings[key] = limitedValue; // Update the stored value
+      this.debugSettings[key] = limitedValue;
     }
     
-    // Ensure PlayerController picks up the new soul collection range
     if (key === 'soulCollectionRange' && this.playerController) {
       this.playerController.soulCollectionRange = value;
-      // console.log('Updated PlayerController soul collection range to:', value);
     }
     
-    // Ensure PlayerController picks up the new attack range
     if (key === 'playerAttackRange' && this.playerController) {
       this.playerController.attackRange = value;
-      // console.log('Updated PlayerController attack range to:', value);
+    }
+    
+    // Handle damage numbers toggle
+    if (key === 'showDamageNumbers' && this.damageNumberManager) {
+      this.damageNumberManager.setShowDamageNumbers(value);
     }
   }
 
@@ -150,12 +222,11 @@ class GameScene extends Phaser.Scene {
       if (this.stageData.enemySpawns) {
         const spawns = this.stageData.enemySpawns;
         this.enemyManager.maxEnemies = spawns.maxEnemies || 15;
-        this.enemySpawnRate = spawns.baseSpawnRate * 1000 || 2000; // Convert to milliseconds
+        this.enemySpawnRate = spawns.baseSpawnRate * 1000 || 2000;
       }
       
-      // Apply difficulty multiplier to player health
+      // Apply difficulty multiplier
       if (settings.difficultyMultiplier && this.gameStateRef) {
-        const baseDamage = 0.5;
         this.enemyDamageMultiplier = settings.difficultyMultiplier;
       }
     }
@@ -194,27 +265,23 @@ class GameScene extends Phaser.Scene {
   setupCollisions() {
     // Projectile-Enemy collisions
     this.physics.add.overlap(this.projectiles, this.enemies, (projectile, enemy) => {
-      if (!enemy.isDead) { // Only hit alive enemies
+      if (!enemy.isDead) {
         this.projectileManager.hitEnemy(projectile, enemy);
       }
     });
 
     // Player-Enemy collisions
     this.physics.add.overlap(this.playerController.player, this.enemies, (player, enemy) => {
-      if (!enemy.isDead) { // Only take damage from alive enemies
-        // Let the enemy manager handle the attack if enemy is in attack range
+      if (!enemy.isDead) {
         const distance = Phaser.Math.Distance.Between(player.x, player.y, enemy.x, enemy.y);
         if (distance <= this.enemyManager.attackRange) {
           // Enemy will handle attack through its update cycle
         } else {
-          // Direct collision damage (for when enemy touches player while moving)
+          // Direct collision damage
           this.playerController.takeDamage(5);
         }
       }
     });
-
-    // Remove automatic soul collection overlap - now handled manually in PlayerController
-    // This prevents the buggy collection system
   }
 
   update() {
@@ -229,7 +296,8 @@ class GameScene extends Phaser.Scene {
     this.playerController.update();
     this.enemyManager.update();
     this.projectileManager.update();
-    this.vfxManager.update(); // Update VFX manager
+    this.vfxManager.update();
+    this.damageNumberManager.update();
     this.updateGameStateData();
     this.updateDebugStats();
   }
