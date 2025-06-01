@@ -20,7 +20,7 @@ const processVfxMetadata = () => {
       });
     } else if (value.type === 'gif') {
       // Direct GIF file
-      const configKey = key.replace('.gif', '');
+      const configKey = key.replace('.gif', '').replace(/\s+/g, '_');
       VFX_CONFIGS[configKey] = createVfxConfig(configKey, key, value);
     }
   });
@@ -33,10 +33,10 @@ const createVfxConfig = (key, path, metadata) => {
     path: `/assets/vfx/${path}`,
     name: formatDisplayName(key),
     category: getCategoryFromPath(path),
-    duration: metadata.total_duration_ms || (metadata.frame_count * 100), // Fallback duration
+    duration: metadata.total_duration_ms > 0 ? metadata.total_duration_ms : (metadata.frame_count * 100), // Fallback duration
     frameCount: metadata.frame_count,
-    dimensions: metadata.dimensions,
-    scale: 1.0, // Default scale - let user control this
+    dimensions: metadata.dimensions || [128, 128],
+    scale: calculateOptimalScale(metadata.dimensions),
     offset: { x: 0, y: 0 }, // Default centered on player
     looping: metadata.looping || false,
     autoDestroy: true
@@ -52,7 +52,8 @@ const formatDisplayName = (key) => {
     .replace(/([A-Z])/g, ' $1')
     .split(' ')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    .join(' ')
+    .trim();
 };
 
 // Get category from file path
@@ -63,15 +64,16 @@ const getCategoryFromPath = (path) => {
 
 // Calculate optimal scale based on dimensions
 const calculateOptimalScale = (dimensions) => {
-  if (!dimensions) return 1.0;
+  if (!dimensions || !Array.isArray(dimensions)) return 1.0;
   
   const [width, height] = dimensions;
   const maxDimension = Math.max(width, height);
   
-  // Scale effects to be reasonable size (target ~100-150px max dimension)
-  if (maxDimension > 400) return 0.3;
-  if (maxDimension > 300) return 0.4;
-  if (maxDimension > 200) return 0.6;
+  // Scale effects to be reasonable size (target ~100-200px max dimension)
+  if (maxDimension > 500) return 0.3;
+  if (maxDimension > 400) return 0.4;
+  if (maxDimension > 300) return 0.5;
+  if (maxDimension > 200) return 0.7;
   if (maxDimension > 150) return 0.8;
   return 1.0;
 };

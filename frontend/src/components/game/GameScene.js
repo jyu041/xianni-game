@@ -72,8 +72,8 @@ class GameScene extends Phaser.Scene {
     // Create animations first
     this.animationManager.createAllAnimations();
     
-    // Create VFX animations
-    this.vfxManager.createVfxAnimations();
+    // VFX Manager doesn't need to create animations for DOM-based approach
+    console.log('VFX Manager ready for DOM-based GIF effects');
 
     // Create player
     this.playerController.createPlayer();
@@ -307,6 +307,13 @@ class GameScene extends Phaser.Scene {
     if (this.autoFireTimer) this.autoFireTimer.paused = false;
     if (this.enemySpawnTimer) this.enemySpawnTimer.paused = false;
     if (this.difficultyTimer) this.difficultyTimer.paused = false;
+  }
+
+  // Cleanup method to handle VFX when scene is destroyed
+  shutdown() {
+    if (this.vfxManager) {
+      this.vfxManager.clearAllEffects();
+    }
   }
 }
 

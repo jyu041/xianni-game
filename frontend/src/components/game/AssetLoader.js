@@ -48,10 +48,8 @@ class AssetLoader {
   }
 
   loadVfxAssets() {
-    // Let VfxManager handle its own asset loading
-    if (this.scene.vfxManager) {
-      this.scene.vfxManager.preloadVfxAssets();
-    }
+    // VfxManager handles its own asset loading - no longer load them here
+    console.log('VFX assets will be loaded by VfxManager using DOM elements');
   }
 
   setupLoadEvents() {
