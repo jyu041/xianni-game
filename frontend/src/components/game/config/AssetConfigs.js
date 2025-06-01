@@ -120,17 +120,6 @@ export const ENEMY_ASSETS = {
     { key: 'enemy_gorgon2_walk', path: '/assets/characters/enemies/gorgon2/Walk.png' },
   ],
 
-  gorgon3: [
-    { key: 'enemy_gorgon3_attack1', path: '/assets/characters/enemies/gorgon3/Attack_1.png' },
-    { key: 'enemy_gorgon3_attack2', path: '/assets/characters/enemies/gorgon3/Attack_2.png' },
-    { key: 'enemy_gorgon3_attack3', path: '/assets/characters/enemies/gorgon3/Attack_3.png' },
-    { key: 'enemy_gorgon3_death', path: '/assets/characters/enemies/gorgon3/Dead.png' },
-    { key: 'enemy_gorgon3_hit', path: '/assets/characters/enemies/gorgon3/Hurt.png' },
-    { key: 'enemy_gorgon3_idle', path: '/assets/characters/enemies/gorgon3/Idle.png' },
-    { key: 'enemy_gorgon3_run', path: '/assets/characters/enemies/gorgon3/Run.png' },
-    { key: 'enemy_gorgon3_walk', path: '/assets/characters/enemies/gorgon3/Walk.png' },
-  ],
-
   martialHero1: [
     { key: 'enemy_martialHero1_attack1', path: '/assets/characters/enemies/martialHero1/Attack1.png' },
     { key: 'enemy_martialHero1_attack2', path: '/assets/characters/enemies/martialHero1/Attack2.png' },

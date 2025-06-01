@@ -1,4 +1,4 @@
-// src/components/game/GameLevelHeader.jsx
+// frontend/src/components/game/GameLevelHeader.jsx
 import { useState, useEffect } from "react";
 import Button from "../ui/Button";
 import DebugMenu from "./DebugMenu";
@@ -13,6 +13,7 @@ const GameLevelHeader = ({
   isPaused,
   debugSettings,
   onDebugChange,
+  phaserGameRef, // Added to access Phaser game instance
 }) => {
   const [showDebugMenu, setShowDebugMenu] = useState(false);
   const [showSkillModal, setShowSkillModal] = useState(false);
@@ -51,6 +52,26 @@ const GameLevelHeader = ({
     console.log("Selected skill:", skill);
     // TODO: Apply skill effects to game state
     setShowSkillModal(false);
+  };
+
+  // Handle VFX casting from debug menu
+  const handleCastVfx = (effectKey, options = {}) => {
+    if (!phaserGameRef?.current) {
+      console.warn("Phaser game instance not available for VFX casting");
+      return;
+    }
+
+    try {
+      const scene = phaserGameRef.current.scene.getScene("GameScene");
+      if (scene && scene.castVfxEffect) {
+        scene.castVfxEffect(effectKey, options);
+        console.log(`VFX Effect cast: ${effectKey}`);
+      } else {
+        console.warn("GameScene or castVfxEffect method not available");
+      }
+    } catch (error) {
+      console.error("Error casting VFX effect:", error);
+    }
   };
 
   const cultivation = getCultivationLevel(playerData.level);
@@ -191,6 +212,7 @@ const GameLevelHeader = ({
         onClose={() => setShowDebugMenu(false)}
         debugSettings={debugSettings}
         onDebugChange={onDebugChange}
+        onCastVfx={handleCastVfx}
       />
 
       <SkillUpgradeModal

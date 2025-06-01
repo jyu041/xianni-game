@@ -1,4 +1,4 @@
-// src/pages/GameLevel.jsx
+// frontend/src/pages/GameLevel.jsx
 import { useState, useEffect, useRef } from "react";
 import Phaser from "phaser";
 import GameLevelHeader from "../components/game/GameLevelHeader";
@@ -33,6 +33,9 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
     activeEnemies: 0,
     playerHealth: 100,
     soulCount: 0,
+    selectedVfxEffect: "",
+    vfxScale: 1.0,
+    vfxRotation: 0,
   });
 
   // Global game state reference for Phaser
@@ -224,6 +227,7 @@ const GameLevel = ({ stageData, playerData, onGameEnd }) => {
         isPaused={gameState.isPaused}
         debugSettings={debugSettings}
         onDebugChange={handleDebugChange}
+        phaserGameRef={phaserGameRef}
       />
 
       <div ref={gameRef} className={styles.gameCanvas} />

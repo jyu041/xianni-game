@@ -5,6 +5,7 @@ import AnimationManager from "./AnimationManager";
 import PlayerController from "./PlayerController";
 import EnemyManager from "./EnemyManager";
 import ProjectileManager from "./ProjectileManager";
+import VfxManager from "./VfxManager";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -21,7 +22,10 @@ class GameScene extends Phaser.Scene {
       soulCollectionRange: 50,
       activeEnemies: 0,
       playerHealth: 100,
-      soulCount: 0
+      soulCount: 0,
+      selectedVfxEffect: '',
+      vfxScale: 1.0,
+      vfxRotation: 0
     };
   }
 
@@ -44,6 +48,9 @@ class GameScene extends Phaser.Scene {
     this.load.bitmapFont('vonwaon16', '/assets/fonts/vonwaon-bitmap.ttf/VonwaonBitmap-16px.ttf');
     this.load.bitmapFont('vonwaon12', '/assets/fonts/vonwaon-bitmap.ttf/VonwaonBitmap-12px.ttf');
     
+    // Initialize VFX manager before asset loading
+    this.vfxManager = new VfxManager(this);
+    
     // Use AssetLoader to handle all asset loading
     this.assetLoader = new AssetLoader(this);
     this.assetLoader.loadAllAssets();
@@ -60,9 +67,13 @@ class GameScene extends Phaser.Scene {
     this.playerController = new PlayerController(this);
     this.enemyManager = new EnemyManager(this);
     this.projectileManager = new ProjectileManager(this);
+    // VfxManager is already initialized in preload
 
     // Create animations first
     this.animationManager.createAllAnimations();
+    
+    // Create VFX animations
+    this.vfxManager.createVfxAnimations();
 
     // Create player
     this.playerController.createPlayer();
@@ -109,6 +120,25 @@ class GameScene extends Phaser.Scene {
     if (key === 'playerAttackRange' && this.playerController) {
       this.playerController.attackRange = value;
       // console.log('Updated PlayerController attack range to:', value);
+    }
+  }
+
+  // New method to cast VFX effect from debug menu
+  castVfxEffect(effectKey, options = {}) {
+    if (!this.vfxManager || !effectKey) {
+      console.warn('Cannot cast VFX effect - manager not ready or no effect specified');
+      return;
+    }
+
+    // Apply debug settings to options
+    options.scale = options.scale || this.debugSettings.vfxScale || 1.0;
+    options.rotation = options.rotation !== undefined ? options.rotation : this.debugSettings.vfxRotation || 0;
+
+    // Cast at player location
+    const effect = this.vfxManager.playEffectAtPlayer(effectKey, options);
+    
+    if (effect) {
+      console.log(`Cast VFX effect: ${effectKey} at player location`);
     }
   }
 
@@ -199,6 +229,7 @@ class GameScene extends Phaser.Scene {
     this.playerController.update();
     this.enemyManager.update();
     this.projectileManager.update();
+    this.vfxManager.update(); // Update VFX manager
     this.updateGameStateData();
     this.updateDebugStats();
   }

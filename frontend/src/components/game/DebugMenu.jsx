@@ -1,11 +1,36 @@
-// src/components/game/DebugMenu.jsx
+// frontend/src/components/game/DebugMenu.jsx
 import { useState, useRef, useEffect } from "react";
 import styles from "./DebugMenu.module.css";
 
-const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
+const DebugMenu = ({
+  isOpen,
+  onClose,
+  debugSettings,
+  onDebugChange,
+  onCastVfx,
+}) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [availableVfxEffects, setAvailableVfxEffects] = useState([]);
   const modalRef = useRef(null);
+
+  // Load VFX effects when component mounts
+  useEffect(() => {
+    // Import VFX configs dynamically to avoid build issues
+    import("./config/VfxConfigs.js")
+      .then((module) => {
+        const effects = module.getAllVfxConfigs();
+        setAvailableVfxEffects(effects);
+
+        // Set default selection if none exists
+        if (!debugSettings.selectedVfxEffect && effects.length > 0) {
+          onDebugChange("selectedVfxEffect", effects[0].key);
+        }
+      })
+      .catch((error) => {
+        console.warn("Could not load VFX configs:", error);
+      });
+  }, []);
 
   const handleMouseDown = (e) => {
     if (e.target.closest(`.${styles.debugContent}`)) return;
@@ -65,13 +90,44 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
   const handleSoulRangeChange = (e) => {
     const value = parseInt(e.target.value);
     const limitedValue = Math.max(1, value);
-    // console.log("Soul range change:", limitedValue);
     onDebugChange("soulCollectionRange", limitedValue);
   };
 
-  if (!isOpen) return null;
+  const handleVfxScaleChange = (e) => {
+    const value = parseFloat(e.target.value);
+    onDebugChange("vfxScale", value);
+  };
 
-  // console.log("Debug menu rendering with settings:", debugSettings);
+  const handleVfxRotationChange = (e) => {
+    const value = parseFloat(e.target.value);
+    onDebugChange("vfxRotation", value);
+  };
+
+  const handleVfxEffectChange = (e) => {
+    onDebugChange("selectedVfxEffect", e.target.value);
+  };
+
+  const handleCastVfx = () => {
+    if (debugSettings.selectedVfxEffect && onCastVfx) {
+      const options = {
+        scale: debugSettings.vfxScale || 1.0,
+        rotation: debugSettings.vfxRotation || 0,
+      };
+      onCastVfx(debugSettings.selectedVfxEffect, options);
+    }
+  };
+
+  // Group effects by category for better organization
+  const groupedEffects = availableVfxEffects.reduce((groups, effect) => {
+    const category = effect.category || "misc";
+    if (!groups[category]) {
+      groups[category] = [];
+    }
+    groups[category].push(effect);
+    return groups;
+  }, {});
+
+  if (!isOpen) return null;
 
   return (
     <div className={styles.debugOverlay}>
@@ -118,10 +174,6 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
                 type="checkbox"
                 checked={debugSettings.showSoulCollectionRange ?? false}
                 onChange={(e) => {
-                  // console.log(
-                  //   "Soul collection range visibility change:",
-                  //   e.target.checked
-                  // );
                   onDebugChange("showSoulCollectionRange", e.target.checked);
                 }}
               />
@@ -194,6 +246,78 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
           </div>
 
           <div className={styles.debugSection}>
+            <h4 className="game-text-large">VFX Effects</h4>
+
+            <div className={styles.inputGroup}>
+              <label className="game-text-small">Select Effect:</label>
+              <select
+                value={debugSettings.selectedVfxEffect || ""}
+                onChange={handleVfxEffectChange}
+                className={styles.vfxSelect}
+              >
+                <option value="">-- Select VFX Effect --</option>
+                {Object.entries(groupedEffects).map(([category, effects]) => (
+                  <optgroup key={category} label={category.toUpperCase()}>
+                    {effects.map((effect) => (
+                      <option key={effect.key} value={effect.key}>
+                        {effect.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+
+            <div className={styles.sliderGroup}>
+              <label className="game-text-small">
+                VFX Scale: {(debugSettings.vfxScale || 1.0).toFixed(1)}x
+              </label>
+              <input
+                type="range"
+                min="0.1"
+                max="3.0"
+                step="0.1"
+                value={debugSettings.vfxScale || 1.0}
+                onChange={handleVfxScaleChange}
+                className={styles.slider}
+              />
+              <div className={styles.sliderLabels}>
+                <span className="game-text-small">0.1x</span>
+                <span className="game-text-small">3.0x</span>
+              </div>
+            </div>
+
+            <div className={styles.sliderGroup}>
+              <label className="game-text-small">
+                VFX Rotation:{" "}
+                {Math.round(((debugSettings.vfxRotation || 0) * 180) / Math.PI)}
+                °
+              </label>
+              <input
+                type="range"
+                min="0"
+                max={Math.PI * 2}
+                step="0.1"
+                value={debugSettings.vfxRotation || 0}
+                onChange={handleVfxRotationChange}
+                className={styles.slider}
+              />
+              <div className={styles.sliderLabels}>
+                <span className="game-text-small">0°</span>
+                <span className="game-text-small">360°</span>
+              </div>
+            </div>
+
+            <button
+              className={styles.castVfxButton}
+              onClick={handleCastVfx}
+              disabled={!debugSettings.selectedVfxEffect}
+            >
+              Cast VFX Effect
+            </button>
+          </div>
+
+          <div className={styles.debugSection}>
             <h4 className="game-text-large">Game Stats</h4>
             <div className={styles.statDisplay}>
               <span className="game-text-small">
@@ -204,6 +328,9 @@ const DebugMenu = ({ isOpen, onClose, debugSettings, onDebugChange }) => {
               </span>
               <span className="game-text-small">
                 魂魄: {debugSettings.soulCount}
+              </span>
+              <span className="game-text-small">
+                VFX Effects: {availableVfxEffects.length} loaded
               </span>
             </div>
           </div>

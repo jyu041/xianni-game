@@ -10,6 +10,7 @@ class AssetLoader {
     this.loadFallbackTextures();
     this.loadMainCharacterAssets();
     this.loadEnemyAssets();
+    this.loadVfxAssets();
     this.setupLoadEvents();
   }
 
@@ -44,6 +45,13 @@ class AssetLoader {
         frameHeight: asset.frameSize.height
       });
     });
+  }
+
+  loadVfxAssets() {
+    // Let VfxManager handle its own asset loading
+    if (this.scene.vfxManager) {
+      this.scene.vfxManager.preloadVfxAssets();
+    }
   }
 
   setupLoadEvents() {
