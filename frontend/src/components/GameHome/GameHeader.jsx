@@ -80,20 +80,7 @@ const GameHeader = ({ playerData, onBackToHome }) => {
         </div>
       </div>
 
-      <div className={styles.centerSection}>
-        <div className={styles.tianniSword}>
-          <div className={styles.swordIcon}>⚔️</div>
-          <div className={styles.swordInfo}>
-            <div className={styles.swordName}>天逆剑</div>
-            <div className={styles.swordLevel}>
-              Lv.{playerData.tianniSwordLevel || 1}
-              {playerData.hasTianniSwordMutation && (
-                <span className={styles.mutationBadge}>五行寂灭</span>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+      <div className={styles.centerSection}>{/* Currently empty */}</div>
 
       <div className={styles.rightSection}>
         <div className={styles.resources}>
