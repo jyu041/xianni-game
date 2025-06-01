@@ -5,6 +5,7 @@ import SidebarMenu from "/src/components/GameHome/SidebarMenu";
 import StageSelection from "/src/components/GameHome/StageSelection";
 import ElementDisplay from "/src/components/GameHome/ElementDisplay";
 import TreasureInventory from "/src/components/GameHome/TreasureInventory";
+import CultivationDisplay from "/src/components/GameHome/CultivationDisplay";
 import ResponsiveLayout from "/src/components/layout/ResponsiveLayout";
 import playerService from "/src/services/playerService";
 import stageService from "/src/services/stageService";
@@ -106,6 +107,8 @@ const GameHome = ({ saveData, onNavigate }) => {
             onTreasureUpgrade={handleTreasureUpgrade}
           />
         );
+      case "cultivation":
+        return <CultivationDisplay playerData={playerData} />;
       case "upgrades":
         return (
           <ElementDisplay
@@ -163,8 +166,9 @@ const GameHome = ({ saveData, onNavigate }) => {
     const titles = {
       stages: "关卡选择",
       inventory: "法宝背包",
+      cultivation: "修为境界",
       store: "修仙商店",
-      upgrades: "功法升级",
+      upgrades: "元素修炼",
       gacha: "天机抽取",
       achievements: "修仙成就",
     };
@@ -175,6 +179,7 @@ const GameHome = ({ saveData, onNavigate }) => {
     const icons = {
       stages: "⚔️",
       inventory: "🎒",
+      cultivation: "🧘",
       store: "🏪",
       upgrades: "📚",
       gacha: "🎲",

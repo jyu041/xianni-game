@@ -138,17 +138,6 @@
   z-index: 1;
 }
 
-.contentTitle {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #ffffff;
-  margin: 0;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
 .contentIcon {
   font-size: 2rem;
   color: rgba(138, 43, 226, 0.9);
@@ -248,9 +237,6 @@
     padding: 1rem 1.5rem;
   }
 
-  .contentTitle {
-    font-size: 1.5rem;
-  }
 
   .contentIcon {
     font-size: 1.7rem;
@@ -278,10 +264,6 @@
   .comingSoon p {
     font-size: 1.1rem;
   }
-
-  .contentTitle {
-    font-size: 1.9rem;
-  }
 }
 
 /* Desktop Styles */
@@ -305,10 +287,6 @@
   .comingSoon p {
     font-size: 1.2rem;
   }
-
-  .contentTitle {
-    font-size: 2rem;
-  }
 }
 
 /* Large Desktop Styles */
@@ -327,9 +305,5 @@
 
   .comingSoon h3 {
     font-size: 2.5rem;
-  }
-
-  .contentTitle {
-    font-size: 2.2rem;
   }
 }
