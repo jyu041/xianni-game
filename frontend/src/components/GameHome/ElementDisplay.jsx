@@ -1,4 +1,4 @@
-// frontend/src/components/elements/ElementDisplay.jsx
+// frontend/src/components/GameHome/ElementDisplay.jsx
 import { useState, useEffect } from "react";
 import elementService from "../../services/elementService";
 import styles from "./ElementDisplay.module.css";
@@ -52,6 +52,72 @@ const ElementDisplay = ({ playerData, onElementChange }) => {
     const progress =
       ((exp - currentLevelExp) / (nextLevelExp - currentLevelExp)) * 100;
     return Math.min(100, Math.max(0, progress));
+  };
+
+  const getTianniSwordAbility = (level, hasMutation = false) => {
+    if (hasMutation && level >= 10) {
+      return {
+        name: "五行寂灭",
+        description: "释放所有五种元素的斩击组合，造成大范围伤害",
+        damage: "75%最大生命值",
+        aoeSize: "大型AOE",
+      };
+    }
+
+    const abilities = {
+      1: {
+        name: "基础剑气",
+        description: "发射基础剑气攻击敌人",
+        damage: "25点固定伤害",
+      },
+      2: {
+        name: "小型斩击",
+        description: "释放小型AOE伤害技能",
+        damage: "20%最大生命值",
+      },
+      3: {
+        name: "强化小型斩击",
+        description: "释放强化的小型AOE伤害技能",
+        damage: "25%最大生命值",
+      },
+      4: {
+        name: "中型斩击",
+        description: "释放中型AOE伤害技能",
+        damage: "30%最大生命值",
+      },
+      5: {
+        name: "强化中型斩击",
+        description: "释放强化的中型AOE伤害技能",
+        damage: "35%最大生命值",
+      },
+      6: {
+        name: "大型斩击",
+        description: "释放大型AOE伤害技能",
+        damage: "40%最大生命值",
+      },
+      7: {
+        name: "强化大型斩击",
+        description: "释放强化的大型AOE伤害技能",
+        damage: "45%最大生命值",
+      },
+      8: {
+        name: "极强大型斩击",
+        description: "释放极强的大型AOE伤害技能",
+        damage: "50%最大生命值",
+      },
+      9: {
+        name: "至强大型斩击",
+        description: "释放至强的大型AOE伤害技能",
+        damage: "55%最大生命值",
+      },
+      10: {
+        name: "三重斩击",
+        description: "连续释放三种斩击技能",
+        damage: "60%最大生命值",
+      },
+    };
+
+    return abilities[level] || abilities[1];
   };
 
   if (!elementInfo) {
@@ -131,6 +197,10 @@ const ElementDisplay = ({ playerData, onElementChange }) => {
         {playerData?.tianniSwordLevel && (
           <div className={styles.abilityInfo}>
             {(() => {
+              const ability = getTianniSwordAbility(
+                playerData.tianniSwordLevel,
+                playerData.hasTianniSwordMutation
+              );
               return (
                 <div className={styles.abilityDetails}>
                   <p>
