@@ -2,12 +2,18 @@
 import { useState, useEffect } from "react";
 import Card from "../ui/Card";
 import Button from "../ui/Button";
-import elementService from "../../services/elementService";
 import styles from "./AchievementsDisplay.module.css";
 
 const AchievementsDisplay = ({ playerData, onClaimReward }) => {
   const [selectedCategory, setSelectedCategory] = useState("cultivation");
   const [selectedAchievement, setSelectedAchievement] = useState(null);
+
+  // Helper function to check if player has all elements at max level
+  const hasGreatElementMasterAchievement = (elementLevels) => {
+    if (!elementLevels) return false;
+    const elements = ["metal", "wood", "water", "fire", "earth"];
+    return elements.every((element) => (elementLevels[element] || 0) >= 100);
+  };
 
   const achievementCategories = [
     { id: "cultivation", name: "修炼成就", icon: "🧘" },
@@ -223,7 +229,7 @@ const AchievementsDisplay = ({ playerData, onClaimReward }) => {
           ).length,
           max: 5,
         },
-        completed: elementService.hasGreatElementMasterAchievement(
+        completed: hasGreatElementMasterAchievement(
           playerData?.elementLevels || {}
         ),
         rewards: { gold: 50000, experience: 10000, gems: 500 },
