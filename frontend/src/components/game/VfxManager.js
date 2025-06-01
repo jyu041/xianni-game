@@ -24,8 +24,21 @@ class VfxManager {
     console.log('VFX animations ready - using DOM elements for GIF animation');
   }
 
-  // Play VFX effect at specified location
-  playEffect(effectKey, x, y, options = {}) {
+  // Convert world coordinates to screen coordinates
+  worldToScreen(worldX, worldY) {
+    const camera = this.scene.cameras.main;
+    const gameCanvas = this.scene.game.canvas;
+    const canvasRect = gameCanvas.getBoundingClientRect();
+    
+    // Apply camera transformations
+    const screenX = (worldX - camera.scrollX) * camera.zoom + canvasRect.left;
+    const screenY = (worldY - camera.scrollY) * camera.zoom + canvasRect.top;
+    
+    return { x: screenX, y: screenY };
+  }
+
+  // Play VFX effect at specified world location
+  playEffect(effectKey, worldX, worldY, options = {}) {
     const config = getVfxConfig(effectKey);
     if (!config) {
       console.warn(`VFX effect not found: ${effectKey}`);
@@ -63,8 +76,8 @@ class VfxManager {
     // Create a wrapper object to track this effect
     const effect = {
       domElement: gifElement,
-      targetX: x, // Base target position
-      targetY: y,
+      worldX: worldX, // Store world coordinates
+      worldY: worldY,
       offsetX: config.offset.x || 0, // Static offset from config
       offsetY: config.offset.y || 0,
       followTarget: options.followTarget || null, // Object to follow (like player)
@@ -94,7 +107,7 @@ class VfxManager {
       });
     }
 
-    console.log(`VFX effect created: ${effectKey} at (${x}, ${y}) with scale ${baseScale}${options.followTarget ? ' (following target)' : ''}`);
+    console.log(`VFX effect created: ${effectKey} at world (${worldX}, ${worldY}) with scale ${baseScale}${options.followTarget ? ' (following target)' : ''}`);
     return effect;
   }
 
@@ -110,6 +123,7 @@ class VfxManager {
     // Set the player as the follow target
     options.followTarget = player;
     
+    // Use player's world coordinates
     return this.playEffect(effectKey, player.x, player.y, options);
   }
 
@@ -123,14 +137,15 @@ class VfxManager {
     // Set the target as the follow target
     options.followTarget = target;
 
+    // Use target's world coordinates
     return this.playEffect(effectKey, target.x, target.y, options);
   }
 
   // Play effect at static location (doesn't follow anything)
-  playEffectAtLocation(effectKey, x, y, options = {}) {
+  playEffectAtLocation(effectKey, worldX, worldY, options = {}) {
     // Explicitly don't follow any target
     options.followTarget = null;
-    return this.playEffect(effectKey, x, y, options);
+    return this.playEffect(effectKey, worldX, worldY, options);
   }
 
   // Destroy specific effect
@@ -171,9 +186,6 @@ class VfxManager {
       return;
     }
 
-    const gameCanvas = this.scene.game.canvas;
-    const canvasRect = gameCanvas.getBoundingClientRect();
-    
     let worldX, worldY;
 
     if (effect.isRelativeToTarget && effect.followTarget && effect.followTarget.active) {
@@ -181,14 +193,15 @@ class VfxManager {
       worldX = effect.followTarget.x + effect.offsetX;
       worldY = effect.followTarget.y + effect.offsetY;
     } else {
-      // Static position - use original target coordinates
-      worldX = effect.targetX + effect.offsetX;
-      worldY = effect.targetY + effect.offsetY;
+      // Static position - use original world coordinates
+      worldX = effect.worldX + effect.offsetX;
+      worldY = effect.worldY + effect.offsetY;
     }
 
     // Convert world coordinates to screen coordinates and center the effect
-    const screenX = canvasRect.left + worldX - effect.scaledWidth / 2;
-    const screenY = canvasRect.top + worldY - effect.scaledHeight / 2;
+    const screenPos = this.worldToScreen(worldX, worldY);
+    const screenX = screenPos.x - effect.scaledWidth / 2;
+    const screenY = screenPos.y - effect.scaledHeight / 2;
     
     effect.domElement.style.left = `${screenX}px`;
     effect.domElement.style.top = `${screenY}px`;

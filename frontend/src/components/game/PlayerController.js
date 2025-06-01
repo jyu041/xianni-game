@@ -350,6 +350,7 @@ class PlayerController {
     this.createJianqiTexture();
     
     for (let i = 0; i < this.jianqiConfig.count; i++) {
+      // Create projectile at player's WORLD position
       const jianqi = this.scene.projectiles.create(this.player.x, this.player.y, 'jianqi');
       
       jianqi.setDisplaySize(20 * this.jianqiConfig.size, 40 * this.jianqiConfig.size);
@@ -362,19 +363,23 @@ class PlayerController {
       // Rotate the sprite to match direction
       jianqi.setRotation(angle + Math.PI / 2);
 
+      // Get speed from debug settings or use default
+      const debugSettings = this.scene.debugSettings;
+      const speed = debugSettings?.jianqiTravelSpeed || this.jianqiConfig.speed;
+
       jianqi.setVelocity(
-        Math.cos(angle) * this.jianqiConfig.speed,
-        Math.sin(angle) * this.jianqiConfig.speed
+        Math.cos(angle) * speed,
+        Math.sin(angle) * speed
       );
 
       // Store jianqi properties
       jianqi.damage = this.jianqiConfig.damage;
       jianqi.maxDistance = this.jianqiConfig.distance;
-      jianqi.startX = this.player.x;
-      jianqi.startY = this.player.y;
+      jianqi.startX = this.player.x; // Use world coordinates
+      jianqi.startY = this.player.y; // Use world coordinates
 
       // Auto-destroy after max distance
-      this.scene.time.delayedCall(this.jianqiConfig.distance / this.jianqiConfig.speed * 1000, () => {
+      this.scene.time.delayedCall(this.jianqiConfig.distance / speed * 1000, () => {
         if (jianqi && jianqi.active) {
           jianqi.destroy();
         }
