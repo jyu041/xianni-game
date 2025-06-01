@@ -13,7 +13,7 @@ const GameLevelHeader = ({
   isPaused,
   debugSettings,
   onDebugChange,
-  phaserGameRef, // Added to access Phaser game instance
+  phaserGameRef,
 }) => {
   const [showDebugMenu, setShowDebugMenu] = useState(false);
   const [showSkillModal, setShowSkillModal] = useState(false);
@@ -48,6 +48,12 @@ const GameLevelHeader = ({
     return { name: "渡劫期", color: "#ff4500" };
   };
 
+  const getManaPercent = () => {
+    const mana = playerData?.mana || 100;
+    const maxMana = playerData?.maxMana || 100;
+    return (mana / maxMana) * 100;
+  };
+
   const handleSkillSelect = (skill) => {
     console.log("Selected skill:", skill);
     // TODO: Apply skill effects to game state
@@ -79,7 +85,7 @@ const GameLevelHeader = ({
   return (
     <>
       <div className={styles.gameHeader}>
-        {/* Left Section - Health Bar */}
+        {/* Left Section - Player Info and Health Bar */}
         <div className={styles.leftSection}>
           <div className={styles.playerInfo}>
             <div className={styles.avatar}>
@@ -111,6 +117,19 @@ const GameLevelHeader = ({
             </div>
             <div className={`${styles.healthText} game-text-small`}>
               生命值: {gameState.player.health}/{gameState.player.maxHealth}
+            </div>
+          </div>
+
+          {/* Mana Section - Moved from GameHeader */}
+          <div className={styles.manaSection}>
+            <div className={styles.manaBar}>
+              <div
+                className={styles.manaFill}
+                style={{ width: `${getManaPercent()}%` }}
+              />
+            </div>
+            <div className={`${styles.manaText} game-text-small`}>
+              灵气: {playerData?.mana || 100} / {playerData?.maxMana || 100}
             </div>
           </div>
         </div>

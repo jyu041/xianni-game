@@ -1,10 +1,12 @@
 // frontend/src/components/game/AbilitySidebars.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import elementService from "../../services/elementService";
 import styles from "./AbilitySidebars.module.css";
 
 const AbilitySidebars = ({ playerData, gameState, onTianniSwordActivate }) => {
-  // 法宝 (Magical Treasures) - Left sidebar
+  const [cooldowns, setCooldowns] = useState({});
+
+  // 法宝 (Magical Treasures) - Left sidebar - Hotkeys 1,2,3,4,5
   const [fabaoSlots] = useState(() => {
     const slots = Array(5).fill(null);
 
@@ -19,16 +21,55 @@ const AbilitySidebars = ({ playerData, gameState, onTianniSwordActivate }) => {
         equipped: true,
         hasMutation: playerData.hasTianniSwordMutation || false,
         element: playerData.primaryElement || "fire",
-        cooldownPercent: 0, // Will be updated based on game state
-        hotkey: "空格",
+        hotkey: "1",
+        cooldown: 0,
       };
     }
 
     return slots;
   });
 
-  // 功法 (Cultivation Methods) - Right sidebar
-  const [gongfaSlots] = useState(Array(5).fill(null));
+  // 功法 (Cultivation Methods) - Right sidebar - Hotkeys 6,7,8,9,0
+  const [gongfaSlots] = useState(() => {
+    const slots = Array(5).fill(null);
+    const hotkeys = ["6", "7", "8", "9", "0"];
+
+    // For now, all slots are empty - will be filled with cultivation methods later
+    return slots.map((slot, index) => {
+      if (slot) {
+        return { ...slot, hotkey: hotkeys[index] };
+      }
+      return null;
+    });
+  });
+
+  // Handle keyboard input for hotkeys
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      const key = event.key;
+
+      // Handle 法宝 hotkeys (1-5)
+      if (["1", "2", "3", "4", "5"].includes(key)) {
+        const slotIndex = parseInt(key) - 1;
+        const ability = fabaoSlots[slotIndex];
+        if (ability) {
+          handleAbilityActivate(ability, slotIndex, "fabao");
+        }
+      }
+
+      // Handle 功法 hotkeys (6-9, 0)
+      if (["6", "7", "8", "9", "0"].includes(key)) {
+        const slotIndex = key === "0" ? 4 : parseInt(key) - 6;
+        const ability = gongfaSlots[slotIndex];
+        if (ability) {
+          handleAbilityActivate(ability, slotIndex, "gongfa");
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [fabaoSlots, gongfaSlots]);
 
   const getTianniSwordAbility = (level, hasMutation = false) => {
     if (hasMutation && level >= 10) {
@@ -36,54 +77,198 @@ const AbilitySidebars = ({ playerData, gameState, onTianniSwordActivate }) => {
         name: "五行寂灭",
         description: "同时释放五种元素斩击",
         damage: "75%",
+        manaCost: 100,
+        cooldown: 5000,
       };
     }
 
     const abilities = {
-      1: { name: "基础剑气", description: "发射剑气攻击", damage: "25" },
-      2: { name: "小型斩击", description: "小型AOE攻击", damage: "20%" },
-      3: { name: "强化小型斩击", description: "增强小型AOE", damage: "25%" },
-      4: { name: "中型斩击", description: "中型AOE攻击", damage: "30%" },
-      5: { name: "强化中型斩击", description: "增强中型AOE", damage: "35%" },
-      6: { name: "大型斩击", description: "大型AOE攻击", damage: "40%" },
-      7: { name: "强化大型斩击", description: "增强大型AOE", damage: "45%" },
-      8: { name: "极强大型斩击", description: "极强大型AOE", damage: "50%" },
-      9: { name: "至强大型斩击", description: "至强大型AOE", damage: "55%" },
-      10: { name: "三重斩击", description: "连续三重斩击", damage: "60%" },
+      1: {
+        name: "基础剑气",
+        description: "发射剑气攻击",
+        damage: "25",
+        manaCost: 0,
+        cooldown: 0,
+      },
+      2: {
+        name: "小型斩击",
+        description: "小型AOE攻击",
+        damage: "20%",
+        manaCost: 20,
+        cooldown: 5000,
+      },
+      3: {
+        name: "强化小型斩击",
+        description: "增强小型AOE",
+        damage: "25%",
+        manaCost: 20,
+        cooldown: 5000,
+      },
+      4: {
+        name: "中型斩击",
+        description: "中型AOE攻击",
+        damage: "30%",
+        manaCost: 35,
+        cooldown: 5000,
+      },
+      5: {
+        name: "强化中型斩击",
+        description: "增强中型AOE",
+        damage: "35%",
+        manaCost: 35,
+        cooldown: 5000,
+      },
+      6: {
+        name: "大型斩击",
+        description: "大型AOE攻击",
+        damage: "40%",
+        manaCost: 50,
+        cooldown: 5000,
+      },
+      7: {
+        name: "强化大型斩击",
+        description: "增强大型AOE",
+        damage: "45%",
+        manaCost: 50,
+        cooldown: 5000,
+      },
+      8: {
+        name: "极强大型斩击",
+        description: "极强大型AOE",
+        damage: "50%",
+        manaCost: 50,
+        cooldown: 5000,
+      },
+      9: {
+        name: "至强大型斩击",
+        description: "至强大型AOE",
+        damage: "55%",
+        manaCost: 50,
+        cooldown: 5000,
+      },
+      10: {
+        name: "三重斩击",
+        description: "连续三重斩击",
+        damage: "60%",
+        manaCost: 75,
+        cooldown: 5000,
+      },
     };
 
     return abilities[level] || abilities[1];
   };
 
-  const handleAbilityClick = (ability, slotIndex, type) => {
+  const handleAbilityActivate = (ability, slotIndex, type) => {
     if (!ability) return;
 
+    const abilityKey = `${type}-${slotIndex}`;
+    const currentTime = Date.now();
+
+    // Check cooldown
+    if (cooldowns[abilityKey] && currentTime < cooldowns[abilityKey]) {
+      console.log(`${ability.name} is on cooldown`);
+      return false;
+    }
+
     if (type === "fabao" && ability.id === "tianniSword") {
+      // Get ability data for mana cost and cooldown
+      const abilityData = getTianniSwordAbility(
+        ability.level,
+        ability.hasMutation
+      );
+
+      // Check mana cost (for levels > 1)
+      if (abilityData.manaCost > 0) {
+        const currentMana = playerData?.mana || 100;
+        if (currentMana < abilityData.manaCost) {
+          console.log(
+            `Insufficient mana: ${currentMana}/${abilityData.manaCost}`
+          );
+          return false;
+        }
+      }
+
       // Trigger Tianni Sword special ability
       if (onTianniSwordActivate) {
         const success = onTianniSwordActivate();
         if (success) {
           console.log("Tianni Sword ability activated!");
 
+          // Set cooldown
+          if (abilityData.cooldown > 0) {
+            setCooldowns((prev) => ({
+              ...prev,
+              [abilityKey]: currentTime + abilityData.cooldown,
+            }));
+          }
+
           // Visual feedback - flash the slot
-          const slot = document.querySelector(
-            `[data-slot="${type}-${slotIndex}"]`
-          );
+          const slot = document.querySelector(`[data-slot="${abilityKey}"]`);
           if (slot) {
             slot.style.animation = "abilityActivate 0.5s ease";
             setTimeout(() => {
               slot.style.animation = "";
             }, 500);
           }
-        } else {
-          console.log("Tianni Sword ability on cooldown or insufficient mana");
+
+          return true;
         }
       }
+    } else if (type === "gongfa") {
+      // Handle cultivation method abilities (to be implemented later)
+      console.log(`功法 ability ${ability.name} activated`);
+
+      // Set a default cooldown for demonstration
+      setCooldowns((prev) => ({
+        ...prev,
+        [abilityKey]: currentTime + 3000, // 3 second cooldown
+      }));
+
+      return true;
     }
+
+    return false;
+  };
+
+  const getCooldownPercent = (ability, slotIndex, type) => {
+    const abilityKey = `${type}-${slotIndex}`;
+    const cooldownEnd = cooldowns[abilityKey];
+
+    if (!cooldownEnd) return 0;
+
+    const currentTime = Date.now();
+    if (currentTime >= cooldownEnd) {
+      // Cooldown expired, clean it up
+      setCooldowns((prev) => {
+        const newCooldowns = { ...prev };
+        delete newCooldowns[abilityKey];
+        return newCooldowns;
+      });
+      return 0;
+    }
+
+    // Calculate remaining cooldown percentage
+    let totalCooldown = 3000; // Default cooldown
+    if (type === "fabao" && ability?.id === "tianniSword") {
+      const abilityData = getTianniSwordAbility(
+        ability.level,
+        ability.hasMutation
+      );
+      totalCooldown = abilityData.cooldown || 0;
+    }
+
+    if (totalCooldown === 0) return 0;
+
+    const timeRemaining = cooldownEnd - currentTime;
+    return Math.max(0, (timeRemaining / totalCooldown) * 100);
   };
 
   const renderAbilitySlot = (index, ability, type) => {
     const isEmpty = !ability;
+    const hotkeys =
+      type === "fabao" ? ["1", "2", "3", "4", "5"] : ["6", "7", "8", "9", "0"];
+    const hotkey = hotkeys[index];
+    const cooldownPercent = getCooldownPercent(ability, index, type);
 
     return (
       <div
@@ -92,12 +277,12 @@ const AbilitySidebars = ({ playerData, gameState, onTianniSwordActivate }) => {
         className={`${styles.abilitySlot} ${
           isEmpty ? styles.emptySlot : styles.filledSlot
         } ${ability?.locked ? styles.lockedSlot : ""}`}
-        onClick={() => handleAbilityClick(ability, index, type)}
+        onClick={() => handleAbilityActivate(ability, index, type)}
         style={{ cursor: ability && !isEmpty ? "pointer" : "default" }}
       >
         {isEmpty ? (
           <div className={styles.emptySlotContent}>
-            <span className={styles.slotNumber}>{index + 1}</span>
+            <span className={styles.slotNumber}>{hotkey}</span>
             <span className={styles.slotType}>
               {type === "fabao" ? "法宝" : "功法"}
             </span>
@@ -120,9 +305,7 @@ const AbilitySidebars = ({ playerData, gameState, onTianniSwordActivate }) => {
                 )}
               </div>
               <div className={styles.abilityLevel}>Lv.{ability.level || 1}</div>
-              {ability.hotkey && (
-                <div className={styles.hotkey}>{ability.hotkey}</div>
-              )}
+              <div className={styles.hotkey}>{hotkey}</div>
               {ability.id === "tianniSword" && (
                 <div className={styles.abilityDescription}>
                   {(() => {
@@ -138,6 +321,11 @@ const AbilitySidebars = ({ playerData, gameState, onTianniSwordActivate }) => {
                         <div className={styles.skillDamage}>
                           伤害: {abilityData.damage}
                         </div>
+                        {abilityData.manaCost > 0 && (
+                          <div className={styles.skillMana}>
+                            灵气: {abilityData.manaCost}
+                          </div>
+                        )}
                       </div>
                     );
                   })()}
@@ -145,11 +333,11 @@ const AbilitySidebars = ({ playerData, gameState, onTianniSwordActivate }) => {
               )}
             </div>
 
-            {ability.cooldownPercent > 0 && (
+            {cooldownPercent > 0 && (
               <div
                 className={styles.cooldownOverlay}
                 style={{
-                  height: `${ability.cooldownPercent}%`,
+                  height: `${cooldownPercent}%`,
                 }}
               />
             )}
@@ -175,7 +363,7 @@ const AbilitySidebars = ({ playerData, gameState, onTianniSwordActivate }) => {
 
   return (
     <>
-      {/* Left Sidebar - 法宝 (Magical Treasures) */}
+      {/* Left Sidebar - 法宝 (Magical Treasures) - Hotkeys 1,2,3,4,5 */}
       <div className={styles.leftSidebar}>
         <div className={styles.sidebarHeader}>
           <h3 className={`${styles.sidebarTitle} game-text-large`}>法宝</h3>
@@ -195,12 +383,12 @@ const AbilitySidebars = ({ playerData, gameState, onTianniSwordActivate }) => {
             {fabaoSlots.filter((slot) => slot !== null).length}/5
           </div>
           <div className={`${styles.hotkeyHint} game-text-small`}>
-            点击使用法宝技能
+            按 1-5 使用法宝
           </div>
         </div>
       </div>
 
-      {/* Right Sidebar - 功法 (Cultivation Methods) */}
+      {/* Right Sidebar - 功法 (Cultivation Methods) - Hotkeys 6,7,8,9,0 */}
       <div className={styles.rightSidebar}>
         <div className={styles.sidebarHeader}>
           <h3 className={`${styles.sidebarTitle} game-text-large`}>功法</h3>
@@ -220,7 +408,7 @@ const AbilitySidebars = ({ playerData, gameState, onTianniSwordActivate }) => {
             {gongfaSlots.filter((slot) => slot !== null).length}/5
           </div>
           <div className={`${styles.hotkeyHint} game-text-small`}>
-            暂无可用功法
+            按 6-9,0 使用功法
           </div>
         </div>
       </div>

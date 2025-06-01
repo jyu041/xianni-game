@@ -1,42 +1,74 @@
-// src/pages/CreateSaveSlot.jsx
+// frontend/src/pages/CreateSaveSlot.jsx
 import { useState } from "react";
-import Button from "../components/ui/Button";
+import ResponsiveLayout from "../components/layout/ResponsiveLayout";
 import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
 import Select from "../components/ui/Select";
+import Button from "../components/ui/Button";
+import elementService from "../services/elementService";
 import playerService from "../services/playerService";
 import styles from "./CreateSaveSlot.module.css";
 
 const CreateSaveSlot = ({ onNavigate, onSaveCreated }) => {
   const [formData, setFormData] = useState({
     playerName: "",
-    difficulty: "normal",
-    cultivation: "mortal",
-    element: "none",
+    difficulty: "",
+    cultivation: "",
+    primaryElement: "fire", // Default to fire element
   });
   const [isCreating, setIsCreating] = useState(false);
+  const [error, setError] = useState("");
 
-  const difficulties = [
-    { value: "easy", label: "简单 - 适合新手修士" },
-    { value: "normal", label: "正常 - 平衡的修仙体验" },
-    { value: "hard", label: "困难 - 真正的逆天之路" },
-    { value: "nightmare", label: "噩梦 - 九死一生" },
+  const difficultyOptions = [
+    { value: "easy", label: "简单 - 适合新手修仙者" },
+    { value: "normal", label: "普通 - 平衡的修炼体验" },
+    { value: "hard", label: "困难 - 挑战你的修仙意志" },
+    { value: "nightmare", label: "噩梦 - 只有真正的仙者才能承受" },
   ];
 
-  const cultivationBackgrounds = [
-    { value: "mortal", label: "凡人 - 从零开始" },
-    { value: "talented", label: "天才 - 修炼天赋异禀" },
-    { value: "noble", label: "世家子弟 - 资源丰富" },
-    { value: "outcast", label: "散修 - 孤身一人但意志坚定" },
+  const cultivationOptions = [
+    { value: "mortal", label: "凡人 - 刚踏上修仙之路" },
+    { value: "talented", label: "天才 - 拥有修仙天赋" },
+    { value: "prodigy", label: "奇才 - 万中无一的修仙奇才" },
+    { value: "immortal", label: "仙体 - 天生的修仙体质" },
   ];
 
-  const elementalAffinities = [
-    { value: "none", label: "无属性 - 平衡发展" },
-    { value: "fire", label: "火系 - 攻击力强" },
-    { value: "water", label: "水系 - 恢复能力强" },
-    { value: "earth", label: "土系 - 防御力强" },
-    { value: "wood", label: "木系 - 生命力强" },
-    { value: "metal", label: "金系 - 穿透力强" },
+  const elementOptions = [
+    {
+      value: "fire",
+      label: "火属性",
+      description: "熔锋铸天命，烈炎炼道兵",
+      color: "#DC2626",
+      bonus: "攻击伤害提高 0-25%",
+    },
+    {
+      value: "water",
+      label: "水属性",
+      description: "寒渊熄焚天，雨落烬成灰",
+      color: "#0EA5E9",
+      bonus: "灵气恢复速度提高 0-25%/秒",
+    },
+    {
+      value: "earth",
+      label: "土属性",
+      description: "尘掩千江浪，沙葬深海怒",
+      color: "#F59E0B",
+      bonus: "受到伤害减少 0-25%",
+    },
+    {
+      value: "metal",
+      label: "金属性",
+      description: "锋锐断生机，万刃摧古木",
+      color: "#8B5CF6",
+      bonus: "获得的游戏外部资源更多 0-100%",
+    },
+    {
+      value: "wood",
+      label: "木属性",
+      description: "根须裂山岳，腐土化尘烟",
+      color: "#22C55E",
+      bonus: "每秒自动以已损失生命值进行生命恢复 0-25%",
+    },
   ];
 
   const handleInputChange = (field, value) => {
@@ -44,152 +76,233 @@ const CreateSaveSlot = ({ onNavigate, onSaveCreated }) => {
       ...prev,
       [field]: value,
     }));
+    setError("");
   };
 
-  const handleCreateSave = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     if (!formData.playerName.trim()) {
-      alert("请输入修士名称");
+      setError("请输入修仙者名号");
+      return;
+    }
+
+    if (!formData.difficulty) {
+      setError("请选择修炼难度");
+      return;
+    }
+
+    if (!formData.cultivation) {
+      setError("请选择修仙天赋");
       return;
     }
 
     setIsCreating(true);
+
     try {
-      const createdPlayer = await playerService.createPlayer(formData);
-      onSaveCreated(createdPlayer);
+      const newPlayer = await playerService.createPlayer({
+        playerName: formData.playerName.trim(),
+        difficulty: formData.difficulty,
+        cultivation: formData.cultivation,
+        element: formData.primaryElement, // This will be mapped to primaryElement in backend
+      });
+
+      onSaveCreated(newPlayer);
     } catch (error) {
-      console.error("Failed to create save:", error);
-      alert("创建存档失败，请检查修士名称是否已存在");
+      console.error("Failed to create player:", error);
+      setError("创建存档失败，请重试");
     } finally {
       setIsCreating(false);
     }
   };
 
+  const getSelectedElementInfo = () => {
+    return elementOptions.find((el) => el.value === formData.primaryElement);
+  };
+
   return (
-    <div className={styles.createSavePage}>
-      <div className={styles.background}>
-        <div className={styles.mysticalElements}>
-          <div className={styles.rune}></div>
-          <div className={styles.rune}></div>
-          <div className={styles.energy}></div>
-        </div>
+    <ResponsiveLayout className={styles.createSaveSlot}>
+      <div className={styles.header}>
+        <h1>创建新的修仙者</h1>
+        <p>踏上你的修仙之路，选择你的修炼方式</p>
       </div>
 
       <div className={styles.content}>
-        <div className={styles.header}>
-          <Button
-            variant="ghost"
-            onClick={() => onNavigate("home")}
-            className={styles.backButton}
-          >
-            ← 返回
-          </Button>
-          <h1 className={styles.title}>创建修士档案</h1>
-        </div>
+        <Card variant="immortal" className={styles.formCard}>
+          <h2>修仙者信息</h2>
 
-        <Card className={styles.formCard}>
-          <div className={styles.form}>
-            <div className={styles.formSection}>
-              <h3 className={styles.sectionTitle}>基本信息</h3>
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.formGroup}>
+              <label htmlFor="playerName">修仙者名号</label>
+              <Input
+                id="playerName"
+                type="text"
+                value={formData.playerName}
+                onChange={(e) =>
+                  handleInputChange("playerName", e.target.value)
+                }
+                placeholder="输入你的修仙者名号"
+                className={styles.nameInput}
+              />
+            </div>
 
-              <div className={styles.formGroup}>
-                <label className={styles.label}>修士名称</label>
-                <Input
-                  type="text"
-                  value={formData.playerName}
-                  onChange={(e) =>
-                    handleInputChange("playerName", e.target.value)
-                  }
-                  placeholder="输入你的修士名称..."
-                  maxLength={20}
-                />
+            <div className={styles.formGroup}>
+              <label htmlFor="primaryElement">主要属性</label>
+              <div className={styles.elementSelection}>
+                {elementOptions.map((element) => (
+                  <div
+                    key={element.value}
+                    className={`${styles.elementCard} ${
+                      formData.primaryElement === element.value
+                        ? styles.selected
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handleInputChange("primaryElement", element.value)
+                    }
+                    style={{
+                      borderColor:
+                        formData.primaryElement === element.value
+                          ? element.color
+                          : "rgba(255,255,255,0.2)",
+                    }}
+                  >
+                    <div
+                      className={styles.elementIcon}
+                      style={{ backgroundColor: element.color }}
+                    >
+                      {elementService.getElementName(element.value)}
+                    </div>
+                    <div className={styles.elementInfo}>
+                      <div
+                        className={styles.elementName}
+                        style={{ color: element.color }}
+                      >
+                        {element.label}
+                      </div>
+                      <div className={styles.elementDescription}>
+                        {element.description}
+                      </div>
+                      <div className={styles.elementBonus}>{element.bonus}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
+            </div>
 
+            <div className={styles.formRow}>
               <div className={styles.formGroup}>
-                <label className={styles.label}>难度选择</label>
+                <label htmlFor="difficulty">修炼难度</label>
                 <Select
+                  id="difficulty"
                   value={formData.difficulty}
                   onChange={(value) => handleInputChange("difficulty", value)}
-                  options={difficulties}
+                  options={difficultyOptions}
+                  placeholder="选择修炼难度"
                 />
               </div>
-            </div>
-
-            <div className={styles.formSection}>
-              <h3 className={styles.sectionTitle}>修士背景</h3>
 
               <div className={styles.formGroup}>
-                <label className={styles.label}>出身背景</label>
+                <label htmlFor="cultivation">修仙天赋</label>
                 <Select
+                  id="cultivation"
                   value={formData.cultivation}
                   onChange={(value) => handleInputChange("cultivation", value)}
-                  options={cultivationBackgrounds}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label className={styles.label}>元素亲和</label>
-                <Select
-                  value={formData.element}
-                  onChange={(value) => handleInputChange("element", value)}
-                  options={elementalAffinities}
+                  options={cultivationOptions}
+                  placeholder="选择修仙天赋"
                 />
               </div>
             </div>
 
-            <div className={styles.preview}>
-              <h3 className={styles.sectionTitle}>修士预览</h3>
-              <div className={styles.previewCard}>
-                <div className={styles.avatar}>
-                  <div className={styles.avatarIcon}>仙</div>
-                </div>
-                <div className={styles.previewInfo}>
-                  <h4>{formData.playerName || "未命名修士"}</h4>
-                  <p className={styles.previewDetail}>
-                    {
-                      cultivationBackgrounds.find(
-                        (c) => c.value === formData.cultivation
-                      )?.label
-                    }
-                  </p>
-                  <p className={styles.previewDetail}>
-                    {
-                      elementalAffinities.find(
-                        (e) => e.value === formData.element
-                      )?.label
-                    }
-                  </p>
-                  <p className={styles.previewDetail}>
-                    难度:{" "}
-                    {
-                      difficulties.find((d) => d.value === formData.difficulty)
-                        ?.label
-                    }
-                  </p>
-                </div>
-              </div>
-            </div>
+            {error && <div className={styles.error}>{error}</div>}
 
             <div className={styles.actions}>
               <Button
-                variant="secondary"
+                type="button"
+                variant="ghost"
                 onClick={() => onNavigate("home")}
                 disabled={isCreating}
               >
-                取消
+                返回
               </Button>
               <Button
+                type="submit"
                 variant="primary"
-                onClick={handleCreateSave}
                 disabled={isCreating}
                 className={styles.createButton}
               >
                 {isCreating ? "创建中..." : "开始修仙之路"}
               </Button>
             </div>
+          </form>
+        </Card>
+
+        {/* Element Information Panel */}
+        {formData.primaryElement && (
+          <Card variant="dark" className={styles.elementInfoCard}>
+            <h3>选中属性详情</h3>
+            {(() => {
+              const selectedElement = getSelectedElementInfo();
+              return (
+                <div className={styles.selectedElementInfo}>
+                  <div
+                    className={styles.bigElementIcon}
+                    style={{ backgroundColor: selectedElement.color }}
+                  >
+                    {elementService.getElementName(selectedElement.value)}
+                  </div>
+                  <div className={styles.elementDetails}>
+                    <h4 style={{ color: selectedElement.color }}>
+                      {selectedElement.label}
+                    </h4>
+                    <p className={styles.elementDesc}>
+                      "{selectedElement.description}"
+                    </p>
+                    <div className={styles.bonusInfo}>
+                      <strong>属性效果:</strong>
+                      <p>{selectedElement.bonus}</p>
+                    </div>
+                    <div className={styles.elementNote}>
+                      <p>
+                        <strong>注意:</strong>{" "}
+                        主要属性将获得更多经验，其他属性获得的经验为主要属性的20%。
+                        你可以在游戏中随时更改主要属性。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </Card>
+        )}
+
+        {/* Tianni Sword Information */}
+        <Card variant="primary" className={styles.tianniSwordCard}>
+          <h3>天逆剑</h3>
+          <div className={styles.swordLore}>
+            <div className={styles.swordIcon}>⚔️</div>
+            <div className={styles.swordDescription}>
+              <p className={styles.swordQuote}>
+                "一剑出，时流滞，五行寂灭；
+                <br />
+                再剑落，天机断，轮回逆生。
+                <br />
+                ——此剑，为悖逆之道。"
+              </p>
+              <div className={styles.swordFeatures}>
+                <h4>天逆剑特性:</h4>
+                <ul>
+                  <li>根据你的主要属性发射对应颜色的剑气</li>
+                  <li>可升级至10级，每级解锁新的技能</li>
+                  <li>达到10级后可解锁终极形态"五行寂灭"</li>
+                  <li>终极形态需要完成"大元素使"成就</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </Card>
       </div>
-    </div>
+    </ResponsiveLayout>
   );
 };
 

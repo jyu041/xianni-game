@@ -1,4 +1,4 @@
-// src/components/game/GameHeader.jsx
+// frontend/src/components/game/GameHeader.jsx
 import { useState } from "react";
 import elementService from "../../services/elementService";
 import styles from "./GameHeader.module.css";
@@ -23,12 +23,6 @@ const GameHeader = ({ playerData, onBackToHome }) => {
     const progressExp = currentExp - currentLevelExp;
     const neededExp = nextLevelExp - currentLevelExp;
     return Math.min((progressExp / neededExp) * 100, 100);
-  };
-
-  const getManaPercent = () => {
-    const mana = playerData.mana || 100;
-    const maxMana = playerData.maxMana || 100;
-    return (mana / maxMana) * 100;
   };
 
   const getPrimaryElementInfo = () => {
@@ -82,18 +76,6 @@ const GameHeader = ({ playerData, onBackToHome }) => {
           </div>
           <div className={styles.expText}>
             经验: {playerData.experience || 0} / {playerData.level * 100}
-          </div>
-        </div>
-
-        <div className={styles.manaSection}>
-          <div className={styles.manaBar}>
-            <div
-              className={styles.manaFill}
-              style={{ width: `${getManaPercent()}%` }}
-            />
-          </div>
-          <div className={styles.manaText}>
-            灵气: {playerData.mana || 100} / {playerData.maxMana || 100}
           </div>
         </div>
       </div>

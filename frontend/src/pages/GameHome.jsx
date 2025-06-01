@@ -1,223 +1,221 @@
-// src/pages/GameHome.jsx
+// frontend/src/pages/GameHome.jsx
 import { useState, useEffect } from "react";
-import Card from "../components/ui/Card";
 import GameHeader from "../components/game/GameHeader";
-import SidebarMenu from "../components/game/SidebarMenu";
-import LevelSelector from "../components/game/LevelSelector";
-import StageModal from "../components/game/StageModal";
+import StageSelection from "../components/game/StageSelection";
+import ElementDisplay from "../components/elements/ElementDisplay";
+import TreasureInventory from "../components/inventory/TreasureInventory";
+import ResponsiveLayout from "../components/layout/ResponsiveLayout";
+import Card from "../components/ui/Card";
+import Button from "../components/ui/Button";
 import playerService from "../services/playerService";
 import stageService from "../services/stageService";
 import styles from "./GameHome.module.css";
 
 const GameHome = ({ saveData, onNavigate }) => {
-  const [activeMenu, setActiveMenu] = useState("stages");
+  const [currentTab, setCurrentTab] = useState("stages");
   const [playerData, setPlayerData] = useState(saveData);
-  const [showAllStages, setShowAllStages] = useState(false);
-  const [stageList, setStageList] = useState([]);
+  const [stages, setStages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    updateLastPlayed();
-    loadStages();
+    loadGameData();
   }, []);
 
-  const updateLastPlayed = async () => {
+  const loadGameData = async () => {
     try {
-      await playerService.updateLastPlayed(playerData.id);
+      setIsLoading(true);
+
+      // Load latest player data
+      const updatedPlayer = await playerService.getPlayerById(saveData.id);
+      if (updatedPlayer) {
+        setPlayerData(updatedPlayer);
+      }
+
+      // Load stages
+      const stageData = await stageService.getAllStages();
+      setStages(stageData || []);
     } catch (error) {
-      console.error("Failed to update last played:", error);
+      console.error("Failed to load game data:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const loadStages = async () => {
+  const handleStageSelect = (stage) => {
+    onNavigate("gameLevel", {
+      stageData: stage,
+      playerData: playerData,
+    });
+  };
+
+  const handleElementChange = async (newPrimaryElement) => {
     try {
-      const stages = await stageService.getAllStages();
-      setStageList(stages);
+      // Update player data locally
+      setPlayerData((prev) => ({
+        ...prev,
+        primaryElement: newPrimaryElement,
+      }));
+
+      // Reload player data to get updated info
+      await loadGameData();
     } catch (error) {
-      console.error("Failed to load stages:", error);
-      setStageList([]);
+      console.error("Failed to update element:", error);
     }
   };
 
-  const handleMenuSelect = (menu) => {
-    setActiveMenu(menu);
-  };
-
-  const handleStageSelect = (stageId) => {
-    const selectedStage = stageList.find((stage) => stage.stageId === stageId);
-    if (selectedStage) {
-      // Navigate to game level with stage data and player data
-      onNavigate("gameLevel", {
-        stageData: selectedStage,
-        playerData: playerData,
-      });
+  const handleTreasureUpgrade = async (treasureId) => {
+    try {
+      if (treasureId === "tianniSword") {
+        const updatedPlayer = await playerService.upgradeTianniSword(
+          playerData.id
+        );
+        if (updatedPlayer) {
+          setPlayerData(updatedPlayer);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to upgrade treasure:", error);
     }
   };
 
-  const handleShowAllStages = () => {
-    setShowAllStages(true);
-  };
+  const renderTabContent = () => {
+    if (isLoading) {
+      return (
+        <div className={styles.loadingContainer}>
+          <div className={styles.loadingSpinner} />
+          <p>加载中...</p>
+        </div>
+      );
+    }
 
-  const handleCloseStageModal = () => {
-    setShowAllStages(false);
-  };
-
-  const getMenuTitle = (menuId) => {
-    const menuTitles = {
-      stages: "关卡选择",
-      inventory: "法宝背包",
-      store: "修仙商店",
-      upgrades: "功法升级",
-      gacha: "天机抽取",
-      achievements: "修仙成就",
-    };
-    return menuTitles[menuId] || "功能菜单";
-  };
-
-  const getMenuIcon = (menuId) => {
-    const menuIcons = {
-      stages: "⚔️",
-      inventory: "🎒",
-      store: "🏪",
-      upgrades: "📚",
-      gacha: "🎲",
-      achievements: "🏆",
-    };
-    return menuIcons[menuId] || "⚡";
-  };
-
-  const renderActiveMenu = () => {
-    switch (activeMenu) {
+    switch (currentTab) {
       case "stages":
         return (
-          <LevelSelector
-            unlockedStages={playerData.unlockedStages || [1]}
-            currentStage={playerData.currentStage || 1}
+          <StageSelection
+            stages={stages}
+            playerData={playerData}
             onStageSelect={handleStageSelect}
-            onShowAllStages={handleShowAllStages}
-            totalStages={stageList.length}
-            stages={stageList}
           />
         );
-      case "inventory":
+      case "elements":
         return (
-          <div className={styles.menuContent}>
-            <div className={styles.comingSoon}>
-              <div className={styles.comingSoonIcon}>🎒</div>
-              <h3>法宝背包</h3>
-              <p>背包系统正在开发中...</p>
-              <p>敬请期待更多精彩内容！</p>
-            </div>
-          </div>
+          <ElementDisplay
+            playerData={playerData}
+            onElementChange={handleElementChange}
+          />
         );
-      case "store":
+      case "treasure":
         return (
-          <div className={styles.menuContent}>
-            <div className={styles.comingSoon}>
-              <div className={styles.comingSoonIcon}>🏪</div>
-              <h3>修仙商店</h3>
-              <p>商店功能正在开发中...</p>
-              <p>敬请期待更多精彩内容！</p>
-            </div>
-          </div>
-        );
-      case "upgrades":
-        return (
-          <div className={styles.menuContent}>
-            <div className={styles.comingSoon}>
-              <div className={styles.comingSoonIcon}>📚</div>
-              <h3>功法升级</h3>
-              <p>升级系统正在开发中...</p>
-              <p>敬请期待更多精彩内容！</p>
-            </div>
-          </div>
-        );
-      case "gacha":
-        return (
-          <div className={styles.menuContent}>
-            <div className={styles.comingSoon}>
-              <div className={styles.comingSoonIcon}>🎲</div>
-              <h3>天机抽取</h3>
-              <p>抽取系统正在开发中...</p>
-              <p>敬请期待更多精彩内容！</p>
-            </div>
-          </div>
-        );
-      case "achievements":
-        return (
-          <div className={styles.menuContent}>
-            <div className={styles.comingSoon}>
-              <div className={styles.comingSoonIcon}>🏆</div>
-              <h3>修仙成就</h3>
-              <p>成就系统正在开发中...</p>
-              <p>敬请期待更多精彩内容！</p>
-            </div>
-          </div>
+          <TreasureInventory
+            playerData={playerData}
+            onTreasureUpgrade={handleTreasureUpgrade}
+          />
         );
       default:
-        return (
-          <LevelSelector
-            unlockedStages={playerData.unlockedStages || [1]}
-            currentStage={playerData.currentStage || 1}
-            onStageSelect={handleStageSelect}
-            onShowAllStages={handleShowAllStages}
-            totalStages={stageList.length}
-            stages={stageList}
-          />
-        );
+        return <div>选择一个标签页</div>;
     }
   };
 
-  return (
-    <div className={styles.gameHomePage}>
-      <div className={styles.background}>
-        <div className={styles.cultivationAura}>
-          <div className={styles.auraRing}></div>
-          <div className={styles.auraRing}></div>
-          <div className={styles.auraRing}></div>
-        </div>
+  const getTabTitle = () => {
+    switch (currentTab) {
+      case "stages":
+        return "关卡选择";
+      case "elements":
+        return "元素修炼";
+      case "treasure":
+        return "法宝管理";
+      default:
+        return "";
+    }
+  };
+
+  if (!playerData) {
+    return (
+      <div className={styles.gameHome}>
+        <p>加载存档数据...</p>
       </div>
+    );
+  }
+
+  return (
+    <ResponsiveLayout className={styles.gameHome}>
+      <GameHeader
+        playerData={playerData}
+        onBackToHome={() => onNavigate("home")}
+      />
 
       <div className={styles.content}>
-        <GameHeader
-          playerData={playerData}
-          onBackToHome={() => onNavigate("home")}
-        />
+        <div className={styles.sidebar}>
+          <Card variant="dark" className={styles.navigationCard}>
+            <h3>游戏菜单</h3>
+            <div className={styles.tabButtons}>
+              <Button
+                variant={currentTab === "stages" ? "primary" : "ghost"}
+                onClick={() => setCurrentTab("stages")}
+                className={styles.tabButton}
+              >
+                🗺️ 关卡挑战
+              </Button>
+              <Button
+                variant={currentTab === "elements" ? "primary" : "ghost"}
+                onClick={() => setCurrentTab("elements")}
+                className={styles.tabButton}
+              >
+                🔥 元素修炼
+              </Button>
+              <Button
+                variant={currentTab === "treasure" ? "primary" : "ghost"}
+                onClick={() => setCurrentTab("treasure")}
+                className={styles.tabButton}
+              >
+                ⚔️ 法宝背包
+              </Button>
+            </div>
+          </Card>
 
-        <div className={styles.gameLayout}>
-          <div className={styles.sidebarSection}>
-            <SidebarMenu
-              activeMenu={activeMenu}
-              onMenuSelect={handleMenuSelect}
-              playerData={playerData}
-            />
-          </div>
-
-          <div className={styles.mainPanel}>
-            <Card className={styles.mainContent}>
-              <div className={styles.contentHeader}>
-                <h2 className={styles.contentTitle}>
-                  <span className={styles.contentIcon}>
-                    {getMenuIcon(activeMenu)}
-                  </span>
-                  {getMenuTitle(activeMenu)}
-                </h2>
+          <Card variant="dark" className={styles.playerStatsCard}>
+            <h4>修炼境界</h4>
+            <div className={styles.statsGrid}>
+              <div className={styles.statRow}>
+                <span>等级:</span>
+                <span>{playerData.level}</span>
               </div>
+              <div className={styles.statRow}>
+                <span>经验:</span>
+                <span>{playerData.experience || 0}</span>
+              </div>
+              <div className={styles.statRow}>
+                <span>金币:</span>
+                <span>{playerData.gold || 0}</span>
+              </div>
+              <div className={styles.statRow}>
+                <span>宝石:</span>
+                <span>{playerData.gems || 0}</span>
+              </div>
+              <div className={styles.statRow}>
+                <span>魂魄:</span>
+                <span>{playerData.soulCount || 0}</span>
+              </div>
+              <div className={styles.statRow}>
+                <span>灵气:</span>
+                <span>
+                  {playerData.mana || 100}/{playerData.maxMana || 100}
+                </span>
+              </div>
+            </div>
+          </Card>
+        </div>
 
-              <div className={styles.contentBody}>{renderActiveMenu()}</div>
-            </Card>
-          </div>
+        <div className={styles.mainContent}>
+          <Card variant="dark" className={styles.contentCard}>
+            <div className={styles.contentHeader}>
+              <h2>{getTabTitle()}</h2>
+            </div>
+            <div className={styles.tabContent}>{renderTabContent()}</div>
+          </Card>
         </div>
       </div>
-
-      <StageModal
-        isOpen={showAllStages}
-        onClose={handleCloseStageModal}
-        unlockedStages={playerData.unlockedStages || [1]}
-        currentStage={playerData.currentStage || 1}
-        onStageSelect={handleStageSelect}
-        stages={stageList}
-      />
-    </div>
+    </ResponsiveLayout>
   );
 };
 

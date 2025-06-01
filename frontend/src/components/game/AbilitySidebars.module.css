@@ -250,6 +250,12 @@
   font-weight: 500;
 }
 
+.skillMana {
+  color: #0ea5e9;
+  font-size: 0.65rem;
+  font-weight: 500;
+}
+
 .elementIndicator {
   position: absolute;
   bottom: 2px;
@@ -270,6 +276,23 @@
     rgba(255, 255, 255, 0.3), 
     rgba(200, 200, 200, 0.2));
   transition: height 0.3s ease;
+  border-radius: 0 0 6px 6px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 0.2rem;
+}
+
+.cooldownOverlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 100, 100, 0.4), 
+    rgba(255, 150, 150, 0.2));
   border-radius: 0 0 6px 6px;
 }
 
@@ -343,5 +366,14 @@
 
   .hotkey {
     font-size: 0.55rem;
+  }
+
+  .skillName {
+    font-size: 0.65rem;
+  }
+
+  .skillDamage,
+  .skillMana {
+    font-size: 0.6rem;
   }
 }
