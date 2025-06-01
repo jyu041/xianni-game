@@ -6,7 +6,6 @@ import StageSelection from "/src/components/GameHome/StageSelection";
 import ElementDisplay from "/src/components/GameHome/ElementDisplay";
 import TreasureInventory from "/src/components/GameHome/TreasureInventory";
 import CultivationDisplay from "/src/components/GameHome/CultivationDisplay";
-import ResponsiveLayout from "/src/components/layout/ResponsiveLayout";
 import playerService from "/src/services/playerService";
 import stageService from "/src/services/stageService";
 import styles from "./GameHome.module.css";
@@ -160,32 +159,6 @@ const GameHome = ({ saveData, onNavigate }) => {
           </div>
         );
     }
-  };
-
-  const getContentTitle = () => {
-    const titles = {
-      stages: "关卡选择",
-      inventory: "法宝背包",
-      cultivation: "修为境界",
-      store: "修仙商店",
-      upgrades: "元素修炼",
-      gacha: "天机抽取",
-      achievements: "修仙成就",
-    };
-    return titles[activeMenu] || "游戏功能";
-  };
-
-  const getContentIcon = () => {
-    const icons = {
-      stages: "⚔️",
-      inventory: "🎒",
-      cultivation: "🧘",
-      store: "🏪",
-      upgrades: "📚",
-      gacha: "🎲",
-      achievements: "🏆",
-    };
-    return icons[activeMenu] || "❓";
   };
 
   if (!playerData) {
