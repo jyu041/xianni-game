@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Card from "../ui/Card";
 import Button from "../ui/Button";
-import styles from "./GachaDisplay.module.css";
+import sharedStyles from "./SharedDisplay.module.css";
 
 const GachaDisplay = ({ playerData, onGachaPull }) => {
   const [selectedBanner, setSelectedBanner] = useState("standard");
@@ -207,7 +207,6 @@ const GachaDisplay = ({ playerData, onGachaPull }) => {
 
     setIsAnimating(true);
 
-    // Simulate animation delay
     setTimeout(() => {
       const results = simulateGachaPull(banner, count);
       setPullResults(results);
@@ -228,22 +227,42 @@ const GachaDisplay = ({ playerData, onGachaPull }) => {
   const currentBanner = gachaBanners[selectedBanner];
 
   return (
-    <div className={styles.gachaDisplay}>
-      <div className={styles.gachaHeader}>
+    <div className={sharedStyles.displayContainer}>
+      <div className={sharedStyles.displayHeader}>
         <h2>天机抽取</h2>
         <p>消耗天机石获得稀有法宝和功法</p>
-        <div className={styles.playerGems}>
-          <span className={styles.gemsIcon}>💎</span>
-          <span className={styles.gemsAmount}>{playerData.gems || 0}</span>
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            background: "rgba(0,0,0,0.8)",
+            padding: "0.75rem 1.5rem",
+            borderRadius: "20px",
+            border: "1px solid rgba(255,255,255,0.3)",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.5)",
+          }}
+        >
+          <span style={{ fontSize: "1.2rem" }}>💎</span>
+          <span
+            style={{
+              color: "#ffffff",
+              fontWeight: "bold",
+              fontSize: "1.1rem",
+              textShadow: "0 0 10px rgba(255,255,255,0.3)",
+            }}
+          >
+            {playerData.gems || 0}
+          </span>
         </div>
       </div>
 
-      <div className={styles.bannerTabs}>
+      <div className={sharedStyles.tabContainer}>
         {Object.values(gachaBanners).map((banner) => (
           <button
             key={banner.id}
-            className={`${styles.bannerTab} ${
-              selectedBanner === banner.id ? styles.active : ""
+            className={`${sharedStyles.tab} ${
+              selectedBanner === banner.id ? sharedStyles.active : ""
             }`}
             onClick={() => setSelectedBanner(banner.id)}
             style={{
@@ -253,37 +272,90 @@ const GachaDisplay = ({ playerData, onGachaPull }) => {
                   : "rgba(255,255,255,0.2)",
             }}
           >
-            <span className={styles.bannerIcon}>{banner.icon}</span>
-            <span className={styles.bannerName}>{banner.name}</span>
+            <span className={sharedStyles.tabIcon}>{banner.icon}</span>
+            <span className={sharedStyles.tabLabel}>{banner.name}</span>
           </button>
         ))}
       </div>
 
-      <div className={styles.bannerInfo}>
-        <Card variant="glass" className={styles.bannerCard}>
-          <div className={styles.bannerHeader}>
+      <div className={sharedStyles.statsSection}>
+        <Card variant="glass" style={{ padding: "2rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1.5rem",
+              marginBottom: "2rem",
+            }}
+          >
             <div
-              className={styles.bannerMainIcon}
-              style={{ color: currentBanner.color }}
+              style={{
+                fontSize: "4rem",
+                color: currentBanner.color,
+                filter: "drop-shadow(0 0 20px currentColor)",
+              }}
             >
               {currentBanner.icon}
             </div>
-            <div className={styles.bannerDetails}>
-              <h3 style={{ color: currentBanner.color }}>
+            <div style={{ flex: 1 }}>
+              <h3
+                style={{
+                  fontSize: "1.8rem",
+                  margin: "0 0 0.5rem 0",
+                  color: currentBanner.color,
+                  textShadow: "0 0 15px currentColor",
+                }}
+              >
                 {currentBanner.name}
               </h3>
-              <p>{currentBanner.description}</p>
+              <p
+                style={{
+                  color: "rgba(255,255,255,0.9)",
+                  fontSize: "1rem",
+                  margin: "0",
+                  lineHeight: "1.5",
+                }}
+              >
+                {currentBanner.description}
+              </p>
             </div>
           </div>
 
-          <div className={styles.ratesDisplay}>
-            <h4>获取概率</h4>
-            <div className={styles.ratesList}>
+          <div style={{ marginBottom: "2rem" }}>
+            <h4
+              style={{
+                color: "#ffffff",
+                margin: "0 0 1rem 0",
+                fontSize: "1.2rem",
+                textAlign: "center",
+              }}
+            >
+              获取概率
+            </h4>
+            <div
+              className={sharedStyles.gridContainer}
+              style={{ gridTemplateColumns: "repeat(5, 1fr)", gap: "1rem" }}
+            >
               {Object.entries(currentBanner.rates).map(([rarity, rate]) => (
-                <div key={rarity} className={styles.rateItem}>
+                <div
+                  key={rarity}
+                  style={{
+                    background: "rgba(0,0,0,0.6)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    borderRadius: "8px",
+                    padding: "0.75rem",
+                    textAlign: "center",
+                  }}
+                >
                   <span
-                    className={styles.rarityLabel}
-                    style={{ color: getRarityColor(rarity) }}
+                    style={{
+                      display: "block",
+                      color: getRarityColor(rarity),
+                      fontWeight: "bold",
+                      fontSize: "0.9rem",
+                      marginBottom: "0.25rem",
+                      textShadow: "0 0 8px currentColor",
+                    }}
                   >
                     {rarity === "legendary" && "传说"}
                     {rarity === "epic" && "史诗"}
@@ -291,29 +363,41 @@ const GachaDisplay = ({ playerData, onGachaPull }) => {
                     {rarity === "uncommon" && "优秀"}
                     {rarity === "common" && "普通"}
                   </span>
-                  <span className={styles.ratePercent}>{rate}%</span>
+                  <span
+                    style={{
+                      color: "rgba(255,255,255,0.8)",
+                      fontSize: "0.8rem",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {rate}%
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className={styles.pullActions}>
-            <div className={styles.pullButton}>
+          <div
+            style={{ display: "flex", gap: "1.5rem", justifyContent: "center" }}
+          >
+            <div style={{ flex: 1, maxWidth: "200px" }}>
               <Button
                 variant="primary"
                 size="large"
                 disabled={!canPull(1) || isAnimating}
                 onClick={() => handleGachaPull(1)}
+                style={{ width: "100%" }}
               >
                 单抽 {currentBanner.cost.single} 💎
               </Button>
             </div>
-            <div className={styles.pullButton}>
+            <div style={{ flex: 1, maxWidth: "200px" }}>
               <Button
                 variant="secondary"
                 size="large"
                 disabled={!canPull(10) || isAnimating}
                 onClick={() => handleGachaPull(10)}
+                style={{ width: "100%" }}
               >
                 十连抽 {currentBanner.cost.ten} 💎
               </Button>
@@ -323,54 +407,129 @@ const GachaDisplay = ({ playerData, onGachaPull }) => {
       </div>
 
       {isAnimating && (
-        <div className={styles.animationOverlay}>
-          <div className={styles.gachaAnimation}>
-            <div className={styles.spinningIcon}>🎲</div>
-            <h3>天机运转中...</h3>
-            <p>正在为您寻找缘分...</p>
+        <div className={sharedStyles.modalOverlay}>
+          <div style={{ textAlign: "center", color: "#ffffff" }}>
+            <div
+              style={{
+                fontSize: "4rem",
+                animation: "spin 1s linear infinite",
+                marginBottom: "1rem",
+                filter: "drop-shadow(0 0 20px rgba(255,215,0,0.8))",
+              }}
+            >
+              🎲
+            </div>
+            <h3
+              style={{
+                fontSize: "1.8rem",
+                margin: "0 0 0.5rem 0",
+                textShadow: "0 0 15px rgba(255,255,255,0.5)",
+              }}
+            >
+              天机运转中...
+            </h3>
+            <p
+              style={{
+                fontSize: "1.1rem",
+                margin: "0",
+                color: "rgba(255,255,255,0.8)",
+                fontStyle: "italic",
+              }}
+            >
+              正在为您寻找缘分...
+            </p>
           </div>
         </div>
       )}
 
       {pullResults && !isAnimating && (
-        <div className={styles.resultsOverlay}>
-          <Card variant="glass" className={styles.resultsPanel}>
-            <div className={styles.resultsHeader}>
+        <div className={sharedStyles.modalOverlay}>
+          <Card
+            variant="glass"
+            className={sharedStyles.modalPanel}
+            style={{ maxWidth: "800px" }}
+          >
+            <div className={sharedStyles.modalHeader}>
               <h3>抽取结果</h3>
               <button
-                className={styles.closeButton}
+                className={sharedStyles.closeButton}
                 onClick={() => setPullResults(null)}
               >
                 ×
               </button>
             </div>
 
-            <div className={styles.resultsGrid}>
+            <div
+              className={`${sharedStyles.gridContainer} ${sharedStyles.grid3Col}`}
+              style={{ marginBottom: "2rem" }}
+            >
               {pullResults.map((item, index) => (
                 <div
                   key={index}
-                  className={styles.resultItem}
-                  style={{ borderColor: getRarityColor(item.rarity) }}
+                  style={{
+                    background: "rgba(0,0,0,0.8)",
+                    border: `2px solid ${getRarityColor(item.rarity)}`,
+                    borderRadius: "12px",
+                    padding: "1rem",
+                    textAlign: "center",
+                    transition: "all 0.3s ease",
+                    position: "relative",
+                    overflow: "hidden",
+                  }}
                 >
                   <div
-                    className={styles.resultIcon}
-                    style={{ color: getRarityColor(item.rarity) }}
+                    style={{
+                      content: "",
+                      position: "absolute",
+                      top: "0",
+                      left: "-100%",
+                      width: "100%",
+                      height: "100%",
+                      background:
+                        "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)",
+                      animation: "shimmer 2s infinite",
+                    }}
+                  />
+                  <div
+                    style={{
+                      fontSize: "2.5rem",
+                      marginBottom: "0.5rem",
+                      color: getRarityColor(item.rarity),
+                      filter: "drop-shadow(0 0 10px currentColor)",
+                    }}
                   >
                     {item.icon}
                   </div>
-                  <div className={styles.resultInfo}>
+                  <div style={{ position: "relative", zIndex: 1 }}>
                     <div
-                      className={styles.resultName}
-                      style={{ color: getRarityColor(item.rarity) }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "1rem",
+                        marginBottom: "0.25rem",
+                        color: getRarityColor(item.rarity),
+                        textShadow: "0 0 8px currentColor",
+                      }}
                     >
                       {item.name}
                     </div>
-                    <div className={styles.resultDescription}>
+                    <div
+                      style={{
+                        color: "rgba(255,255,255,0.8)",
+                        fontSize: "0.8rem",
+                        marginBottom: "0.5rem",
+                        lineHeight: "1.3",
+                      }}
+                    >
                       {item.description}
                     </div>
                     <div
-                      className={styles.resultRarity}
-                      style={{ color: getRarityColor(item.rarity) }}
+                      style={{
+                        fontSize: "0.7rem",
+                        fontWeight: "bold",
+                        textTransform: "uppercase",
+                        color: getRarityColor(item.rarity),
+                        textShadow: "0 0 5px currentColor",
+                      }}
                     >
                       {item.rarity === "legendary" && "传说"}
                       {item.rarity === "epic" && "史诗"}
@@ -383,7 +542,7 @@ const GachaDisplay = ({ playerData, onGachaPull }) => {
               ))}
             </div>
 
-            <div className={styles.resultsActions}>
+            <div className={sharedStyles.modalActions}>
               <Button variant="primary" onClick={() => setPullResults(null)}>
                 确认
               </Button>

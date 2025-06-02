@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Card from "../ui/Card";
 import Button from "../ui/Button";
-import styles from "./AchievementsDisplay.module.css";
+import sharedStyles from "./SharedDisplay.module.css";
 
 const AchievementsDisplay = ({ playerData, onClaimReward }) => {
   const [selectedCategory, setSelectedCategory] = useState("cultivation");
@@ -271,7 +271,7 @@ const AchievementsDisplay = ({ playerData, onClaimReward }) => {
         description: "完成所有主要成就",
         icon: "👑",
         requirement: "获得所有传说成就",
-        progress: { current: 0, max: 5 }, // This would be calculated based on other legendary achievements
+        progress: { current: 0, max: 5 },
         completed: false,
         rewards: { title: "仙道至尊", gold: 1000000, gems: 10000 },
         rarity: "legendary",
@@ -312,35 +312,55 @@ const AchievementsDisplay = ({ playerData, onClaimReward }) => {
   const totalCount = currentAchievements.length;
 
   return (
-    <div className={styles.achievementsDisplay}>
-      <div className={styles.achievementsHeader}>
+    <div className={sharedStyles.displayContainer}>
+      <div className={sharedStyles.displayHeader}>
         <h2>修仙成就</h2>
         <p>查看你的修炼成就和里程碑</p>
-        <div className={styles.overallProgress}>
-          <span>
+        <div
+          style={{
+            display: "inline-block",
+            background: "rgba(0,0,0,0.6)",
+            padding: "0.75rem 1.5rem",
+            borderRadius: "20px",
+            border: "1px solid rgba(255,255,255,0.2)",
+            minWidth: "200px",
+          }}
+        >
+          <span
+            style={{
+              color: "#ffffff",
+              fontWeight: "600",
+              fontSize: "0.9rem",
+              display: "block",
+              marginBottom: "0.5rem",
+            }}
+          >
             总体进度: {completedCount}/{totalCount}
           </span>
-          <div className={styles.progressBar}>
+          <div className={sharedStyles.progressBar}>
             <div
-              className={styles.progressFill}
-              style={{ width: `${(completedCount / totalCount) * 100}%` }}
+              className={sharedStyles.progressFill}
+              style={{
+                width: `${(completedCount / totalCount) * 100}%`,
+                backgroundColor: "#ffc107",
+              }}
             />
           </div>
         </div>
       </div>
 
-      <div className={styles.categoryTabs}>
+      <div className={sharedStyles.tabContainer}>
         {achievementCategories.map((category) => (
           <button
             key={category.id}
-            className={`${styles.categoryTab} ${
-              selectedCategory === category.id ? styles.active : ""
+            className={`${sharedStyles.tab} ${
+              selectedCategory === category.id ? sharedStyles.active : ""
             }`}
             onClick={() => setSelectedCategory(category.id)}
           >
-            <span className={styles.categoryIcon}>{category.icon}</span>
-            <span className={styles.categoryName}>{category.name}</span>
-            <span className={styles.categoryProgress}>
+            <span className={sharedStyles.tabIcon}>{category.icon}</span>
+            <span className={sharedStyles.tabLabel}>{category.name}</span>
+            <span className={sharedStyles.tabCounter}>
               {achievements[category.id].filter((a) => a.completed).length}/
               {achievements[category.id].length}
             </span>
@@ -348,143 +368,199 @@ const AchievementsDisplay = ({ playerData, onClaimReward }) => {
         ))}
       </div>
 
-      <div className={styles.achievementsContent}>
-        <div className={styles.achievementsList}>
-          {currentAchievements.map((achievement) => {
-            const progressPercent = getProgressPercent(achievement);
-            const claimable = canClaimReward(achievement);
+      <div className={`${sharedStyles.gridContainer} ${sharedStyles.grid3Col}`}>
+        {currentAchievements.map((achievement) => {
+          const progressPercent = getProgressPercent(achievement);
+          const claimable = canClaimReward(achievement);
 
-            return (
-              <Card
-                key={achievement.id}
-                variant={achievement.completed ? "primary" : "default"}
-                className={`${styles.achievementCard} ${
-                  achievement.completed ? styles.completed : ""
-                } ${claimable ? styles.claimable : ""}`}
-                onClick={() => setSelectedAchievement(achievement)}
-              >
-                <div className={styles.achievementHeader}>
-                  <div
-                    className={styles.achievementIcon}
-                    style={{ color: getRarityColor(achievement.rarity) }}
-                  >
-                    {achievement.icon}
-                  </div>
-                  <div
-                    className={styles.rarityBadge}
-                    style={{
-                      backgroundColor: getRarityColor(achievement.rarity),
-                    }}
-                  >
-                    {achievement.rarity}
-                  </div>
-                  {achievement.completed && (
-                    <div className={styles.completedBadge}>✓</div>
-                  )}
+          return (
+            <Card
+              key={achievement.id}
+              variant={achievement.completed ? "primary" : "default"}
+              className={`${sharedStyles.itemCard} ${
+                achievement.completed ? sharedStyles.equipped : ""
+              } ${claimable ? sharedStyles.claimableBadge : ""}`}
+              onClick={() => setSelectedAchievement(achievement)}
+            >
+              <div className={sharedStyles.itemHeader}>
+                <div
+                  className={sharedStyles.itemIcon}
+                  style={{ color: getRarityColor(achievement.rarity) }}
+                >
+                  {achievement.icon}
                 </div>
-
-                <div className={styles.achievementInfo}>
-                  <h4
-                    className={styles.achievementName}
-                    style={{ color: getRarityColor(achievement.rarity) }}
-                  >
-                    {achievement.name}
-                  </h4>
-                  <p className={styles.achievementDescription}>
-                    {achievement.description}
-                  </p>
-
-                  <div className={styles.progressSection}>
-                    <div className={styles.progressText}>
-                      进度: {achievement.progress.current}/
-                      {achievement.progress.max}
-                    </div>
-                    <div className={styles.progressBar}>
-                      <div
-                        className={styles.progressFill}
-                        style={{
-                          width: `${progressPercent}%`,
-                          backgroundColor: getRarityColor(achievement.rarity),
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className={styles.requirementText}>
-                    {achievement.requirement}
-                  </div>
+                <div
+                  className={sharedStyles.rarityBadge}
+                  style={{
+                    backgroundColor: getRarityColor(achievement.rarity),
+                  }}
+                >
+                  {achievement.rarity}
                 </div>
-
-                {claimable && (
-                  <Button
-                    variant="primary"
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleClaimReward(achievement);
-                    }}
+                {achievement.completed && (
+                  <div
+                    className={`${sharedStyles.statusBadge} ${sharedStyles.completedBadge}`}
                   >
-                    领取奖励
-                  </Button>
+                    ✓
+                  </div>
                 )}
-              </Card>
-            );
-          })}
-        </div>
+              </div>
+
+              <div className={sharedStyles.itemInfo}>
+                <h4
+                  className={sharedStyles.itemName}
+                  style={{ color: getRarityColor(achievement.rarity) }}
+                >
+                  {achievement.name}
+                </h4>
+                <p className={sharedStyles.itemDescription}>
+                  {achievement.description}
+                </p>
+
+                <div className={sharedStyles.progressContainer}>
+                  <div className={sharedStyles.progressLabel}>
+                    进度: {achievement.progress.current}/
+                    {achievement.progress.max}
+                  </div>
+                  <div className={sharedStyles.progressBar}>
+                    <div
+                      className={sharedStyles.progressFill}
+                      style={{
+                        width: `${progressPercent}%`,
+                        backgroundColor: getRarityColor(achievement.rarity),
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className={sharedStyles.itemDetails}>
+                  <span
+                    style={{
+                      color: "rgba(255,255,255,0.7)",
+                      fontSize: "0.8rem",
+                      fontStyle: "italic",
+                      background: "rgba(0,0,0,0.4)",
+                      padding: "0.4rem 0.6rem",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                    }}
+                  >
+                    {achievement.requirement}
+                  </span>
+                </div>
+              </div>
+
+              {claimable && (
+                <Button
+                  variant="primary"
+                  size="small"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleClaimReward(achievement);
+                  }}
+                >
+                  领取奖励
+                </Button>
+              )}
+            </Card>
+          );
+        })}
       </div>
 
       {selectedAchievement && (
-        <div className={styles.achievementDetail}>
-          <Card variant="glass" className={styles.detailPanel}>
-            <div className={styles.detailHeader}>
+        <div className={sharedStyles.modalOverlay}>
+          <Card variant="glass" className={sharedStyles.modalPanel}>
+            <div className={sharedStyles.modalHeader}>
               <div
-                className={styles.detailIcon}
+                className={sharedStyles.modalIcon}
                 style={{ color: getRarityColor(selectedAchievement.rarity) }}
               >
                 {selectedAchievement.icon}
               </div>
-              <div className={styles.detailInfo}>
+              <div className={sharedStyles.modalInfo}>
                 <h3
                   style={{ color: getRarityColor(selectedAchievement.rarity) }}
                 >
                   {selectedAchievement.name}
                 </h3>
                 <div
-                  className={styles.detailRarity}
-                  style={{ color: getRarityColor(selectedAchievement.rarity) }}
+                  style={{
+                    fontSize: "0.9rem",
+                    fontWeight: "bold",
+                    textTransform: "uppercase",
+                    opacity: "0.8",
+                    color: getRarityColor(selectedAchievement.rarity),
+                  }}
                 >
                   {selectedAchievement.rarity}
                 </div>
                 {selectedAchievement.completed && (
-                  <div className={styles.completedStatus}>已完成</div>
+                  <div
+                    style={{
+                      background: "#4caf50",
+                      color: "white",
+                      padding: "0.25rem 0.75rem",
+                      borderRadius: "12px",
+                      fontSize: "0.8rem",
+                      fontWeight: "bold",
+                      marginTop: "0.5rem",
+                      display: "inline-block",
+                    }}
+                  >
+                    已完成
+                  </div>
                 )}
               </div>
               <button
-                className={styles.closeButton}
+                className={sharedStyles.closeButton}
                 onClick={() => setSelectedAchievement(null)}
               >
                 ×
               </button>
             </div>
 
-            <p className={styles.detailDescription}>
+            <p className={sharedStyles.modalDescription}>
               {selectedAchievement.description}
             </p>
 
-            <div className={styles.detailProgress}>
-              <h4>完成进度</h4>
-              <div className={styles.progressInfo}>
-                <span>
+            <div
+              style={{
+                background: "rgba(0,0,0,0.6)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "10px",
+                padding: "1rem",
+                marginBottom: "1.5rem",
+              }}
+            >
+              <h4
+                style={{
+                  color: "#ffffff",
+                  margin: "0 0 0.75rem 0",
+                  fontSize: "1rem",
+                }}
+              >
+                完成进度
+              </h4>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "0.5rem",
+                  fontWeight: "600",
+                  fontSize: "0.9rem",
+                }}
+              >
+                <span style={{ color: "rgba(255,255,255,0.9)" }}>
                   {selectedAchievement.progress.current}/
                   {selectedAchievement.progress.max}
                 </span>
-                <span>
+                <span style={{ color: "rgba(255,255,255,0.9)" }}>
                   {getProgressPercent(selectedAchievement).toFixed(1)}%
                 </span>
               </div>
-              <div className={styles.progressBar}>
+              <div className={sharedStyles.progressBar}>
                 <div
-                  className={styles.progressFill}
+                  className={sharedStyles.progressFill}
                   style={{
                     width: `${getProgressPercent(selectedAchievement)}%`,
                     backgroundColor: getRarityColor(selectedAchievement.rarity),
@@ -493,42 +569,120 @@ const AchievementsDisplay = ({ playerData, onClaimReward }) => {
               </div>
             </div>
 
-            <div className={styles.detailRequirement}>
-              <h4>完成条件</h4>
-              <p>{selectedAchievement.requirement}</p>
-            </div>
-
-            <div className={styles.detailRewards}>
-              <h4>奖励</h4>
-              <div className={styles.rewardsList}>
+            <div
+              style={{
+                background: "rgba(255,193,7,0.1)",
+                border: "1px solid rgba(255,193,7,0.3)",
+                borderRadius: "10px",
+                padding: "1rem",
+                marginBottom: "1.5rem",
+              }}
+            >
+              <h4
+                style={{
+                  color: "#ffc107",
+                  margin: "0 0 0.75rem 0",
+                  fontSize: "1rem",
+                  textShadow: "0 0 10px rgba(255,193,7,0.5)",
+                }}
+              >
+                奖励
+              </h4>
+              <div
+                style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}
+              >
                 {selectedAchievement.rewards.gold && (
-                  <div className={styles.rewardItem}>
-                    <span className={styles.rewardIcon}>💰</span>
-                    <span className={styles.rewardAmount}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      background: "rgba(0,0,0,0.6)",
+                      padding: "0.5rem 0.75rem",
+                      borderRadius: "20px",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                    }}
+                  >
+                    <span style={{ fontSize: "1rem" }}>💰</span>
+                    <span
+                      style={{
+                        color: "#ffffff",
+                        fontWeight: "600",
+                        fontSize: "0.9rem",
+                      }}
+                    >
                       {selectedAchievement.rewards.gold} 灵石
                     </span>
                   </div>
                 )}
                 {selectedAchievement.rewards.experience && (
-                  <div className={styles.rewardItem}>
-                    <span className={styles.rewardIcon}>📚</span>
-                    <span className={styles.rewardAmount}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      background: "rgba(0,0,0,0.6)",
+                      padding: "0.5rem 0.75rem",
+                      borderRadius: "20px",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                    }}
+                  >
+                    <span style={{ fontSize: "1rem" }}>📚</span>
+                    <span
+                      style={{
+                        color: "#ffffff",
+                        fontWeight: "600",
+                        fontSize: "0.9rem",
+                      }}
+                    >
                       {selectedAchievement.rewards.experience} 经验
                     </span>
                   </div>
                 )}
                 {selectedAchievement.rewards.gems && (
-                  <div className={styles.rewardItem}>
-                    <span className={styles.rewardIcon}>💎</span>
-                    <span className={styles.rewardAmount}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      background: "rgba(0,0,0,0.6)",
+                      padding: "0.5rem 0.75rem",
+                      borderRadius: "20px",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                    }}
+                  >
+                    <span style={{ fontSize: "1rem" }}>💎</span>
+                    <span
+                      style={{
+                        color: "#ffffff",
+                        fontWeight: "600",
+                        fontSize: "0.9rem",
+                      }}
+                    >
                       {selectedAchievement.rewards.gems} 仙石
                     </span>
                   </div>
                 )}
                 {selectedAchievement.rewards.title && (
-                  <div className={styles.rewardItem}>
-                    <span className={styles.rewardIcon}>👑</span>
-                    <span className={styles.rewardAmount}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      background: "rgba(0,0,0,0.6)",
+                      padding: "0.5rem 0.75rem",
+                      borderRadius: "20px",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                    }}
+                  >
+                    <span style={{ fontSize: "1rem" }}>👑</span>
+                    <span
+                      style={{
+                        color: "#ffffff",
+                        fontWeight: "600",
+                        fontSize: "0.9rem",
+                      }}
+                    >
                       称号: {selectedAchievement.rewards.title}
                     </span>
                   </div>
@@ -536,7 +690,7 @@ const AchievementsDisplay = ({ playerData, onClaimReward }) => {
               </div>
             </div>
 
-            <div className={styles.detailActions}>
+            <div className={sharedStyles.modalActions}>
               <Button
                 variant="ghost"
                 onClick={() => setSelectedAchievement(null)}
