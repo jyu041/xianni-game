@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Card from "../ui/Card";
 import Button from "../ui/Button";
 import elementService from "../../services/elementService";
-import styles from "./StoreDisplay.module.css";
+import sharedStyles from "./SharedDisplay.module.css";
 
 const StoreDisplay = ({ playerData, onPurchase }) => {
   const [selectedCategory, setSelectedCategory] = useState("resources");
@@ -156,146 +156,259 @@ const StoreDisplay = ({ playerData, onPurchase }) => {
   const currentItems = storeItems[selectedCategory] || [];
 
   return (
-    <div className={styles.storeDisplay}>
-      <div className={styles.storeHeader}>
+    <div className={sharedStyles.displayContainer}>
+      <div className={sharedStyles.displayHeader}>
         <h2>修仙商店</h2>
         <p>购买珍贵的修炼资源和法宝</p>
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "1rem",
+            background: "rgba(0,0,0,0.8)",
+            padding: "0.75rem 1.5rem",
+            borderRadius: "20px",
+            border: "1px solid rgba(255,255,255,0.3)",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.5)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <span style={{ fontSize: "1.2rem" }}>💰</span>
+            <span
+              style={{
+                color: "#ffffff",
+                fontWeight: "bold",
+                fontSize: "1rem",
+                textShadow: "0 0 10px rgba(255,255,255,0.3)",
+              }}
+            >
+              {playerData.gold || 0}
+            </span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <span style={{ fontSize: "1.2rem" }}>💎</span>
+            <span
+              style={{
+                color: "#ffffff",
+                fontWeight: "bold",
+                fontSize: "1rem",
+                textShadow: "0 0 10px rgba(255,255,255,0.3)",
+              }}
+            >
+              {playerData.gems || 0}
+            </span>
+          </div>
+        </div>
       </div>
 
-      <div className={styles.categoryTabs}>
+      <div className={sharedStyles.tabContainer}>
         {storeCategories.map((category) => (
           <button
             key={category.id}
-            className={`${styles.categoryTab} ${
-              selectedCategory === category.id ? styles.active : ""
+            className={`${sharedStyles.tab} ${
+              selectedCategory === category.id ? sharedStyles.active : ""
             }`}
             onClick={() => setSelectedCategory(category.id)}
           >
-            <span className={styles.categoryIcon}>{category.icon}</span>
-            <span className={styles.categoryName}>{category.name}</span>
+            <span className={sharedStyles.tabIcon}>{category.icon}</span>
+            <span className={sharedStyles.tabLabel}>{category.name}</span>
           </button>
         ))}
       </div>
 
-      <div className={styles.storeContent}>
-        <div className={styles.itemGrid}>
-          {currentItems.map((item) => {
-            const affordable = canPurchase(item);
-            return (
-              <Card
-                key={item.id}
-                variant={affordable ? "default" : "dark"}
-                className={`${styles.storeItem} ${
-                  !affordable ? styles.unaffordable : ""
-                }`}
-                onClick={() => setSelectedItem(item)}
-              >
-                <div className={styles.itemHeader}>
-                  <div
-                    className={styles.itemIcon}
-                    style={{ color: getRarityColor(item.rarity) }}
-                  >
-                    {item.icon}
-                  </div>
-                  <div
-                    className={styles.rarityBadge}
-                    style={{ backgroundColor: getRarityColor(item.rarity) }}
-                  >
-                    {item.rarity}
-                  </div>
+      <div className={`${sharedStyles.gridContainer} ${sharedStyles.grid3Col}`}>
+        {currentItems.map((item) => {
+          const affordable = canPurchase(item);
+          return (
+            <Card
+              key={item.id}
+              variant={affordable ? "default" : "dark"}
+              className={`${sharedStyles.itemCard} ${
+                !affordable ? sharedStyles.disabled : ""
+              }`}
+              onClick={() => setSelectedItem(item)}
+            >
+              <div className={sharedStyles.itemHeader}>
+                <div
+                  className={sharedStyles.itemIcon}
+                  style={{ color: getRarityColor(item.rarity) }}
+                >
+                  {item.icon}
                 </div>
-
-                <div className={styles.itemInfo}>
-                  <h4
-                    className={styles.itemName}
-                    style={{ color: getRarityColor(item.rarity) }}
-                  >
-                    {item.name}
-                  </h4>
-                  <p className={styles.itemDescription}>{item.description}</p>
-
-                  <div className={styles.itemPrice}>
-                    <span className={styles.priceIcon}>
-                      {item.price.type === "gold" ? "💰" : "💎"}
-                    </span>
-                    <span className={styles.priceAmount}>
-                      {item.price.amount}
-                    </span>
-                  </div>
-
-                  {item.requirement && (
-                    <div className={styles.requirement}>
-                      <span className={styles.requirementText}>
-                        {item.requirement}
-                      </span>
-                    </div>
-                  )}
+                <div
+                  className={sharedStyles.rarityBadge}
+                  style={{ backgroundColor: getRarityColor(item.rarity) }}
+                >
+                  {item.rarity}
                 </div>
+              </div>
 
-                <Button
-                  variant={affordable ? "primary" : "ghost"}
-                  size="small"
-                  disabled={!affordable}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handlePurchase(item);
+              <div className={sharedStyles.itemInfo}>
+                <h4
+                  className={sharedStyles.itemName}
+                  style={{ color: getRarityColor(item.rarity) }}
+                >
+                  {item.name}
+                </h4>
+                <p className={sharedStyles.itemDescription}>
+                  {item.description}
+                </p>
+
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    background: "rgba(0, 0, 0, 0.6)",
+                    padding: "0.5rem 0.75rem",
+                    borderRadius: "8px",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    margin: "0.75rem 0",
                   }}
                 >
-                  {affordable ? "购买" : "不足"}
-                </Button>
-              </Card>
-            );
-          })}
-        </div>
+                  <span style={{ fontSize: "1.1rem" }}>
+                    {item.price.type === "gold" ? "💰" : "💎"}
+                  </span>
+                  <span
+                    style={{
+                      color: "#ffffff",
+                      fontWeight: "bold",
+                      fontSize: "1rem",
+                    }}
+                  >
+                    {item.price.amount}
+                  </span>
+                </div>
+
+                {item.requirement && (
+                  <div
+                    style={{
+                      background: "rgba(255, 193, 7, 0.1)",
+                      border: "1px solid rgba(255, 193, 7, 0.3)",
+                      borderRadius: "6px",
+                      padding: "0.4rem 0.6rem",
+                      margin: "0.5rem 0",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: "#ffeb3b",
+                        fontSize: "0.8rem",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {item.requirement}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <Button
+                variant={affordable ? "primary" : "ghost"}
+                size="small"
+                disabled={!affordable}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePurchase(item);
+                }}
+              >
+                {affordable ? "购买" : "不足"}
+              </Button>
+            </Card>
+          );
+        })}
       </div>
 
       {selectedItem && (
-        <div className={styles.itemDetail}>
-          <Card variant="glass" className={styles.detailPanel}>
-            <div className={styles.detailHeader}>
+        <div className={sharedStyles.modalOverlay}>
+          <Card variant="glass" className={sharedStyles.modalPanel}>
+            <div className={sharedStyles.modalHeader}>
               <div
-                className={styles.detailIcon}
+                className={sharedStyles.modalIcon}
                 style={{ color: getRarityColor(selectedItem.rarity) }}
               >
                 {selectedItem.icon}
               </div>
-              <div className={styles.detailInfo}>
+              <div className={sharedStyles.modalInfo}>
                 <h3 style={{ color: getRarityColor(selectedItem.rarity) }}>
                   {selectedItem.name}
                 </h3>
                 <div
-                  className={styles.detailRarity}
-                  style={{ color: getRarityColor(selectedItem.rarity) }}
+                  style={{
+                    fontSize: "0.9rem",
+                    fontWeight: "bold",
+                    textTransform: "uppercase",
+                    opacity: "0.8",
+                    color: getRarityColor(selectedItem.rarity),
+                  }}
                 >
                   {selectedItem.rarity}
                 </div>
               </div>
+              <button
+                className={sharedStyles.closeButton}
+                onClick={() => setSelectedItem(null)}
+              >
+                ×
+              </button>
             </div>
 
-            <p className={styles.detailDescription}>
+            <p className={sharedStyles.modalDescription}>
               {selectedItem.description}
             </p>
 
-            <div className={styles.detailPrice}>
-              <h4>价格:</h4>
-              <div className={styles.priceInfo}>
-                <span className={styles.priceIcon}>
+            <div
+              style={{
+                background: "rgba(0,0,0,0.6)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "10px",
+                padding: "1rem",
+                marginBottom: "1.5rem",
+              }}
+            >
+              <h4
+                style={{
+                  color: "#ffffff",
+                  margin: "0 0 0.5rem 0",
+                  fontSize: "1rem",
+                }}
+              >
+                价格:
+              </h4>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  fontSize: "1.2rem",
+                }}
+              >
+                <span style={{ fontSize: "1.3rem" }}>
                   {selectedItem.price.type === "gold" ? "💰" : "💎"}
                 </span>
-                <span className={styles.priceAmount}>
+                <span
+                  style={{
+                    color: "#ffffff",
+                    fontWeight: "bold",
+                    textShadow: "0 0 10px rgba(255,255,255,0.3)",
+                  }}
+                >
                   {selectedItem.price.amount}
                 </span>
               </div>
             </div>
 
-            <div className={styles.detailActions}>
+            <div className={sharedStyles.modalActions}>
               <Button variant="ghost" onClick={() => setSelectedItem(null)}>
                 取消
               </Button>
               <Button
                 variant="primary"
                 disabled={!canPurchase(selectedItem)}
-                onClick={() => handlePurchase(selectedItem)}
+                onClick={() => {
+                  handlePurchase(selectedItem);
+                  setSelectedItem(null);
+                }}
               >
                 购买
               </Button>

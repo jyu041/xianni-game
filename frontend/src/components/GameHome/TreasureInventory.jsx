@@ -1,7 +1,9 @@
-// frontend/src/components/inventory/TreasureInventory.jsx
+// frontend/src/components/GameHome/TreasureInventory.jsx
 import { useState, useEffect } from "react";
 import elementService from "../../services/elementService";
-import styles from "./TreasureInventory.module.css";
+import Card from "../ui/Card";
+import Button from "../ui/Button";
+import sharedStyles from "./SharedDisplay.module.css";
 
 const TreasureInventory = ({ playerData, onTreasureUpgrade }) => {
   const [selectedTreasure, setSelectedTreasure] = useState("tianniSword");
@@ -168,144 +170,375 @@ const TreasureInventory = ({ playerData, onTreasureUpgrade }) => {
   };
 
   return (
-    <div className={styles.treasureInventory}>
-      <div className={styles.content}>
-        {/* Treasure List */}
-        <div className={styles.treasureList}>
-          <h3>法宝列表</h3>
-          <div className={styles.treasureGrid}>
-            {treasures.map((treasure) => (
-              <div
-                key={treasure.id}
-                className={`${styles.treasureCard} ${
-                  selectedTreasure === treasure.id ? styles.selected : ""
-                } ${treasure.equipped ? styles.equipped : ""}`}
-                onClick={() => setSelectedTreasure(treasure.id)}
-                style={{
-                  borderColor: getRarityColor(treasure.rarity),
-                }}
-              >
-                <div className={styles.treasureIcon}>
-                  <span className={styles.weaponIcon}>⚔️</span>
-                  {treasure.locked && (
-                    <div className={styles.lockedIndicator}>🔒</div>
-                  )}
-                  {treasure.equipped && (
-                    <div className={styles.equippedIndicator}>✓</div>
-                  )}
-                </div>
+    <div className={sharedStyles.displayContainer}>
+      <div className={sharedStyles.displayHeader}>
+        <h2>法宝背包</h2>
+        <p>查看和管理你的法宝收藏</p>
+      </div>
 
-                <div className={styles.treasureInfo}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 2fr",
+          gap: "2rem",
+          height: "100%",
+        }}
+      >
+        {/* Treasure List */}
+        <div className={sharedStyles.statsSection}>
+          <Card variant="default" style={{ padding: "1.5rem" }}>
+            <h3
+              style={{
+                color: "#ffffff",
+                margin: "0 0 1rem 0",
+                fontSize: "1.2rem",
+                textAlign: "center",
+              }}
+            >
+              法宝列表
+            </h3>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+            >
+              {treasures.map((treasure) => (
+                <Card
+                  key={treasure.id}
+                  variant={
+                    selectedTreasure === treasure.id ? "primary" : "default"
+                  }
+                  className={`${sharedStyles.itemCard} ${
+                    selectedTreasure === treasure.id
+                      ? sharedStyles.selected
+                      : ""
+                  } ${treasure.equipped ? sharedStyles.equipped : ""}`}
+                  onClick={() => setSelectedTreasure(treasure.id)}
+                  style={{
+                    borderColor: getRarityColor(treasure.rarity),
+                    padding: "1rem",
+                    minHeight: "auto",
+                  }}
+                >
                   <div
-                    className={styles.treasureName}
-                    style={{ color: getRarityColor(treasure.rarity) }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1rem",
+                    }}
                   >
-                    {treasure.name}
+                    <div style={{ position: "relative" }}>
+                      <div
+                        style={{
+                          fontSize: "2rem",
+                          color: getRarityColor(treasure.rarity),
+                          filter: "drop-shadow(0 0 10px currentColor)",
+                        }}
+                      >
+                        ⚔️
+                      </div>
+                      {treasure.locked && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "-5px",
+                            right: "-5px",
+                            fontSize: "1rem",
+                            filter: "drop-shadow(0 0 5px rgba(255, 0, 0, 0.8))",
+                          }}
+                        >
+                          🔒
+                        </div>
+                      )}
+                      {treasure.equipped && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "-5px",
+                            left: "-5px",
+                            background: "#00ff00",
+                            color: "#000000",
+                            fontSize: "0.8rem",
+                            fontWeight: "bold",
+                            padding: "0.2rem",
+                            borderRadius: "50%",
+                            width: "20px",
+                            height: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            boxShadow: "0 0 10px rgba(0, 255, 0, 0.5)",
+                          }}
+                        >
+                          ✓
+                        </div>
+                      )}
+                    </div>
+
+                    <div
+                      style={{
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.25rem",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "1rem",
+                          color: getRarityColor(treasure.rarity),
+                          textShadow: "0 0 10px currentColor",
+                        }}
+                      >
+                        {treasure.name}
+                      </div>
+                      <div
+                        style={{
+                          color: "rgba(255, 255, 255, 0.8)",
+                          fontSize: "0.9rem",
+                          fontWeight: "600",
+                        }}
+                      >
+                        Lv.{treasure.level}/{treasure.maxLevel}
+                        {treasure.hasMutation && (
+                          <span
+                            style={{
+                              color: "#ffd700",
+                              fontSize: "1.2rem",
+                              marginLeft: "0.5rem",
+                              filter: "drop-shadow(0 0 5px #ffd700)",
+                              animation: "sparkle 2s ease-in-out infinite",
+                            }}
+                          >
+                            ★
+                          </span>
+                        )}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.8rem",
+                          fontWeight: "500",
+                          color: getElementColor(treasure.element),
+                          textShadow: "0 0 5px currentColor",
+                        }}
+                      >
+                        {elementService.getElementName(treasure.element)}属性
+                      </div>
+                    </div>
                   </div>
-                  <div className={styles.treasureLevel}>
-                    Lv.{treasure.level}/{treasure.maxLevel}
-                    {treasure.hasMutation && (
-                      <span className={styles.mutationBadge}>★</span>
-                    )}
-                  </div>
-                  <div
-                    className={styles.treasureElement}
-                    style={{ color: getElementColor(treasure.element) }}
-                  >
-                    {elementService.getElementName(treasure.element)}属性
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                </Card>
+              ))}
+            </div>
+          </Card>
         </div>
 
         {/* Treasure Details */}
-        <div className={styles.treasureDetails}>
+        <div style={{ overflow: "auto", maxHeight: "70vh" }}>
           {selectedTreasureData && (
-            <>
-              <div className={styles.detailsHeader}>
-                <div className={styles.treasureTitle}>
-                  <h3
-                    style={{
-                      color: getRarityColor(selectedTreasureData.rarity),
-                    }}
-                  >
-                    {selectedTreasureData.name}
-                    {selectedTreasureData.hasMutation && (
-                      <span className={styles.mutationIndicator}>五行寂灭</span>
-                    )}
-                  </h3>
-                  <div className={styles.levelInfo}>
-                    等级 {selectedTreasureData.level}/
-                    {selectedTreasureData.maxLevel}
-                  </div>
+            <Card variant="default" style={{ padding: "1.5rem" }}>
+              <div
+                style={{
+                  marginBottom: "1.5rem",
+                  paddingBottom: "1rem",
+                  borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+                }}
+              >
+                <h3
+                  style={{
+                    color: getRarityColor(selectedTreasureData.rarity),
+                    margin: "0 0 0.5rem 0",
+                    fontSize: "1.8rem",
+                    textShadow: "0 0 15px currentColor",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                  }}
+                >
+                  {selectedTreasureData.name}
+                  {selectedTreasureData.hasMutation && (
+                    <span
+                      style={{
+                        background:
+                          "linear-gradient(45deg, #ff6b6b, #ffd93d, #6bcf7f, #4ecdc4, #45b7d1)",
+                        backgroundSize: "200% 200%",
+                        animation: "rainbowFlow 3s ease infinite",
+                        color: "#000000",
+                        padding: "0.3rem 0.8rem",
+                        borderRadius: "15px",
+                        fontSize: "0.9rem",
+                        fontWeight: "bold",
+                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.5)",
+                      }}
+                    >
+                      五行寂灭
+                    </span>
+                  )}
+                </h3>
+                <div
+                  style={{
+                    color: "rgba(255, 255, 255, 0.8)",
+                    fontSize: "1.1rem",
+                    fontWeight: "600",
+                  }}
+                >
+                  等级 {selectedTreasureData.level}/
+                  {selectedTreasureData.maxLevel}
                 </div>
               </div>
 
-              <div className={styles.description}>
-                <p>{selectedTreasureData.description}</p>
+              <div
+                style={{
+                  marginBottom: "1.5rem",
+                  padding: "1rem",
+                  background: "rgba(138, 43, 226, 0.1)",
+                  border: "1px solid rgba(138, 43, 226, 0.3)",
+                  borderRadius: "10px",
+                }}
+              >
+                <p
+                  style={{
+                    color: "rgba(255, 255, 255, 0.9)",
+                    margin: "0",
+                    fontStyle: "italic",
+                    lineHeight: "1.6",
+                    textAlign: "center",
+                  }}
+                >
+                  {selectedTreasureData.description}
+                </p>
               </div>
 
               {/* Current Ability */}
               {ability && (
-                <div className={styles.abilitySection}>
+                <div className={sharedStyles.statsSection}>
                   <h4>当前能力</h4>
-                  <div
-                    className={`${styles.abilityCard} ${
-                      ability.special ? styles.special : ""
-                    }`}
+                  <Card
+                    variant={ability.special ? "primary" : "default"}
+                    style={{
+                      padding: "1rem",
+                      border: ability.special ? "2px solid #ffd700" : undefined,
+                      boxShadow: ability.special
+                        ? "0 0 20px rgba(255, 215, 0, 0.3)"
+                        : undefined,
+                    }}
                   >
-                    <div className={styles.abilityHeader}>
-                      <span className={styles.abilityName}>{ability.name}</span>
-                      <span className={styles.abilityHotkey}>空格键</span>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      <span
+                        style={{
+                          color: "#8a2be2",
+                          fontWeight: "bold",
+                          fontSize: "1.1rem",
+                          textShadow: "0 0 10px rgba(138, 43, 226, 0.5)",
+                        }}
+                      >
+                        {ability.name}
+                      </span>
+                      <span
+                        style={{
+                          background: "rgba(255, 255, 255, 0.2)",
+                          color: "#ffffff",
+                          padding: "0.3rem 0.6rem",
+                          borderRadius: "8px",
+                          fontSize: "0.8rem",
+                          fontWeight: "bold",
+                          border: "1px solid rgba(255, 255, 255, 0.3)",
+                        }}
+                      >
+                        空格键
+                      </span>
                     </div>
-                    <div className={styles.abilityDescription}>
+                    <div
+                      style={{
+                        color: "rgba(255, 255, 255, 0.9)",
+                        marginBottom: "1rem",
+                        lineHeight: "1.4",
+                      }}
+                    >
                       {ability.description}
                     </div>
-                    <div className={styles.abilityStats}>
-                      <div className={styles.stat}>
-                        <span className={styles.statLabel}>伤害:</span>
-                        <span className={styles.statValue}>
-                          {ability.damage}
-                        </span>
-                      </div>
-                      <div className={styles.stat}>
-                        <span className={styles.statLabel}>范围:</span>
-                        <span className={styles.statValue}>
-                          {ability.aoeSize}
-                        </span>
-                      </div>
-                      <div className={styles.stat}>
-                        <span className={styles.statLabel}>冷却:</span>
-                        <span className={styles.statValue}>
-                          {ability.cooldown}
-                        </span>
-                      </div>
-                      <div className={styles.stat}>
-                        <span className={styles.statLabel}>灵气:</span>
-                        <span className={styles.statValue}>
-                          {ability.manaCost}
-                        </span>
-                      </div>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: "0.5rem",
+                      }}
+                    >
+                      {[
+                        { label: "伤害:", value: ability.damage },
+                        { label: "范围:", value: ability.aoeSize },
+                        { label: "冷却:", value: ability.cooldown },
+                        { label: "灵气:", value: ability.manaCost },
+                      ].map((stat, index) => (
+                        <div
+                          key={index}
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            padding: "0.3rem 0.5rem",
+                            background: "rgba(255, 255, 255, 0.05)",
+                            borderRadius: "6px",
+                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                          }}
+                        >
+                          <span
+                            style={{
+                              color: "rgba(255, 255, 255, 0.7)",
+                              fontSize: "0.9rem",
+                            }}
+                          >
+                            {stat.label}
+                          </span>
+                          <span
+                            style={{
+                              color: "#ffffff",
+                              fontWeight: "600",
+                              fontSize: "0.9rem",
+                            }}
+                          >
+                            {stat.value}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                  </div>
+                  </Card>
                 </div>
               )}
 
               {/* Upgrade Section */}
-              <div className={styles.upgradeSection}>
+              <div className={sharedStyles.statsSection}>
                 <h4>升级</h4>
                 {canUpgrade(selectedTreasureData) ? (
-                  <div className={styles.upgradeInfo}>
-                    <p>升级到 Lv.{selectedTreasureData.level + 1}</p>
-                    <div className={styles.upgradeCost}>
-                      <span>
+                  <Card
+                    variant="default"
+                    style={{
+                      background: "rgba(0, 255, 0, 0.1)",
+                      border: "1px solid rgba(0, 255, 0, 0.3)",
+                      padding: "1rem",
+                      textAlign: "center",
+                    }}
+                  >
+                    <p
+                      style={{
+                        color: "rgba(255, 255, 255, 0.9)",
+                        margin: "0 0 0.5rem 0",
+                        fontWeight: "600",
+                      }}
+                    >
+                      升级到 Lv.{selectedTreasureData.level + 1}
+                    </p>
+                    <div style={{ marginBottom: "1rem" }}>
+                      <span style={{ color: "#ffd700", fontWeight: "bold" }}>
                         消耗: {getUpgradeCost(selectedTreasureData)} 灵石
                       </span>
                     </div>
-                    <button
-                      className={styles.upgradeButton}
+                    <Button
+                      variant="primary"
                       onClick={() =>
                         onTreasureUpgrade &&
                         onTreasureUpgrade(selectedTreasureData.id)
@@ -315,43 +548,146 @@ const TreasureInventory = ({ playerData, onTreasureUpgrade }) => {
                       }
                     >
                       升级法宝
-                    </button>
-                  </div>
+                    </Button>
+                  </Card>
                 ) : selectedTreasureData.hasMutation ? (
-                  <div className={styles.maxLevelInfo}>
-                    <p>✨ 已达到终极形态 - 五行寂灭</p>
-                    <p>天逆剑已获得所有元素之力，无法再次升级</p>
-                  </div>
+                  <Card
+                    variant="default"
+                    style={{
+                      background: "rgba(255, 215, 0, 0.1)",
+                      border: "1px solid rgba(255, 215, 0, 0.3)",
+                      padding: "1rem",
+                      textAlign: "center",
+                    }}
+                  >
+                    <p
+                      style={{
+                        color: "rgba(255, 255, 255, 0.9)",
+                        margin: "0.25rem 0",
+                      }}
+                    >
+                      ✨ 已达到终极形态 - 五行寂灭
+                    </p>
+                    <p
+                      style={{
+                        color: "rgba(255, 255, 255, 0.9)",
+                        margin: "0.25rem 0",
+                      }}
+                    >
+                      天逆剑已获得所有元素之力，无法再次升级
+                    </p>
+                  </Card>
                 ) : (
-                  <div className={styles.maxLevelInfo}>
-                    <p>已达到最高等级</p>
-                    <p>需要完成"大元素使"成就解锁终极形态</p>
-                  </div>
+                  <Card
+                    variant="default"
+                    style={{
+                      background: "rgba(255, 215, 0, 0.1)",
+                      border: "1px solid rgba(255, 215, 0, 0.3)",
+                      padding: "1rem",
+                      textAlign: "center",
+                    }}
+                  >
+                    <p
+                      style={{
+                        color: "rgba(255, 255, 255, 0.9)",
+                        margin: "0.25rem 0",
+                      }}
+                    >
+                      已达到最高等级
+                    </p>
+                    <p
+                      style={{
+                        color: "rgba(255, 255, 255, 0.9)",
+                        margin: "0.25rem 0",
+                      }}
+                    >
+                      需要完成"大元素使"成就解锁终极形态
+                    </p>
+                  </Card>
                 )}
               </div>
 
               {/* Mutation Info */}
               {selectedTreasureData.level === 10 &&
                 !selectedTreasureData.hasMutation && (
-                  <div className={styles.mutationSection}>
-                    <h4>终极突变</h4>
-                    <div className={styles.mutationInfo}>
-                      <p>
+                  <Card
+                    variant="default"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 140, 0, 0.1))",
+                      border: "2px solid rgba(255, 215, 0, 0.5)",
+                      padding: "1.5rem",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <h4
+                      style={{
+                        color: "#ffd700",
+                        margin: "0 0 1rem 0",
+                        fontSize: "1.3rem",
+                        textShadow: "0 0 10px rgba(255, 215, 0, 0.5)",
+                        textAlign: "center",
+                      }}
+                    >
+                      终极突变
+                    </h4>
+                    <div style={{ textAlign: "center" }}>
+                      <p
+                        style={{
+                          color: "rgba(255, 255, 255, 0.9)",
+                          margin: "0 0 1rem 0",
+                        }}
+                      >
                         当所有元素等级达到满级(100)时，天逆剑将解锁终极形态：
                       </p>
-                      <div className={styles.mutationPreview}>
-                        <span className={styles.mutationName}>五行寂灭</span>
-                        <span className={styles.mutationDescription}>
+                      <div
+                        style={{
+                          background: "rgba(0, 0, 0, 0.6)",
+                          border: "1px solid rgba(255, 215, 0, 0.4)",
+                          borderRadius: "10px",
+                          padding: "1rem",
+                          marginBottom: "1rem",
+                        }}
+                      >
+                        <span
+                          style={{
+                            display: "block",
+                            color: "#ffd700",
+                            fontWeight: "bold",
+                            fontSize: "1.2rem",
+                            marginBottom: "0.5rem",
+                            textShadow: "0 0 10px rgba(255, 215, 0, 0.5)",
+                          }}
+                        >
+                          五行寂灭
+                        </span>
+                        <span
+                          style={{
+                            color: "rgba(255, 255, 255, 0.8)",
+                            fontStyle: "italic",
+                          }}
+                        >
                           同时释放五种元素的斩击组合，造成75%最大生命值伤害
                         </span>
                       </div>
-                      <div className={styles.mutationRequirement}>
-                        <span>需要成就: 大元素使</span>
+                      <div>
+                        <span
+                          style={{
+                            color: "#ff6b6b",
+                            fontWeight: "bold",
+                            padding: "0.5rem 1rem",
+                            background: "rgba(255, 107, 107, 0.1)",
+                            border: "1px solid rgba(255, 107, 107, 0.3)",
+                            borderRadius: "8px",
+                          }}
+                        >
+                          需要成就: 大元素使
+                        </span>
                       </div>
                     </div>
-                  </div>
+                  </Card>
                 )}
-            </>
+            </Card>
           )}
         </div>
       </div>
