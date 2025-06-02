@@ -17,6 +17,12 @@ const SidebarMenu = ({ activeMenu, onMenuSelect, playerData }) => {
       className: "inventory",
     },
     {
+      id: "equipment",
+      label: "装备系统",
+      icon: "⚖️",
+      className: "equipment",
+    },
+    {
       id: "cultivation",
       label: "修为境界",
       icon: "🧘",

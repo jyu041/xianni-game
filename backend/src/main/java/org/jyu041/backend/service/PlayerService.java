@@ -21,6 +21,9 @@ public class PlayerService {
     @Autowired
     private ElementService elementService;
 
+    @Autowired
+    private EquipmentService equipmentService;
+
     public List<Player> getAllPlayers() {
         return playerRepository.findAllByOrderByLastPlayedDesc();
     }
@@ -40,6 +43,7 @@ public class PlayerService {
 
     public Player updatePlayer(Player player) {
         player.setLastPlayed(LocalDateTime.now());
+        player.calculateStats(); // Recalculate stats when updating
         return playerRepository.save(player);
     }
 
@@ -92,6 +96,58 @@ public class PlayerService {
             if (!unlockedStages.contains(stageId)) {
                 unlockedStages.add(stageId);
                 player.setUnlockedStages(unlockedStages);
+                return playerRepository.save(player);
+            }
+        }
+        return null;
+    }
+
+    // New equipment methods
+    public Player equipItem(String playerId, String itemId) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            Map<String, Object> item = equipmentService.getEquipmentById(itemId);
+
+            if (item != null) {
+                // Check level requirement
+                int levelReq = (Integer) item.get("levelRequirement");
+                if (player.getLevel() < levelReq) {
+                    return null; // Not high enough level
+                }
+
+                List<Map<String, Object>> equipped = player.getEquippedItems();
+                if (equipped == null) {
+                    equipped = new ArrayList<>();
+                }
+
+                // Check if already equipped
+                boolean alreadyEquipped = equipped.stream()
+                        .anyMatch(equippedItem -> itemId.equals(equippedItem.get("id")));
+
+                if (!alreadyEquipped) {
+                    // Create equipped item entry
+                    Map<String, Object> equippedItem = new HashMap<>(item);
+                    equippedItem.put("equippedAt", System.currentTimeMillis());
+                    equipped.add(equippedItem);
+
+                    player.setEquippedItems(equipped);
+                    return playerRepository.save(player);
+                }
+            }
+        }
+        return null;
+    }
+
+    public Player unequipItem(String playerId, String itemId) {
+        Optional<Player> playerOpt = playerRepository.findById(playerId);
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            List<Map<String, Object>> equipped = player.getEquippedItems();
+
+            if (equipped != null) {
+                equipped.removeIf(item -> itemId.equals(item.get("id")));
+                player.setEquippedItems(equipped);
                 return playerRepository.save(player);
             }
         }
@@ -241,7 +297,7 @@ public class PlayerService {
         Optional<Player> playerOpt = playerRepository.findById(playerId);
         if (playerOpt.isPresent()) {
             Player player = playerOpt.get();
-            int newMana = Math.min(player.getMaxMana(), player.getMana() + mana);
+            int newMana = Math.min(player.getCurrentMaxMana(), player.getMana() + mana);
             player.setMana(newMana);
             return playerRepository.save(player);
         }

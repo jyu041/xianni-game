@@ -6,6 +6,7 @@ import StageSelection from "/src/components/GameHome/StageSelection";
 import ElementDisplay from "/src/components/GameHome/ElementDisplay";
 import TreasureInventory from "/src/components/GameHome/TreasureInventory";
 import CultivationDisplay from "/src/components/GameHome/CultivationDisplay";
+import EquipmentDisplay from "/src/components/GameHome/EquipmentDisplay";
 import StoreDisplay from "/src/components/GameHome/StoreDisplay";
 import GachaDisplay from "/src/components/GameHome/GachaDisplay";
 import AchievementsDisplay from "/src/components/GameHome/AchievementsDisplay";
@@ -62,6 +63,16 @@ const GameHome = ({ saveData, onNavigate }) => {
       await loadGameData();
     } catch (error) {
       console.error("Failed to update element:", error);
+    }
+  };
+
+  const handleEquipmentChange = async (updatedPlayer) => {
+    try {
+      setPlayerData(updatedPlayer);
+      // Optionally reload full game data
+      await loadGameData();
+    } catch (error) {
+      console.error("Failed to update equipment:", error);
     }
   };
 
@@ -199,6 +210,13 @@ const GameHome = ({ saveData, onNavigate }) => {
           <ElementDisplay
             playerData={playerData}
             onElementChange={handleElementChange}
+          />
+        );
+      case "equipment":
+        return (
+          <EquipmentDisplay
+            playerData={playerData}
+            onEquipmentChange={handleEquipmentChange}
           />
         );
       case "store":
