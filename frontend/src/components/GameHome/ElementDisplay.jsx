@@ -1,7 +1,8 @@
 // frontend/src/components/GameHome/ElementDisplay.jsx
 import { useState, useEffect } from "react";
+import Card from "../ui/Card";
 import elementService from "../../services/elementService";
-import styles from "./ElementDisplay.module.css";
+import sharedStyles from "./SharedDisplay.module.css";
 
 const ElementDisplay = ({ playerData, onElementChange }) => {
   const [elementInfo, setElementInfo] = useState(null);
@@ -121,12 +122,27 @@ const ElementDisplay = ({ playerData, onElementChange }) => {
   };
 
   if (!elementInfo) {
-    return <div className={styles.loading}>加载中...</div>;
+    return (
+      <div className={sharedStyles.displayContainer}>
+        <div className={sharedStyles.loading}>
+          <div className={sharedStyles.loadingSpinner} />
+          <p>加载中...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className={styles.elementDisplay}>
-      <div className={styles.elementGrid}>
+    <div className={sharedStyles.displayContainer}>
+      <div className={sharedStyles.displayHeader}>
+        <h2>元素修炼</h2>
+        <p>修炼五行元素，提升你的修仙能力</p>
+      </div>
+
+      <div
+        className={sharedStyles.gridContainer}
+        style={{ gridTemplateColumns: "repeat(5, 1fr)" }}
+      >
         {Object.keys(elementInfo.names).map((element) => {
           const level = getElementLevel(element);
           const progress = getElementProgress(element);
@@ -134,10 +150,11 @@ const ElementDisplay = ({ playerData, onElementChange }) => {
           const elementColor = elementService.getElementColor(element);
 
           return (
-            <div
+            <Card
               key={element}
-              className={`${styles.elementCard} ${
-                isPrimary ? styles.primary : ""
+              variant={isPrimary ? "primary" : "default"}
+              className={`${sharedStyles.itemCard} ${
+                isPrimary ? sharedStyles.selected : ""
               }`}
               onClick={() => handleElementSelect(element)}
               style={{
@@ -145,94 +162,300 @@ const ElementDisplay = ({ playerData, onElementChange }) => {
               }}
             >
               <div
-                className={styles.elementIcon}
-                style={{ backgroundColor: elementColor }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  height: "100%",
+                }}
               >
-                {elementInfo.names[element]}
-              </div>
-
-              <div className={styles.elementInfo}>
-                <h4 style={{ color: elementColor }}>
-                  {elementInfo.names[element]}属性
-                </h4>
-                <p className={styles.level}>等级 {level}/100</p>
-
-                <div className={styles.progressBar}>
-                  <div
-                    className={styles.progressFill}
-                    style={{
-                      width: `${progress}%`,
-                      backgroundColor: elementColor,
-                    }}
-                  />
+                <div
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                    color: "white",
+                    backgroundColor: elementColor,
+                    margin: "0 auto 1rem auto",
+                    boxShadow: "0 4px 15px rgba(0,0,0,0.5)",
+                    border: "2px solid rgba(255,255,255,0.3)",
+                  }}
+                >
+                  {elementInfo.names[element]}
                 </div>
 
-                <p className={styles.description}>
-                  {elementInfo.descriptions[element]}
-                </p>
+                <div
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <h4
+                    style={{
+                      color: elementColor,
+                      margin: "0 0 0.5rem 0",
+                      fontSize: "1rem",
+                    }}
+                  >
+                    {elementInfo.names[element]}属性
+                  </h4>
+                  <p
+                    style={{
+                      color: "rgba(255,255,255,0.8)",
+                      margin: "0 0 0.75rem 0",
+                      fontSize: "0.9rem",
+                      fontWeight: "600",
+                    }}
+                  >
+                    等级 {level}/100
+                  </p>
 
-                {isPrimary && (
-                  <div className={styles.primaryBadge}>主要属性</div>
-                )}
+                  <div
+                    className={sharedStyles.progressContainer}
+                    style={{ width: "100%" }}
+                  >
+                    <div className={sharedStyles.progressBar}>
+                      <div
+                        className={sharedStyles.progressFill}
+                        style={{
+                          width: `${progress}%`,
+                          backgroundColor: elementColor,
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <p
+                    style={{
+                      color: "rgba(255,255,255,0.7)",
+                      fontSize: "0.8rem",
+                      margin: "0 0 1rem 0",
+                      lineHeight: "1.4",
+                      flex: 1,
+                    }}
+                  >
+                    {elementInfo.descriptions[element]}
+                  </p>
+
+                  {isPrimary && (
+                    <div
+                      style={{
+                        background: "linear-gradient(45deg, #ffd700, #ffed4e)",
+                        color: "#000000",
+                        padding: "0.2rem 0.6rem",
+                        borderRadius: "12px",
+                        fontSize: "0.7rem",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        boxShadow: "0 2px 8px rgba(255,215,0,0.4)",
+                      }}
+                    >
+                      主要属性
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            </Card>
           );
         })}
       </div>
 
-      <div className={styles.tianniSwordInfo}>
-        <h4>天逆剑</h4>
-        <div className={styles.swordLevel}>
-          等级 {playerData?.tianniSwordLevel || 1}/10
-          {playerData?.hasTianniSwordMutation && (
-            <span className={styles.mutationBadge}>五行寂灭</span>
-          )}
-        </div>
-
-        {playerData?.tianniSwordLevel && (
-          <div className={styles.abilityInfo}>
-            {(() => {
-              const ability = getTianniSwordAbility(
-                playerData.tianniSwordLevel,
-                playerData.hasTianniSwordMutation
-              );
-              return (
-                <div className={styles.abilityDetails}>
-                  <p>
-                    <strong>{ability.name}</strong>
-                  </p>
-                  <p>{ability.description}</p>
-                  {ability.damage && <p>伤害: {ability.damage}</p>}
-                  {ability.aoeSize && <p>范围: {ability.aoeSize}</p>}
-                </div>
-              );
-            })()}
+      {/* Tianni Sword Info */}
+      <div className={sharedStyles.statsSection}>
+        <Card
+          variant="primary"
+          style={{
+            background: "rgba(0,0,0,0.8)",
+            border: "2px solid rgba(138,43,226,0.6)",
+            padding: "1.5rem",
+          }}
+        >
+          <h4
+            style={{
+              color: "#8a2be2",
+              margin: "0 0 1rem 0",
+              fontSize: "1.4rem",
+              textAlign: "center",
+              textShadow: "0 0 10px rgba(138,43,226,0.5)",
+            }}
+          >
+            天逆剑
+          </h4>
+          <div
+            style={{
+              color: "rgba(255,255,255,0.9)",
+              fontSize: "1.1rem",
+              fontWeight: "600",
+              textAlign: "center",
+              marginBottom: "1rem",
+            }}
+          >
+            等级 {playerData?.tianniSwordLevel || 1}/10
+            {playerData?.hasTianniSwordMutation && (
+              <span
+                style={{
+                  background:
+                    "linear-gradient(45deg, #ff6b6b, #ffd93d, #6bcf7f, #4ecdc4, #45b7d1)",
+                  backgroundSize: "200% 200%",
+                  animation: "rainbowFlow 3s ease infinite",
+                  color: "#000000",
+                  padding: "0.25rem 0.75rem",
+                  borderRadius: "15px",
+                  fontSize: "0.8rem",
+                  fontWeight: "bold",
+                  marginLeft: "0.5rem",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.5)",
+                }}
+              >
+                五行寂灭
+              </span>
+            )}
           </div>
-        )}
+
+          {playerData?.tianniSwordLevel && (
+            <div
+              style={{
+                background: "rgba(138,43,226,0.1)",
+                border: "1px solid rgba(138,43,226,0.3)",
+                borderRadius: "10px",
+                padding: "1rem",
+                textAlign: "center",
+              }}
+            >
+              {(() => {
+                const ability = getTianniSwordAbility(
+                  playerData.tianniSwordLevel,
+                  playerData.hasTianniSwordMutation
+                );
+                return (
+                  <div>
+                    <p
+                      style={{
+                        color: "rgba(255,255,255,0.9)",
+                        margin: "0.25rem 0",
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      <strong style={{ color: "#8a2be2" }}>
+                        {ability.name}
+                      </strong>
+                    </p>
+                    <p
+                      style={{
+                        color: "rgba(255,255,255,0.9)",
+                        margin: "0.25rem 0",
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      {ability.description}
+                    </p>
+                    {ability.damage && (
+                      <p
+                        style={{
+                          color: "rgba(255,255,255,0.9)",
+                          margin: "0.25rem 0",
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        伤害: {ability.damage}
+                      </p>
+                    )}
+                    {ability.aoeSize && (
+                      <p
+                        style={{
+                          color: "rgba(255,255,255,0.9)",
+                          margin: "0.25rem 0",
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        范围: {ability.aoeSize}
+                      </p>
+                    )}
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+        </Card>
       </div>
 
-      <div className={styles.elementCounters}>
-        <h4>五行相克</h4>
-        <div className={styles.counterGrid}>
-          {Object.keys(elementInfo.names).map((element) => {
-            const counters = elementInfo.counters[element];
-            return (
-              <div key={element} className={styles.counterRow}>
-                <span
-                  style={{ color: elementService.getElementColor(element) }}
+      {/* Element Counters */}
+      <div className={sharedStyles.statsSection}>
+        <Card
+          variant="default"
+          style={{ background: "rgba(0,0,0,0.6)", padding: "1.5rem" }}
+        >
+          <h4
+            style={{
+              color: "#ffffff",
+              margin: "0 0 1rem 0",
+              fontSize: "1.2rem",
+              textAlign: "center",
+            }}
+          >
+            五行相克
+          </h4>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr",
+              gap: "0.75rem",
+            }}
+          >
+            {Object.keys(elementInfo.names).map((element) => {
+              const counters = elementInfo.counters[element];
+              return (
+                <div
+                  key={element}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "1rem",
+                    padding: "0.5rem",
+                    background: "rgba(255,255,255,0.05)",
+                    borderRadius: "8px",
+                    fontWeight: "600",
+                  }}
                 >
-                  {elementInfo.names[element]}
-                </span>
-                <span>克</span>
-                <span
-                  style={{ color: elementService.getElementColor(counters) }}
-                >
-                  {elementInfo.names[counters]}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+                  <span
+                    style={{
+                      fontSize: "1rem",
+                      color: elementService.getElementColor(element),
+                    }}
+                  >
+                    {elementInfo.names[element]}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "1rem",
+                      color: "rgba(255,255,255,0.8)",
+                      fontWeight: "normal",
+                    }}
+                  >
+                    克
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "1rem",
+                      color: elementService.getElementColor(counters),
+                    }}
+                  >
+                    {elementInfo.names[counters]}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Card from "../ui/Card";
 import Button from "../ui/Button";
-import styles from "./EquipmentDisplay.module.css";
+import sharedStyles from "./SharedDisplay.module.css";
 
 const EquipmentDisplay = ({ playerData, onEquipmentChange }) => {
   const [availableEquipment, setAvailableEquipment] = useState([]);
@@ -55,7 +55,7 @@ const EquipmentDisplay = ({ playerData, onEquipmentChange }) => {
       if (response.ok) {
         const updatedPlayer = await response.json();
         onEquipmentChange && onEquipmentChange(updatedPlayer);
-        loadPlayerStats(); // Refresh stats
+        loadPlayerStats();
       }
     } catch (error) {
       console.error("Failed to equip item:", error);
@@ -76,7 +76,7 @@ const EquipmentDisplay = ({ playerData, onEquipmentChange }) => {
       if (response.ok) {
         const updatedPlayer = await response.json();
         onEquipmentChange && onEquipmentChange(updatedPlayer);
-        loadPlayerStats(); // Refresh stats
+        loadPlayerStats();
       }
     } catch (error) {
       console.error("Failed to unequip item:", error);
@@ -118,98 +118,211 @@ const EquipmentDisplay = ({ playerData, onEquipmentChange }) => {
 
   if (loading) {
     return (
-      <div className={styles.loading}>
-        <div className={styles.loadingSpinner} />
-        <p>加载装备中...</p>
+      <div className={sharedStyles.displayContainer}>
+        <div className={sharedStyles.loading}>
+          <div className={sharedStyles.loadingSpinner} />
+          <p>加载装备中...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className={styles.equipmentDisplay}>
+    <div className={sharedStyles.displayContainer}>
+      <div className={sharedStyles.displayHeader}>
+        <h2>装备系统</h2>
+        <p>装备强大的法宝来提升你的修炼属性</p>
+      </div>
+
       {/* Player Stats Panel */}
       {playerStats && (
-        <div className={styles.statsPanel}>
-          <Card variant="glass" className={styles.statsCard}>
-            <h3>角色属性</h3>
-            <div className={styles.cultivationInfo}>
-              <span className={styles.cultivation}>
-                {playerStats.cultivation}
-              </span>
-              <span className={styles.level}>等级 {playerStats.level}</span>
-            </div>
-
-            <div className={styles.statsGrid}>
-              <div className={styles.statCategory}>
-                <h4>基础属性</h4>
-                <div className={styles.statList}>
-                  <div className={styles.statItem}>
-                    <span>生命值:</span>
-                    <span>{playerStats.baseStats.health}</span>
-                  </div>
-                  <div className={styles.statItem}>
-                    <span>生命回复:</span>
-                    <span>
-                      {playerStats.baseStats.healthRegen.toFixed(1)}/秒
-                    </span>
-                  </div>
-                  <div className={styles.statItem}>
-                    <span>灵气:</span>
-                    <span>{playerStats.baseStats.mana}</span>
-                  </div>
-                  <div className={styles.statItem}>
-                    <span>灵气回复:</span>
-                    <span>{playerStats.baseStats.manaRegen.toFixed(1)}/秒</span>
-                  </div>
-                  <div className={styles.statItem}>
-                    <span>攻击力:</span>
-                    <span>{playerStats.baseStats.attack}</span>
-                  </div>
-                  <div className={styles.statItem}>
-                    <span>防御力:</span>
-                    <span>{playerStats.baseStats.defense}</span>
-                  </div>
-                </div>
+        <div className={sharedStyles.statsSection}>
+          <Card variant="glass">
+            <div style={{ padding: "1.5rem" }}>
+              <h3
+                style={{
+                  color: "#ffffff",
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                角色属性
+              </h3>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "1rem",
+                  marginBottom: "1.5rem",
+                  paddingBottom: "1rem",
+                  borderBottom: "1px solid rgba(255,255,255,0.2)",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#8a2be2",
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  {playerStats.cultivation}
+                </span>
+                <span
+                  style={{ color: "rgba(255,255,255,0.9)", fontWeight: "600" }}
+                >
+                  等级 {playerStats.level}
+                </span>
               </div>
 
-              <div className={styles.statCategory}>
-                <h4>总属性 (含装备)</h4>
-                <div className={styles.statList}>
-                  <div className={styles.statItem}>
-                    <span>生命值:</span>
-                    <span className={styles.enhanced}>
-                      {playerStats.currentStats.health}
-                    </span>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "1.5rem",
+                }}
+              >
+                <div>
+                  <h4
+                    style={{
+                      color: "#ffffff",
+                      margin: "0 0 0.75rem 0",
+                      fontSize: "1rem",
+                      textAlign: "center",
+                      paddingBottom: "0.5rem",
+                      borderBottom: "1px solid rgba(255,255,255,0.1)",
+                    }}
+                  >
+                    基础属性
+                  </h4>
+                  <div
+                    className={sharedStyles.statsGrid}
+                    style={{ gridTemplateColumns: "1fr", gap: "0.5rem" }}
+                  >
+                    {[
+                      { label: "生命值", value: playerStats.baseStats.health },
+                      {
+                        label: "生命回复",
+                        value: `${playerStats.baseStats.healthRegen.toFixed(
+                          1
+                        )}/秒`,
+                      },
+                      { label: "灵气", value: playerStats.baseStats.mana },
+                      {
+                        label: "灵气回复",
+                        value: `${playerStats.baseStats.manaRegen.toFixed(
+                          1
+                        )}/秒`,
+                      },
+                      { label: "攻击力", value: playerStats.baseStats.attack },
+                      { label: "防御力", value: playerStats.baseStats.defense },
+                    ].map((stat, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: "0.4rem 0.6rem",
+                          background: "rgba(0,0,0,0.4)",
+                          borderRadius: "6px",
+                          border: "1px solid rgba(255,255,255,0.1)",
+                        }}
+                      >
+                        <span
+                          style={{
+                            color: "rgba(255,255,255,0.7)",
+                            fontSize: "0.9rem",
+                          }}
+                        >
+                          {stat.label}:
+                        </span>
+                        <span
+                          style={{
+                            color: "#ffffff",
+                            fontWeight: "bold",
+                            fontSize: "0.9rem",
+                          }}
+                        >
+                          {stat.value}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                  <div className={styles.statItem}>
-                    <span>生命回复:</span>
-                    <span className={styles.enhanced}>
-                      {playerStats.currentStats.healthRegen.toFixed(1)}/秒
-                    </span>
-                  </div>
-                  <div className={styles.statItem}>
-                    <span>灵气:</span>
-                    <span className={styles.enhanced}>
-                      {playerStats.currentStats.mana}
-                    </span>
-                  </div>
-                  <div className={styles.statItem}>
-                    <span>灵气回复:</span>
-                    <span className={styles.enhanced}>
-                      {playerStats.currentStats.manaRegen.toFixed(1)}/秒
-                    </span>
-                  </div>
-                  <div className={styles.statItem}>
-                    <span>攻击力:</span>
-                    <span className={styles.enhanced}>
-                      {playerStats.currentStats.attack}
-                    </span>
-                  </div>
-                  <div className={styles.statItem}>
-                    <span>防御力:</span>
-                    <span className={styles.enhanced}>
-                      {playerStats.currentStats.defense}
-                    </span>
+                </div>
+
+                <div>
+                  <h4
+                    style={{
+                      color: "#ffffff",
+                      margin: "0 0 0.75rem 0",
+                      fontSize: "1rem",
+                      textAlign: "center",
+                      paddingBottom: "0.5rem",
+                      borderBottom: "1px solid rgba(255,255,255,0.1)",
+                    }}
+                  >
+                    总属性 (含装备)
+                  </h4>
+                  <div
+                    className={sharedStyles.statsGrid}
+                    style={{ gridTemplateColumns: "1fr", gap: "0.5rem" }}
+                  >
+                    {[
+                      {
+                        label: "生命值",
+                        value: playerStats.currentStats.health,
+                      },
+                      {
+                        label: "生命回复",
+                        value: `${playerStats.currentStats.healthRegen.toFixed(
+                          1
+                        )}/秒`,
+                      },
+                      { label: "灵气", value: playerStats.currentStats.mana },
+                      {
+                        label: "灵气回复",
+                        value: `${playerStats.currentStats.manaRegen.toFixed(
+                          1
+                        )}/秒`,
+                      },
+                      {
+                        label: "攻击力",
+                        value: playerStats.currentStats.attack,
+                      },
+                      {
+                        label: "防御力",
+                        value: playerStats.currentStats.defense,
+                      },
+                    ].map((stat, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: "0.4rem 0.6rem",
+                          background: "rgba(0,0,0,0.4)",
+                          borderRadius: "6px",
+                          border: "1px solid rgba(255,255,255,0.1)",
+                        }}
+                      >
+                        <span
+                          style={{
+                            color: "rgba(255,255,255,0.7)",
+                            fontSize: "0.9rem",
+                          }}
+                        >
+                          {stat.label}:
+                        </span>
+                        <span
+                          className={sharedStyles.enhanced}
+                          style={{ fontWeight: "bold", fontSize: "0.9rem" }}
+                        >
+                          {stat.value}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -219,7 +332,7 @@ const EquipmentDisplay = ({ playerData, onEquipmentChange }) => {
       )}
 
       {/* Equipment Grid */}
-      <div className={styles.equipmentGrid}>
+      <div className={`${sharedStyles.gridContainer} ${sharedStyles.grid3Col}`}>
         {availableEquipment.map((item) => {
           const equipped = isItemEquipped(item.id);
           const canEquip = canEquipItem(item);
@@ -228,53 +341,73 @@ const EquipmentDisplay = ({ playerData, onEquipmentChange }) => {
             <Card
               key={item.id}
               variant={equipped ? "primary" : canEquip ? "default" : "dark"}
-              className={`${styles.equipmentCard} ${
-                equipped ? styles.equipped : ""
-              } ${!canEquip ? styles.locked : ""}`}
+              className={`${sharedStyles.itemCard} ${
+                equipped ? sharedStyles.equipped : ""
+              } ${!canEquip ? sharedStyles.locked : ""}`}
               onClick={() => setSelectedItem(item)}
             >
-              <div className={styles.itemHeader}>
+              <div className={sharedStyles.itemHeader}>
                 <div
-                  className={styles.itemIcon}
+                  className={sharedStyles.itemIcon}
                   style={{ color: getRarityColor(item.rarity) }}
                 >
                   {item.icon}
                 </div>
                 <div
-                  className={styles.rarityBadge}
+                  className={sharedStyles.rarityBadge}
                   style={{ backgroundColor: getRarityColor(item.rarity) }}
                 >
                   {item.rarity}
                 </div>
-                {equipped && <div className={styles.equippedBadge}>已装备</div>}
+                {equipped && (
+                  <div
+                    className={`${sharedStyles.statusBadge} ${sharedStyles.equippedBadge}`}
+                  >
+                    已装备
+                  </div>
+                )}
               </div>
 
-              <div className={styles.itemInfo}>
+              <div className={sharedStyles.itemInfo}>
                 <h4
-                  className={styles.itemName}
+                  className={sharedStyles.itemName}
                   style={{ color: getRarityColor(item.rarity) }}
                 >
                   {item.name}
                 </h4>
-                <p className={styles.itemDescription}>{item.description}</p>
+                <p className={sharedStyles.itemDescription}>
+                  {item.description}
+                </p>
 
-                <div className={styles.statsPreview}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.25rem",
+                  }}
+                >
                   {Object.entries(item.stats).map(([stat, value]) => (
-                    <div key={stat} className={styles.statBonus}>
+                    <div key={stat} className={sharedStyles.statBonus}>
                       {formatStatBonus(stat, value)}
                     </div>
                   ))}
                 </div>
 
-                <div className={styles.requirements}>
-                  <span className={styles.levelReq}>
+                <div className={sharedStyles.itemDetails}>
+                  <span
+                    style={{
+                      color: "rgba(255,255,255,0.7)",
+                      fontSize: "0.8rem",
+                      fontWeight: "500",
+                    }}
+                  >
                     需要等级: {item.levelRequirement}
                   </span>
                 </div>
               </div>
 
               {!canEquip && (
-                <div className={styles.lockedOverlay}>
+                <div className={sharedStyles.lockedOverlay}>
                   <span>等级不足</span>
                 </div>
               )}
@@ -285,52 +418,114 @@ const EquipmentDisplay = ({ playerData, onEquipmentChange }) => {
 
       {/* Item Detail Modal */}
       {selectedItem && (
-        <div className={styles.itemDetail}>
-          <Card variant="glass" className={styles.detailPanel}>
-            <div className={styles.detailHeader}>
+        <div className={sharedStyles.modalOverlay}>
+          <Card variant="glass" className={sharedStyles.modalPanel}>
+            <div className={sharedStyles.modalHeader}>
               <div
-                className={styles.detailIcon}
+                className={sharedStyles.modalIcon}
                 style={{ color: getRarityColor(selectedItem.rarity) }}
               >
                 {selectedItem.icon}
               </div>
-              <div className={styles.detailInfo}>
+              <div className={sharedStyles.modalInfo}>
                 <h3 style={{ color: getRarityColor(selectedItem.rarity) }}>
                   {selectedItem.name}
                 </h3>
-                <div className={styles.detailRarity}>
+                <div
+                  style={{
+                    fontSize: "0.9rem",
+                    fontWeight: "bold",
+                    textTransform: "uppercase",
+                    opacity: "0.8",
+                    color: "rgba(255,255,255,0.7)",
+                  }}
+                >
                   {selectedItem.rarity} {selectedItem.category}
                 </div>
               </div>
               <button
-                className={styles.closeButton}
+                className={sharedStyles.closeButton}
                 onClick={() => setSelectedItem(null)}
               >
                 ×
               </button>
             </div>
 
-            <p className={styles.detailDescription}>
+            <p className={sharedStyles.modalDescription}>
               {selectedItem.description}
             </p>
 
-            <div className={styles.detailStats}>
-              <h4>属性加成</h4>
-              <div className={styles.statsList}>
+            <div
+              style={{
+                background: "rgba(0,0,0,0.6)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "10px",
+                padding: "1rem",
+                marginBottom: "1.5rem",
+              }}
+            >
+              <h4
+                style={{
+                  color: "#ffffff",
+                  margin: "0 0 0.75rem 0",
+                  fontSize: "1rem",
+                }}
+              >
+                属性加成
+              </h4>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.5rem",
+                }}
+              >
                 {Object.entries(selectedItem.stats).map(([stat, value]) => (
-                  <div key={stat} className={styles.detailStatItem}>
+                  <div
+                    key={stat}
+                    style={{
+                      color: "#4caf50",
+                      fontWeight: "600",
+                      fontSize: "0.9rem",
+                      textShadow: "0 0 5px rgba(76,175,80,0.3)",
+                    }}
+                  >
                     {formatStatBonus(stat, value)}
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className={styles.detailRequirements}>
-              <h4>装备需求</h4>
-              <p>等级: {selectedItem.levelRequirement}</p>
+            <div
+              style={{
+                background: "rgba(255,193,7,0.1)",
+                border: "1px solid rgba(255,193,7,0.3)",
+                borderRadius: "10px",
+                padding: "1rem",
+                marginBottom: "1.5rem",
+              }}
+            >
+              <h4
+                style={{
+                  color: "#ffc107",
+                  margin: "0 0 0.5rem 0",
+                  fontSize: "1rem",
+                }}
+              >
+                装备需求
+              </h4>
+              <p
+                style={{
+                  color: "rgba(255,255,255,0.9)",
+                  margin: "0",
+                  fontWeight: "500",
+                }}
+              >
+                等级: {selectedItem.levelRequirement}
+              </p>
             </div>
 
-            <div className={styles.detailActions}>
+            <div className={sharedStyles.modalActions}>
               <Button variant="ghost" onClick={() => setSelectedItem(null)}>
                 关闭
               </Button>

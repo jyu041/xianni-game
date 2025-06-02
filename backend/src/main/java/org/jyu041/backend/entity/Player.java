@@ -1,6 +1,9 @@
 // backend/src/main/java/org/jyu041/backend/entity/Player.java
 package org.jyu041.backend.entity;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
@@ -10,6 +13,8 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 @Document(collection = "players")
+@Data
+@NoArgsConstructor
 public class Player {
     @Id
     private String id;
@@ -66,18 +71,7 @@ public class Player {
     private long totalSoulsCollected;
     private long totalPlaytimeSeconds;
 
-    // Constructors
-    public Player() {
-        this.elementLevels = new HashMap<>();
-        this.elementExperience = new HashMap<>();
-        this.treasureLevels = new HashMap<>();
-        this.equippedItems = new ArrayList<>();
-        initializeElements();
-        initializeBaseStats();
-    }
-
     public Player(String playerName, String element) {
-        this();
         this.playerName = playerName;
         this.level = 1;
         this.experience = 0;
@@ -98,10 +92,17 @@ public class Player {
         this.totalSoulsCollected = 0;
         this.totalPlaytimeSeconds = 0;
 
+        initializeCollections();
+        initializeBaseStats();
         calculateStats();
     }
 
-    private void initializeElements() {
+    private void initializeCollections() {
+        this.elementLevels = new HashMap<>();
+        this.elementExperience = new HashMap<>();
+        this.treasureLevels = new HashMap<>();
+        this.equippedItems = new ArrayList<>();
+
         String[] elements = {"metal", "wood", "water", "fire", "earth"};
         for (String elem : elements) {
             this.elementLevels.put(elem, 0);
@@ -112,11 +113,22 @@ public class Player {
     private void initializeBaseStats() {
         // Base stats at level 1
         this.baseHealth = 100;
-        this.baseHealthRegen = 0.0;
+        this.baseHealthRegen = 0.0; // No base health regen as specified
         this.baseMana = 100;
-        this.baseManaRegen = 10.0;
+        this.baseManaRegen = 10.0; // Will be recalculated based on total mana
         this.baseAttack = 25;
         this.baseDefense = 0;
+    }
+
+    // Custom setter for level that triggers stat recalculation
+    public void setLevel(int level) {
+        this.level = level;
+        calculateStats();
+    }
+
+    public void setEquippedItems(List<Map<String, Object>> equippedItems) {
+        this.equippedItems = equippedItems;
+        calculateStats();
     }
 
     public void calculateStats() {
@@ -129,8 +141,8 @@ public class Player {
         // Mana calculation: 100 + level*10 + small_breakthroughs*50 + big_breakthroughs*100
         this.baseMana = 100 + (level * 10) + (cultivation.smallBreakthroughs * 50) + (cultivation.bigBreakthroughs * 100);
 
-        // Mana regen scales with total mana (10% of max mana per second)
-        this.baseManaRegen = this.baseMana * 0.1;
+        // Mana regen scales with total mana (more balanced: 5% of max mana per second)
+        this.baseManaRegen = this.baseMana * 0.05;
 
         // Attack calculation: 25 + level*5 + small_breakthroughs*10 + big_breakthroughs*25
         this.baseAttack = 25 + (level * 5) + (cultivation.smallBreakthroughs * 10) + (cultivation.bigBreakthroughs * 25);
@@ -229,154 +241,11 @@ public class Player {
         return new CultivationInfo(stageName + phaseName, smallBreakthroughs, bigBreakthroughs);
     }
 
+    @Data
+    @AllArgsConstructor
     public static class CultivationInfo {
         public final String name;
         public final int smallBreakthroughs;
         public final int bigBreakthroughs;
-
-        public CultivationInfo(String name, int smallBreakthroughs, int bigBreakthroughs) {
-            this.name = name;
-            this.smallBreakthroughs = smallBreakthroughs;
-            this.bigBreakthroughs = bigBreakthroughs;
-        }
     }
-
-    // Getters and Setters (keeping existing ones and adding new ones)
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-
-    public String getPlayerName() { return playerName; }
-    public void setPlayerName(String playerName) { this.playerName = playerName; }
-
-    public int getLevel() { return level; }
-    public void setLevel(int level) {
-        this.level = level;
-        calculateStats();
-    }
-
-    public long getExperience() { return experience; }
-    public void setExperience(long experience) { this.experience = experience; }
-
-    public long getGold() { return gold; }
-    public void setGold(long gold) { this.gold = gold; }
-
-    public long getGems() { return gems; }
-    public void setGems(long gems) { this.gems = gems; }
-
-    public String getElement() { return element; }
-    public void setElement(String element) { this.element = element; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public LocalDateTime getLastPlayed() { return lastPlayed; }
-    public void setLastPlayed(LocalDateTime lastPlayed) { this.lastPlayed = lastPlayed; }
-
-    public long getPlaytime() { return playtime; }
-    public void setPlaytime(long playtime) { this.playtime = playtime; }
-
-    public int getCurrentStage() { return currentStage; }
-    public void setCurrentStage(int currentStage) { this.currentStage = currentStage; }
-
-    public List<Integer> getUnlockedStages() { return unlockedStages; }
-    public void setUnlockedStages(List<Integer> unlockedStages) { this.unlockedStages = unlockedStages; }
-
-    public List<String> getInventory() { return inventory; }
-    public void setInventory(List<String> inventory) { this.inventory = inventory; }
-
-    public Map<String, Object> getEquipment() { return equipment; }
-    public void setEquipment(Map<String, Object> equipment) { this.equipment = equipment; }
-
-    public List<String> getSkills() { return skills; }
-    public void setSkills(List<String> skills) { this.skills = skills; }
-
-    public List<String> getAchievements() { return achievements; }
-    public void setAchievements(List<String> achievements) { this.achievements = achievements; }
-
-    // New stat getters and setters
-    public String getPrimaryElement() { return primaryElement; }
-    public void setPrimaryElement(String primaryElement) { this.primaryElement = primaryElement; }
-
-    public Map<String, Integer> getElementLevels() { return elementLevels; }
-    public void setElementLevels(Map<String, Integer> elementLevels) { this.elementLevels = elementLevels; }
-
-    public Map<String, Long> getElementExperience() { return elementExperience; }
-    public void setElementExperience(Map<String, Long> elementExperience) { this.elementExperience = elementExperience; }
-
-    public int getMana() { return mana; }
-    public void setMana(int mana) { this.mana = mana; }
-
-    public int getMaxMana() { return maxMana; }
-    public void setMaxMana(int maxMana) { this.maxMana = maxMana; }
-
-    public long getSoulCount() { return soulCount; }
-    public void setSoulCount(long soulCount) { this.soulCount = soulCount; }
-
-    // Base stats
-    public int getBaseHealth() { return baseHealth; }
-    public void setBaseHealth(int baseHealth) { this.baseHealth = baseHealth; }
-
-    public double getBaseHealthRegen() { return baseHealthRegen; }
-    public void setBaseHealthRegen(double baseHealthRegen) { this.baseHealthRegen = baseHealthRegen; }
-
-    public int getBaseMana() { return baseMana; }
-    public void setBaseMana(int baseMana) { this.baseMana = baseMana; }
-
-    public double getBaseManaRegen() { return baseManaRegen; }
-    public void setBaseManaRegen(double baseManaRegen) { this.baseManaRegen = baseManaRegen; }
-
-    public int getBaseAttack() { return baseAttack; }
-    public void setBaseAttack(int baseAttack) { this.baseAttack = baseAttack; }
-
-    public int getBaseDefense() { return baseDefense; }
-    public void setBaseDefense(int baseDefense) { this.baseDefense = baseDefense; }
-
-    // Current stats
-    public int getCurrentHealth() { return currentHealth; }
-    public void setCurrentHealth(int currentHealth) { this.currentHealth = currentHealth; }
-
-    public int getCurrentMaxHealth() { return currentMaxHealth; }
-    public void setCurrentMaxHealth(int currentMaxHealth) { this.currentMaxHealth = currentMaxHealth; }
-
-    public double getCurrentHealthRegen() { return currentHealthRegen; }
-    public void setCurrentHealthRegen(double currentHealthRegen) { this.currentHealthRegen = currentHealthRegen; }
-
-    public int getCurrentMaxMana() { return currentMaxMana; }
-    public void setCurrentMaxMana(int currentMaxMana) { this.currentMaxMana = currentMaxMana; }
-
-    public double getCurrentManaRegen() { return currentManaRegen; }
-    public void setCurrentManaRegen(double currentManaRegen) { this.currentManaRegen = currentManaRegen; }
-
-    public int getCurrentAttack() { return currentAttack; }
-    public void setCurrentAttack(int currentAttack) { this.currentAttack = currentAttack; }
-
-    public int getCurrentDefense() { return currentDefense; }
-    public void setCurrentDefense(int currentDefense) { this.currentDefense = currentDefense; }
-
-    public Map<String, Integer> getTreasureLevels() { return treasureLevels; }
-    public void setTreasureLevels(Map<String, Integer> treasureLevels) { this.treasureLevels = treasureLevels; }
-
-    public int getTianniSwordLevel() { return tianniSwordLevel; }
-    public void setTianniSwordLevel(int tianniSwordLevel) { this.tianniSwordLevel = tianniSwordLevel; }
-
-    public boolean isHasTianniSwordMutation() { return hasTianniSwordMutation; }
-    public void setHasTianniSwordMutation(boolean hasTianniSwordMutation) { this.hasTianniSwordMutation = hasTianniSwordMutation; }
-
-    public List<Map<String, Object>> getEquippedItems() { return equippedItems; }
-    public void setEquippedItems(List<Map<String, Object>> equippedItems) {
-        this.equippedItems = equippedItems;
-        calculateStats();
-    }
-
-    public long getTotalEnemiesKilled() { return totalEnemiesKilled; }
-    public void setTotalEnemiesKilled(long totalEnemiesKilled) { this.totalEnemiesKilled = totalEnemiesKilled; }
-
-    public long getTotalDamageDealt() { return totalDamageDealt; }
-    public void setTotalDamageDealt(long totalDamageDealt) { this.totalDamageDealt = totalDamageDealt; }
-
-    public long getTotalSoulsCollected() { return totalSoulsCollected; }
-    public void setTotalSoulsCollected(long totalSoulsCollected) { this.totalSoulsCollected = totalSoulsCollected; }
-
-    public long getTotalPlaytimeSeconds() { return totalPlaytimeSeconds; }
-    public void setTotalPlaytimeSeconds(long totalPlaytimeSeconds) { this.totalPlaytimeSeconds = totalPlaytimeSeconds; }
 }

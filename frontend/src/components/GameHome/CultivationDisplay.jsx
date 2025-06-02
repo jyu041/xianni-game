@@ -1,10 +1,10 @@
 // frontend/src/components/GameHome/CultivationDisplay.jsx
-import styles from "./CultivationDisplay.module.css";
+import Card from "../ui/Card";
+import sharedStyles from "./SharedDisplay.module.css";
 
 const CultivationDisplay = ({ playerData }) => {
   const getCultivationLevel = (level) => {
     if (level <= 15) {
-      // 凝气期 (1-15层)
       const chineseNumbers = [
         "",
         "一",
@@ -32,10 +32,9 @@ const CultivationDisplay = ({ playerData }) => {
       };
     }
 
-    // Calculate stage and phase for post-凝气 levels
-    const adjustedLevel = level - 15; // Levels after 凝气
-    const stageIndex = Math.floor((adjustedLevel - 1) / 20); // Which major stage (筑基, 结丹, etc.)
-    const phaseInStage = Math.floor(((adjustedLevel - 1) % 20) / 5); // Which phase within stage (初期, 中期, 后期, 大圆满)
+    const adjustedLevel = level - 15;
+    const stageIndex = Math.floor((adjustedLevel - 1) / 20);
+    const phaseInStage = Math.floor(((adjustedLevel - 1) % 20) / 5);
 
     const stages = [
       { name: "筑基", color: "#4682b4", description: "筑建修仙根基，凝聚丹田" },
@@ -53,7 +52,6 @@ const CultivationDisplay = ({ playerData }) => {
     ];
 
     const phases = ["初期", "中期", "后期", "大圆满"];
-
     const stage = stages[Math.min(stageIndex, stages.length - 1)];
     const phaseName = phases[phaseInStage];
 
@@ -68,16 +66,13 @@ const CultivationDisplay = ({ playerData }) => {
 
   const getBreakthroughInfo = (level) => {
     if (level <= 15) {
-      return {
-        smallBreakthroughs: 0,
-        bigBreakthroughs: level <= 15 ? 0 : 1,
-      };
+      return { smallBreakthroughs: 0, bigBreakthroughs: level <= 15 ? 0 : 1 };
     }
 
     const adjustedLevel = level - 15;
     const stageIndex = Math.floor((adjustedLevel - 1) / 20);
     const smallBreakthroughs = Math.floor((adjustedLevel - 1) / 5);
-    const bigBreakthroughs = 1 + stageIndex; // 凝气->筑基 + major stage transitions
+    const bigBreakthroughs = 1 + stageIndex;
 
     return { smallBreakthroughs, bigBreakthroughs };
   };
@@ -115,175 +110,316 @@ const CultivationDisplay = ({ playerData }) => {
   const baseStats = calculateBaseStats(playerData?.level || 1);
   const breakthroughs = getBreakthroughInfo(playerData?.level || 1);
 
-  const getStats = () => {
-    return [
-      {
-        label: "当前等级",
-        value: playerData?.level || 1,
-        color: cultivation.color,
-      },
-      {
-        label: "修炼经验",
-        value: `${playerData?.experience || 0}`,
-        color: "#8a2be2",
-      },
-      {
-        label: "小突破次数",
-        value: `${breakthroughs.smallBreakthroughs}`,
-        color: "#4caf50",
-      },
-      {
-        label: "大突破次数",
-        value: `${breakthroughs.bigBreakthroughs}`,
-        color: "#ff9800",
-      },
-      {
-        label: "基础生命值",
-        value: `${baseStats.health}`,
-        color: "#f44336",
-      },
-      {
-        label: "基础灵气",
-        value: `${baseStats.mana}`,
-        color: "#2196f3",
-      },
-      {
-        label: "基础攻击",
-        value: `${baseStats.attack}`,
-        color: "#ff5722",
-      },
-      {
-        label: "基础防御",
-        value: `${baseStats.defense}`,
-        color: "#9c27b0",
-      },
-    ];
-  };
+  const getStats = () => [
+    {
+      label: "当前等级",
+      value: playerData?.level || 1,
+      color: cultivation.color,
+    },
+    {
+      label: "修炼经验",
+      value: `${playerData?.experience || 0}`,
+      color: "#8a2be2",
+    },
+    {
+      label: "小突破次数",
+      value: `${breakthroughs.smallBreakthroughs}`,
+      color: "#4caf50",
+    },
+    {
+      label: "大突破次数",
+      value: `${breakthroughs.bigBreakthroughs}`,
+      color: "#ff9800",
+    },
+    { label: "基础生命值", value: `${baseStats.health}`, color: "#f44336" },
+    { label: "基础灵气", value: `${baseStats.mana}`, color: "#2196f3" },
+    { label: "基础攻击", value: `${baseStats.attack}`, color: "#ff5722" },
+    { label: "基础防御", value: `${baseStats.defense}`, color: "#9c27b0" },
+  ];
 
   return (
-    <div className={styles.cultivationDisplay}>
+    <div className={sharedStyles.displayContainer}>
+      <div className={sharedStyles.displayHeader}>
+        <h2>修为境界</h2>
+        <p>查看你的修炼境界和属性计算</p>
+      </div>
+
       {/* Current Cultivation Realm */}
-      <div className={styles.currentRealm}>
-        <div className={styles.realmCard}>
+      <div className={sharedStyles.statsSection}>
+        <Card variant="glass" style={{ marginBottom: "2rem" }}>
           <div
-            className={styles.realmIcon}
-            style={{ color: cultivation.color }}
+            style={{
+              background: "rgba(0,0,0,0.8)",
+              border: "2px solid rgba(255,255,255,0.3)",
+              borderRadius: "20px",
+              padding: "2rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "2rem",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.6)",
+            }}
           >
-            🧘
-          </div>
-          <div className={styles.realmInfo}>
-            <h4 style={{ color: cultivation.color }}>{cultivation.name}</h4>
-            <p className={styles.realmDescription}>{cultivation.description}</p>
-            <div className={styles.levelProgress}>
-              <div className={styles.progressLabel}>
-                修炼进度: 等级 {playerData?.level || 1} ({cultivation.stage} -{" "}
-                {cultivation.phase})
-              </div>
-              <div className={styles.progressBar}>
-                <div
-                  className={styles.progressFill}
-                  style={{
-                    width: `${experienceProgress}%`,
-                    backgroundColor: cultivation.color,
-                  }}
-                />
-              </div>
-              <div className={styles.progressText}>
-                经验: {(playerData?.experience || 0) % 100}/100
+            <div
+              style={{
+                fontSize: "4rem",
+                color: cultivation.color,
+                filter: "drop-shadow(0 0 20px currentColor)",
+              }}
+            >
+              🧘
+            </div>
+            <div style={{ flex: 1 }}>
+              <h4
+                style={{
+                  fontSize: "2rem",
+                  margin: "0 0 0.5rem 0",
+                  color: cultivation.color,
+                  textShadow: "0 0 15px currentColor",
+                }}
+              >
+                {cultivation.name}
+              </h4>
+              <p
+                style={{
+                  color: "rgba(255,255,255,0.8)",
+                  fontSize: "1.1rem",
+                  margin: "0 0 1.5rem 0",
+                  fontStyle: "italic",
+                }}
+              >
+                {cultivation.description}
+              </p>
+              <div className={sharedStyles.progressContainer}>
+                <div className={sharedStyles.progressLabel}>
+                  修炼进度: 等级 {playerData?.level || 1} ({cultivation.stage} -{" "}
+                  {cultivation.phase})
+                </div>
+                <div className={sharedStyles.progressBar}>
+                  <div
+                    className={sharedStyles.progressFill}
+                    style={{
+                      width: `${experienceProgress}%`,
+                      backgroundColor: cultivation.color,
+                    }}
+                  />
+                </div>
+                <div className={sharedStyles.progressText}>
+                  经验: {(playerData?.experience || 0) % 100}/100
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* Breakthrough Information */}
-      <div className={styles.statsSection}>
+      <div className={sharedStyles.statsSection}>
         <h4>突破信息</h4>
-        <div className={styles.breakthroughInfo}>
-          <div className={styles.breakthroughCard}>
-            <div
-              className={styles.breakthroughIcon}
-              style={{ color: "#4caf50" }}
-            >
-              🌟
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "1rem",
+            marginBottom: "1rem",
+          }}
+        >
+          <Card variant="default" className={sharedStyles.statCard}>
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <div
+                style={{
+                  fontSize: "2rem",
+                  color: "#4caf50",
+                  filter: "drop-shadow(0 0 10px currentColor)",
+                }}
+              >
+                🌟
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.25rem",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#ffffff",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                  }}
+                >
+                  小突破
+                </span>
+                <span
+                  style={{
+                    color: "#4caf50",
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                    textShadow: "0 0 5px rgba(76,175,80,0.5)",
+                  }}
+                >
+                  {breakthroughs.smallBreakthroughs} 次
+                </span>
+                <span
+                  style={{
+                    color: "rgba(255,255,255,0.7)",
+                    fontSize: "0.8rem",
+                    fontStyle: "italic",
+                  }}
+                >
+                  每5级一次小突破
+                </span>
+              </div>
             </div>
-            <div className={styles.breakthroughDetails}>
-              <span className={styles.breakthroughLabel}>小突破</span>
-              <span className={styles.breakthroughValue}>
-                {breakthroughs.smallBreakthroughs} 次
-              </span>
-              <span className={styles.breakthroughDesc}>每5级一次小突破</span>
+          </Card>
+          <Card variant="default" className={sharedStyles.statCard}>
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <div
+                style={{
+                  fontSize: "2rem",
+                  color: "#ff9800",
+                  filter: "drop-shadow(0 0 10px currentColor)",
+                }}
+              >
+                ⭐
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.25rem",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#ffffff",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                  }}
+                >
+                  大突破
+                </span>
+                <span
+                  style={{
+                    color: "#ff9800",
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                    textShadow: "0 0 5px rgba(255,152,0,0.5)",
+                  }}
+                >
+                  {breakthroughs.bigBreakthroughs} 次
+                </span>
+                <span
+                  style={{
+                    color: "rgba(255,255,255,0.7)",
+                    fontSize: "0.8rem",
+                    fontStyle: "italic",
+                  }}
+                >
+                  境界提升突破
+                </span>
+              </div>
             </div>
-          </div>
-          <div className={styles.breakthroughCard}>
-            <div
-              className={styles.breakthroughIcon}
-              style={{ color: "#ff9800" }}
-            >
-              ⭐
-            </div>
-            <div className={styles.breakthroughDetails}>
-              <span className={styles.breakthroughLabel}>大突破</span>
-              <span className={styles.breakthroughValue}>
-                {breakthroughs.bigBreakthroughs} 次
-              </span>
-              <span className={styles.breakthroughDesc}>境界提升突破</span>
-            </div>
-          </div>
+          </Card>
         </div>
       </div>
 
       {/* Base Stats Calculation */}
-      <div className={styles.statsSection}>
+      <div className={sharedStyles.statsSection}>
         <h4>基础属性计算</h4>
-        <div className={styles.calculationInfo}>
-          <div className={styles.calculationCard}>
-            <h5>生命值计算</h5>
-            <div className={styles.formula}>
-              100 (基础) + {playerData?.level || 1} × 10 (等级) +{" "}
-              {breakthroughs.smallBreakthroughs} × 20 (小突破) +{" "}
-              {breakthroughs.bigBreakthroughs} × 50 (大突破) ={" "}
-              <strong>{baseStats.health}</strong>
-            </div>
-          </div>
-          <div className={styles.calculationCard}>
-            <h5>灵气计算</h5>
-            <div className={styles.formula}>
-              100 (基础) + {playerData?.level || 1} × 10 (等级) +{" "}
-              {breakthroughs.smallBreakthroughs} × 50 (小突破) +{" "}
-              {breakthroughs.bigBreakthroughs} × 100 (大突破) ={" "}
-              <strong>{baseStats.mana}</strong>
-            </div>
-          </div>
-          <div className={styles.calculationCard}>
-            <h5>攻击计算</h5>
-            <div className={styles.formula}>
-              25 (基础) + {playerData?.level || 1} × 5 (等级) +{" "}
-              {breakthroughs.smallBreakthroughs} × 10 (小突破) +{" "}
-              {breakthroughs.bigBreakthroughs} × 25 (大突破) ={" "}
-              <strong>{baseStats.attack}</strong>
-            </div>
-          </div>
-          <div className={styles.calculationCard}>
-            <h5>防御计算</h5>
-            <div className={styles.formula}>
-              0 (基础) + {playerData?.level || 1} × 1 (等级) +{" "}
-              {breakthroughs.smallBreakthroughs} × 2 (小突破) +{" "}
-              {breakthroughs.bigBreakthroughs} × 5 (大突破) ={" "}
-              <strong>{baseStats.defense}</strong>
-            </div>
-          </div>
+        <div
+          className={`${sharedStyles.gridContainer} ${sharedStyles.grid2Col}`}
+        >
+          {[
+            {
+              name: "生命值计算",
+              formula: `100 (基础) + ${playerData?.level || 1} × 10 (等级) + ${
+                breakthroughs.smallBreakthroughs
+              } × 20 (小突破) + ${
+                breakthroughs.bigBreakthroughs
+              } × 50 (大突破) = ${baseStats.health}`,
+            },
+            {
+              name: "灵气计算",
+              formula: `100 (基础) + ${playerData?.level || 1} × 10 (等级) + ${
+                breakthroughs.smallBreakthroughs
+              } × 50 (小突破) + ${
+                breakthroughs.bigBreakthroughs
+              } × 100 (大突破) = ${baseStats.mana}`,
+            },
+            {
+              name: "攻击计算",
+              formula: `25 (基础) + ${playerData?.level || 1} × 5 (等级) + ${
+                breakthroughs.smallBreakthroughs
+              } × 10 (小突破) + ${
+                breakthroughs.bigBreakthroughs
+              } × 25 (大突破) = ${baseStats.attack}`,
+            },
+            {
+              name: "防御计算",
+              formula: `0 (基础) + ${playerData?.level || 1} × 1 (等级) + ${
+                breakthroughs.smallBreakthroughs
+              } × 2 (小突破) + ${
+                breakthroughs.bigBreakthroughs
+              } × 5 (大突破) = ${baseStats.defense}`,
+            },
+          ].map((calc, index) => (
+            <Card
+              key={index}
+              variant="default"
+              className={sharedStyles.statCard}
+            >
+              <h5
+                style={{
+                  color: "#8a2be2",
+                  margin: "0 0 0.5rem 0",
+                  fontSize: "1rem",
+                  textShadow: "0 0 8px rgba(138,43,226,0.5)",
+                }}
+              >
+                {calc.name}
+              </h5>
+              <div
+                style={{
+                  color: "rgba(255,255,255,0.9)",
+                  fontSize: "0.85rem",
+                  lineHeight: "1.4",
+                  fontFamily: "Courier New, monospace",
+                }}
+              >
+                {calc.formula.split("=").map((part, i) =>
+                  i === calc.formula.split("=").length - 1 ? (
+                    <strong
+                      key={i}
+                      style={{
+                        color: "#4caf50",
+                        fontSize: "1.1rem",
+                        textShadow: "0 0 5px rgba(76,175,80,0.5)",
+                      }}
+                    >
+                      = {part.trim()}
+                    </strong>
+                  ) : (
+                    part + (i < calc.formula.split("=").length - 1 ? " =" : "")
+                  )
+                )}
+              </div>
+            </Card>
+          ))}
         </div>
       </div>
 
       {/* Stats Grid */}
-      <div className={styles.statsSection}>
+      <div className={sharedStyles.statsSection}>
         <h4>修炼数据</h4>
-        <div className={styles.statsGrid}>
+        <div className={sharedStyles.statsGrid}>
           {getStats().map((stat, index) => (
-            <div key={index} className={styles.statCard}>
-              <div className={styles.statLabel}>{stat.label}</div>
-              <div className={styles.statValue} style={{ color: stat.color }}>
+            <div key={index} className={sharedStyles.statCard}>
+              <div className={sharedStyles.statLabel}>{stat.label}</div>
+              <div
+                className={sharedStyles.statValue}
+                style={{ color: stat.color }}
+              >
                 {stat.value}
               </div>
             </div>
@@ -293,42 +429,82 @@ const CultivationDisplay = ({ playerData }) => {
 
       {/* Current vs Equipment Enhanced Stats */}
       {(playerData?.currentMaxHealth || playerData?.currentAttack) && (
-        <div className={styles.statsSection}>
+        <div className={sharedStyles.statsSection}>
           <h4>装备增强后属性</h4>
-          <div className={styles.enhancedStats}>
-            <div className={styles.statComparison}>
-              <span>生命值:</span>
-              <span className={styles.baseStat}>{baseStats.health}</span>
-              <span>→</span>
-              <span className={styles.enhancedStat}>
-                {playerData?.currentMaxHealth || baseStats.health}
-              </span>
-            </div>
-            <div className={styles.statComparison}>
-              <span>灵气:</span>
-              <span className={styles.baseStat}>{baseStats.mana}</span>
-              <span>→</span>
-              <span className={styles.enhancedStat}>
-                {playerData?.currentMaxMana || baseStats.mana}
-              </span>
-            </div>
-            <div className={styles.statComparison}>
-              <span>攻击:</span>
-              <span className={styles.baseStat}>{baseStats.attack}</span>
-              <span>→</span>
-              <span className={styles.enhancedStat}>
-                {playerData?.currentAttack || baseStats.attack}
-              </span>
-            </div>
-            <div className={styles.statComparison}>
-              <span>防御:</span>
-              <span className={styles.baseStat}>{baseStats.defense}</span>
-              <span>→</span>
-              <span className={styles.enhancedStat}>
-                {playerData?.currentDefense || baseStats.defense}
-              </span>
-            </div>
-          </div>
+          <Card variant="default" style={{ padding: "1.5rem" }}>
+            {[
+              {
+                label: "生命值",
+                base: baseStats.health,
+                enhanced: playerData?.currentMaxHealth || baseStats.health,
+              },
+              {
+                label: "灵气",
+                base: baseStats.mana,
+                enhanced: playerData?.currentMaxMana || baseStats.mana,
+              },
+              {
+                label: "攻击",
+                base: baseStats.attack,
+                enhanced: playerData?.currentAttack || baseStats.attack,
+              },
+              {
+                label: "防御",
+                base: baseStats.defense,
+                enhanced: playerData?.currentDefense || baseStats.defense,
+              },
+            ].map((stat, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "0.75rem",
+                  marginBottom: "0.5rem",
+                  background: "rgba(255,255,255,0.05)",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                }}
+              >
+                <span
+                  style={{
+                    color: "rgba(255,255,255,0.8)",
+                    fontWeight: "600",
+                    flex: 1,
+                  }}
+                >
+                  {stat.label}:
+                </span>
+                <span
+                  style={{
+                    color: "rgba(255,255,255,0.7)",
+                    fontWeight: "500",
+                    minWidth: "60px",
+                    textAlign: "center",
+                  }}
+                >
+                  {stat.base}
+                </span>
+                <span
+                  style={{ color: "rgba(255,255,255,0.5)", margin: "0 0.5rem" }}
+                >
+                  →
+                </span>
+                <span
+                  className={sharedStyles.enhanced}
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "1.1rem",
+                    minWidth: "60px",
+                    textAlign: "center",
+                  }}
+                >
+                  {stat.enhanced}
+                </span>
+              </div>
+            ))}
+          </Card>
         </div>
       )}
     </div>
