@@ -1,5 +1,5 @@
-// frontend/src/components/game/scripts/AssetLoader.js
-import { MAIN_CHARACTER_ASSETS, getAllEnemyAssets } from '../config/AssetConfigs.js';
+// frontend/src/components/GameLevel/scripts/AssetLoader.js
+import { MAIN_CHARACTER_ASSETS } from '../config/AssetConfigs.js';
 
 class AssetLoader {
   constructor(scene) {
@@ -9,13 +9,13 @@ class AssetLoader {
   loadAllAssets() {
     this.loadFallbackTextures();
     this.loadMainCharacterAssets();
-    this.loadEnemyAssets();
+    // No longer need to load enemy assets - they're GIFs loaded directly via DOM
     this.loadVfxAssets();
     this.setupLoadEvents();
   }
 
   loadFallbackTextures() {
-    // Create simple graphics as fallback textures
+    // Create simple graphics as fallback textures for basic elements
     const fallbackTextures = [
       { key: 'player', data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==' },
       { key: 'enemy', data: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==' },
@@ -28,6 +28,7 @@ class AssetLoader {
   }
 
   loadMainCharacterAssets() {
+    // Only load main character sprites - enemies are now GIFs
     MAIN_CHARACTER_ASSETS.forEach(asset => {
       this.scene.load.spritesheet(asset.key, asset.path, {
         frameWidth: asset.frameSize.width,
@@ -36,19 +37,8 @@ class AssetLoader {
     });
   }
 
-  loadEnemyAssets() {
-    const allEnemyAssets = getAllEnemyAssets();
-    
-    allEnemyAssets.forEach(asset => {
-      this.scene.load.spritesheet(asset.key, asset.path, {
-        frameWidth: asset.frameSize.width,
-        frameHeight: asset.frameSize.height
-      });
-    });
-  }
-
   loadVfxAssets() {
-    // VfxManager handles its own asset loading - no longer load them here
+    // VfxManager handles its own asset loading using DOM elements
     console.log('VFX assets will be loaded by VfxManager using DOM elements');
   }
 
@@ -62,7 +52,7 @@ class AssetLoader {
     });
 
     this.scene.load.on('complete', () => {
-      console.log('All assets loaded successfully');
+      console.log('Assets loaded successfully (enemies now use GIF system)');
     });
   }
 }

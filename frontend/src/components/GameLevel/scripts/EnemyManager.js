@@ -1,5 +1,5 @@
-// frontend/src/components/game/scripts/EnemyManager.js
-import { getAllEnemyTypes, getRandomEnemyType } from '../config/EnemyTypes.js';
+// frontend/src/components/GameLevel/scripts/EnemyManager.js
+import { getAllEnemyTypes, getRandomEnemyType, getRandomAnimation, getEnemyAnimationPath } from '../config/EnemyTypes.js';
 
 class EnemyManager {
   constructor(scene) {
@@ -8,14 +8,16 @@ class EnemyManager {
     this.attackRange = 60;
     this.attackCooldown = 2000;
     this.enemyTypes = getAllEnemyTypes();
-    this.healthBars = []; // Store health bar graphics
-    this.showHealthBars = true; // Default to showing health bars
+    this.healthBars = [];
+    this.showHealthBars = true;
+    this.activeGifs = new Map(); // Track active GIF elements
   }
 
   update() {
     this.updateEnemyBehavior();
     this.updateHealthBars();
     this.updateDebugRanges();
+    this.updateGifPositions(); // Update GIF positions
   }
 
   updateEnemyBehavior() {
@@ -39,7 +41,6 @@ class EnemyManager {
 
       const healthPercent = enemy.health / enemy.maxHealth;
       
-      // Only show health bar if not at full health AND if health bars are enabled
       if (healthPercent < 1.0 && this.showHealthBars) {
         this.showEnemyHealthBar(enemy, healthPercent);
       } else {
@@ -50,32 +51,27 @@ class EnemyManager {
 
   showEnemyHealthBar(enemy, healthPercent) {
     if (!enemy.healthBarBg) {
-      // Create health bar background - positioned closer to enemy
       enemy.healthBarBg = this.scene.add.rectangle(
-        enemy.x, enemy.y - enemy.displayHeight/2 - 8, // Reduced from -15 to -8
+        enemy.x, enemy.y - enemy.displayHeight/2 - 8,
         40, 6, 0x000000, 0.7
       );
       enemy.healthBarBg.setStrokeStyle(1, 0xffffff, 0.5);
       
-      // Create health bar fill
       enemy.healthBarFill = this.scene.add.rectangle(
-        enemy.x, enemy.y - enemy.displayHeight/2 - 8, // Reduced from -15 to -8
+        enemy.x, enemy.y - enemy.displayHeight/2 - 8,
         38, 4, 0x00ff00
       );
     }
 
-    // Update position - closer to enemy
     enemy.healthBarBg.setPosition(enemy.x, enemy.y - enemy.displayHeight/2 - 8);
     enemy.healthBarFill.setPosition(enemy.x, enemy.y - enemy.displayHeight/2 - 8);
     
-    // Update fill width and color based on health
     const fillWidth = 38 * healthPercent;
     enemy.healthBarFill.setDisplaySize(fillWidth, 4);
     
-    // Color based on health percentage
-    let color = 0x00ff00; // Green
-    if (healthPercent < 0.3) color = 0xff0000; // Red
-    else if (healthPercent < 0.6) color = 0xffff00; // Yellow
+    let color = 0x00ff00;
+    if (healthPercent < 0.3) color = 0xff0000;
+    else if (healthPercent < 0.6) color = 0xffff00;
     
     enemy.healthBarFill.setFillStyle(color);
   }
@@ -90,7 +86,6 @@ class EnemyManager {
   }
 
   updateDebugRanges() {
-    // Clear previous debug graphics
     if (this.debugGraphics) {
       this.debugGraphics.clear();
     } else {
@@ -100,7 +95,6 @@ class EnemyManager {
     const debugSettings = this.scene.debugSettings;
     if (!debugSettings) return;
 
-    // Show enemy attack ranges
     if (debugSettings.showEnemyAttackRanges) {
       this.debugGraphics.lineStyle(2, 0xff0000, 0.3);
       this.scene.enemies.children.entries.forEach(enemy => {
@@ -111,11 +105,48 @@ class EnemyManager {
     }
   }
 
+  updateGifPositions() {
+    // Clean up dead enemies first
+    const toRemove = [];
+    this.activeGifs.forEach((gifElement, enemy) => {
+      if (!enemy.active || !gifElement.parentNode) {
+        toRemove.push(enemy);
+      }
+    });
+    
+    toRemove.forEach(enemy => {
+      console.log('Cleaning up orphaned GIF for destroyed enemy');
+      this.removeEnemyGif(enemy);
+    });
+    
+    // Update positions for active enemies
+    this.activeGifs.forEach((gifElement, enemy) => {
+      if (!enemy.active || enemy.isDead) return;
+
+      // Convert world coordinates to screen coordinates
+      const screenPos = this.worldToScreen(enemy.x, enemy.y);
+      const size = enemy.enemySize || 64;
+      
+      gifElement.style.left = `${screenPos.x - size/2}px`;
+      gifElement.style.top = `${screenPos.y - size/2}px`;
+    });
+  }
+
+  worldToScreen(worldX, worldY) {
+    const camera = this.scene.cameras.main;
+    const gameCanvas = this.scene.game.canvas;
+    const canvasRect = gameCanvas.getBoundingClientRect();
+    
+    const screenX = (worldX - camera.scrollX) * camera.zoom + canvasRect.left;
+    const screenY = (worldY - camera.scrollY) * camera.zoom + canvasRect.top;
+    
+    return { x: screenX, y: screenY };
+  }
+
   moveTowardsPlayer(enemy, player) {
     const angle = Phaser.Math.Angle.Between(enemy.x, enemy.y, player.x, player.y);
     const speed = enemy.enemySpeed || 50;
     
-    // Force direction determination based on player position
     const direction = this.getDirectionFromPlayerPosition(enemy, player);
     enemy.currentDirection = direction;
     
@@ -124,7 +155,7 @@ class EnemyManager {
       Math.sin(angle) * speed
     );
 
-    this.updateEnemyMovementAnimation(enemy, direction);
+    this.updateEnemyAnimation(enemy, 'move');
     this.forceCorrectDirection(enemy, direction);
   }
 
@@ -132,7 +163,6 @@ class EnemyManager {
     const deltaX = player.x - enemy.x;
     const deltaY = player.y - enemy.y;
     
-    // Prioritize horizontal movement for facing direction
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       return deltaX > 0 ? 'right' : 'left';
     } else {
@@ -140,46 +170,53 @@ class EnemyManager {
     }
   }
 
-  updateEnemyMovementAnimation(enemy, direction) {
-    if (enemy.enemyType && !enemy.isAttacking && !enemy.isDead) {
-      // Try movement animations in priority order
-      const animKeys = [
-        `enemy_${enemy.enemyType}_move_anim`,
-        `enemy_${enemy.enemyType}_run_anim`,
-        `enemy_${enemy.enemyType}_walk_anim`,
-        `enemy_${enemy.enemyType}_idle_anim`
-      ];
-      
-      const animKey = animKeys.find(key => this.scene.anims.exists(key));
-      
-      if (animKey && (!enemy.anims.isPlaying || enemy.anims.currentAnim.key !== animKey)) {
-        enemy.play(animKey);
-      }
+  updateEnemyAnimation(enemy, action) {
+    if (enemy.isDead || !enemy.enemyTypeData) return;
+
+    // Don't change animation if already performing specific action (except for death)
+    if (action === 'move' && enemy.isAttacking && action !== 'death') return;
+
+    const animationFile = getRandomAnimation(enemy.enemyTypeData, action);
+    if (animationFile && (animationFile !== enemy.currentAnimation || action === 'death')) {
+      this.setEnemyAnimation(enemy, animationFile);
+      enemy.currentAnimation = animationFile;
+      console.log(`Enemy ${enemy.enemyTypeData.key} playing ${action}: ${animationFile}`);
+    }
+  }
+
+  setEnemyAnimation(enemy, animationFile) {
+    if (!enemy.enemyTypeData) return;
+
+    const gifPath = getEnemyAnimationPath(enemy.enemyTypeData, animationFile);
+    const gifElement = this.activeGifs.get(enemy);
+    
+    if (gifElement) {
+      // Change the GIF source to trigger new animation
+      gifElement.src = gifPath + `?t=${Date.now()}`; // Cache busting
     }
   }
 
   forceCorrectDirection(enemy, direction) {
-    // Force sprite facing direction - prioritize left/right facing
+    const gifElement = this.activeGifs.get(enemy);
+    if (!gifElement) return;
+
     switch (direction) {
       case 'left':
-        enemy.setFlipX(true);
+        gifElement.style.transform = 'scaleX(-1)';
         break;
       case 'right':
-        enemy.setFlipX(false);
+        gifElement.style.transform = 'scaleX(1)';
         break;
       case 'up':
       case 'down':
-        // For up/down movement, maintain the flip based on last horizontal direction
-        // If no previous horizontal direction, default to facing right (no flip)
         if (enemy.lastHorizontalDirection === 'left') {
-          enemy.setFlipX(true);
+          gifElement.style.transform = 'scaleX(-1)';
         } else {
-          enemy.setFlipX(false);
+          gifElement.style.transform = 'scaleX(1)';
         }
         break;
     }
     
-    // Store last horizontal direction for up/down movement
     if (direction === 'left' || direction === 'right') {
       enemy.lastHorizontalDirection = direction;
     }
@@ -200,26 +237,23 @@ class EnemyManager {
     enemy.isAttacking = true;
     enemy.setVelocity(0, 0);
     
-    const attackAnimKey = `enemy_${enemy.enemyType}_attack_anim`;
+    // Play attack animation
+    this.updateEnemyAnimation(enemy, 'attack');
     
-    if (this.scene.anims.exists(attackAnimKey)) {
-      enemy.play(attackAnimKey);
-      
-      // Use a timer instead of animation complete to ensure enemy gets unstuck
-      this.scene.time.delayedCall(800, () => {
-        if (!enemy.isDead && enemy.active) {
-          this.dealAttackDamage(enemy, player);
-          enemy.isAttacking = false;
-        }
-      });
-    } else {
-      this.dealAttackDamage(enemy, player);
-      this.scene.time.delayedCall(500, () => {
-        if (!enemy.isDead && enemy.active) {
-          enemy.isAttacking = false;
-        }
-      });
-    }
+    // Deal damage after animation delay
+    this.scene.time.delayedCall(400, () => {
+      if (!enemy.isDead && enemy.active) {
+        this.dealAttackDamage(enemy, player);
+      }
+    });
+
+    // Stop attacking after animation
+    this.scene.time.delayedCall(800, () => {
+      if (!enemy.isDead && enemy.active) {
+        enemy.isAttacking = false;
+        this.updateEnemyAnimation(enemy, 'idle');
+      }
+    });
   }
 
   dealAttackDamage(enemy, player) {
@@ -231,7 +265,6 @@ class EnemyManager {
       this.scene.playerController.takeDamage(damage);
       this.createAttackEffect(enemy, player);
       
-      // Show damage number on player
       if (this.scene.damageNumberManager) {
         this.scene.damageNumberManager.showDamageNumber(
           player.x, 
@@ -259,47 +292,46 @@ class EnemyManager {
   }
 
   spawnEnemy() {
-    if (this.scene.enemies.children.size >= this.maxEnemies) return;
+    if (this.scene.enemies.children.size >= this.maxEnemies) {
+      console.log(`Max enemies reached: ${this.scene.enemies.children.size}/${this.maxEnemies}`);
+      return;
+    }
 
     const spawnPosition = this.getRandomSpawnPosition();
     const enemyType = getRandomEnemyType();
-    console.log("spawning in: ", enemyType.key);
     
+    console.log(`Spawning ${enemyType.key} at (${spawnPosition.x}, ${spawnPosition.y})`);
     this.createEnemy(spawnPosition, enemyType);
   }
 
   getRandomSpawnPosition() {
     const margin = 50;
+    const camera = this.scene.cameras.main;
+    
+    // Get camera world bounds
+    const worldLeft = camera.scrollX;
+    const worldRight = camera.scrollX + camera.width;
+    const worldTop = camera.scrollY;
+    const worldBottom = camera.scrollY + camera.height;
+    
     const spawnPositions = [
-      { x: Phaser.Math.Between(margin, this.scene.cameras.main.width - margin), y: -margin },
-      { x: this.scene.cameras.main.width + margin, y: Phaser.Math.Between(margin, this.scene.cameras.main.height - margin) },
-      { x: Phaser.Math.Between(margin, this.scene.cameras.main.width - margin), y: this.scene.cameras.main.height + margin },
-      { x: -margin, y: Phaser.Math.Between(margin, this.scene.cameras.main.height - margin) }
+      { x: Phaser.Math.Between(worldLeft, worldRight), y: worldTop - margin }, // Top
+      { x: worldRight + margin, y: Phaser.Math.Between(worldTop, worldBottom) }, // Right
+      { x: Phaser.Math.Between(worldLeft, worldRight), y: worldBottom + margin }, // Bottom
+      { x: worldLeft - margin, y: Phaser.Math.Between(worldTop, worldBottom) } // Left
     ];
 
     return Phaser.Utils.Array.GetRandom(spawnPositions);
   }
 
   createEnemy(spawnPos, enemyType) {
-    let enemy;
-
-    if (this.scene.textures.exists(enemyType.texture)) {
-      enemy = this.scene.enemies.create(spawnPos.x, spawnPos.y, enemyType.texture);
-      // Increased size for all enemies
-      enemy.setDisplaySize(enemyType.size * 1.2, enemyType.size * 1.2);
-      enemy.enemyType = enemyType.key;
-      
-      const idleAnimKey = `enemy_${enemyType.key}_idle_anim`;
-      if (this.scene.anims.exists(idleAnimKey)) {
-        enemy.play(idleAnimKey);
-      }
-    } else {
-      enemy = this.scene.enemies.create(spawnPos.x, spawnPos.y, 'enemy');
-      enemy.setDisplaySize(30, 30); // Increased from 25
-      enemy.enemyType = 'basic';
-    }
-
-    // Set enemy properties from config
+    // Create invisible Phaser sprite for physics and collision
+    const enemy = this.scene.enemies.create(spawnPos.x, spawnPos.y, 'enemy');
+    enemy.setDisplaySize(enemyType.size, enemyType.size);
+    enemy.setAlpha(0); // Make invisible initially since we'll use GIF overlay
+    
+    // Store enemy type data
+    enemy.enemyTypeData = enemyType;
     enemy.enemySpeed = Phaser.Math.Between(enemyType.speedRange[0], enemyType.speedRange[1]);
     enemy.health = enemyType.health;
     enemy.maxHealth = enemyType.health;
@@ -307,37 +339,246 @@ class EnemyManager {
     enemy.isAttacking = false;
     enemy.isDead = false;
     enemy.currentDirection = 'right';
-    enemy.lastHorizontalDirection = 'right'; // Default facing right
+    enemy.lastHorizontalDirection = 'right';
     enemy.lastAttackTime = 0;
+    enemy.currentAnimation = null;
+    enemy.enemySize = enemyType.size;
 
     enemy.setCollideWorldBounds(false);
     enemy.setBounce(0);
     enemy.setDrag(50);
 
+    // Create GIF element overlay
+    this.createEnemyGif(enemy, enemyType);
+    
+    // Start with idle animation
+    this.updateEnemyAnimation(enemy, 'idle');
+
     return enemy;
   }
 
-  // Completely overhauled soul drop system
+  createEnemyGif(enemy, enemyType) {
+    const gifElement = document.createElement('img');
+    const idleAnimation = getRandomAnimation(enemyType, 'idle');
+    
+    if (idleAnimation) {
+      const gifPath = getEnemyAnimationPath(enemyType, idleAnimation);
+      gifElement.src = gifPath;
+    }
+    
+    gifElement.style.position = 'absolute';
+    gifElement.style.pointerEvents = 'none';
+    gifElement.style.zIndex = '10';
+    gifElement.style.width = `${enemyType.size}px`;
+    gifElement.style.height = `${enemyType.size}px`;
+    
+    // Add to DOM
+    document.body.appendChild(gifElement);
+    
+    // Track the GIF element
+    this.activeGifs.set(enemy, gifElement);
+    
+    return gifElement;
+  }
+
+  removeEnemyGif(enemy) {
+    const gifElement = this.activeGifs.get(enemy);
+    if (gifElement) {
+      try {
+        if (gifElement.parentNode) {
+          gifElement.parentNode.removeChild(gifElement);
+        }
+      } catch (error) {
+        console.warn('Error removing GIF element:', error);
+      }
+    }
+    this.activeGifs.delete(enemy);
+  }
+
+  // Fixed death sequence - completely rewritten
+  startDeathSequence(enemy) {
+    if (enemy.isDead) return;
+    
+    console.log(`Starting death sequence for enemy at (${enemy.x}, ${enemy.y})`);
+    
+    enemy.isDead = true;
+    enemy.setVelocity(0, 0);
+    enemy.isAttacking = false;
+    
+    // Hide health bar immediately
+    this.hideEnemyHealthBar(enemy);
+    
+    const gifElement = this.activeGifs.get(enemy);
+    if (!gifElement || !gifElement.parentNode) {
+      console.warn('No GIF element found for dying enemy, creating soul directly');
+      this.createSoulDrop(enemy.x, enemy.y);
+      enemy.destroy();
+      return;
+    }
+    
+    // Step 1: Play death animation GIF (if available)
+    const deathAnimation = getRandomAnimation(enemy.enemyTypeData, 'death');
+    if (deathAnimation) {
+      console.log(`Playing death animation: ${deathAnimation}`);
+      this.setEnemyAnimation(enemy, deathAnimation);
+      enemy.currentAnimation = deathAnimation;
+    }
+    
+    // Step 2: Wait a moment for death animation, then start blue glow effect
+    this.scene.time.delayedCall(200, () => {
+      if (!gifElement.parentNode) return;
+      
+      console.log('Starting blue glow effect');
+      
+      // Apply blue tint effect to the GIF
+      gifElement.style.filter = 'brightness(1.8) saturate(1.5) hue-rotate(180deg) drop-shadow(0 0 15px #00ffcc)';
+      
+      // Create pulsing scale effect
+      let pulseCount = 0;
+      const originalTransform = gifElement.style.transform || '';
+      
+      const pulseEffect = () => {
+        if (!gifElement.parentNode || pulseCount >= 10) return;
+        
+        const scale = pulseCount % 2 === 0 ? 1.15 : 1.0;
+        // Preserve any existing transforms and add scale
+        const baseTransform = originalTransform.replace(/scale\([^)]*\)/g, '').trim();
+        gifElement.style.transform = `${baseTransform} scale(${scale})`.trim();
+        
+        pulseCount++;
+        if (pulseCount < 10) {
+          setTimeout(pulseEffect, 100); // Pulse every 100ms for 1 second total
+        } else {
+          // Start shrinking phase
+          this.startShrinkingPhase(enemy, gifElement, originalTransform);
+        }
+      };
+      
+      pulseEffect();
+    });
+  }
+
+  startShrinkingPhase(enemy, gifElement, originalTransform) {
+    if (!gifElement.parentNode) {
+      this.createSoulDrop(enemy.x, enemy.y);
+      enemy.destroy();
+      return;
+    }
+    
+    console.log('Starting shrinking phase');
+    
+    // Create explosion particles
+    this.createDeathParticles(enemy);
+    
+    // Shrink the GIF to a tiny dot
+    gifElement.style.transition = 'transform 0.4s ease-in, opacity 0.4s ease-in';
+    gifElement.style.transform = `${originalTransform} scale(0.05)`.trim();
+    gifElement.style.opacity = '0.1';
+    
+    // After shrinking, create soul and cleanup
+    this.scene.time.delayedCall(400, () => {
+      console.log('Creating soul drop and cleaning up enemy');
+      
+      // Create the soul drop
+      this.createSoulDrop(enemy.x, enemy.y);
+      
+      // Clean up
+      this.removeEnemyGif(enemy);
+      if (enemy.active) {
+        enemy.destroy();
+      }
+      
+      console.log(`Enemy destroyed. Active enemies: ${this.scene.enemies.children.size}, Active GIFs: ${this.activeGifs.size}`);
+    });
+  }
+
+  createDeathParticles(enemy) {
+    for (let i = 0; i < 8; i++) {
+      const angle = (Math.PI * 2 * i) / 8;
+      const particle = this.scene.add.circle(
+        enemy.x,
+        enemy.y,
+        Phaser.Math.Between(2, 4),
+        0x00ffcc,
+        0.8
+      );
+
+      this.scene.tweens.add({
+        targets: particle,
+        x: enemy.x + Math.cos(angle) * Phaser.Math.Between(20, 40),
+        y: enemy.y + Math.sin(angle) * Phaser.Math.Between(20, 40),
+        alpha: 0,
+        scaleX: 0.1,
+        scaleY: 0.1,
+        duration: Phaser.Math.Between(200, 400),
+        ease: 'Power2.easeOut',
+        onComplete: () => particle.destroy()
+      });
+    }
+
+    this.scene.cameras.main.shake(100, 0.01);
+  }
+
+  showEnemyHitEffect(enemy) {
+    // Flash effect for GIF enemies
+    const gifElement = this.activeGifs.get(enemy);
+    if (gifElement) {
+      gifElement.style.filter = 'brightness(1.5) saturate(1.5)';
+      setTimeout(() => {
+        if (gifElement.parentNode) {
+          gifElement.style.filter = 'none';
+        }
+      }, 100);
+    }
+    
+    // Play hurt animation if available
+    this.updateEnemyAnimation(enemy, 'hurt');
+    
+    // Return to appropriate animation after hit
+    this.scene.time.delayedCall(300, () => {
+      if (!enemy.isDead && enemy.active) {
+        if (enemy.isAttacking) {
+          this.updateEnemyAnimation(enemy, 'attack');
+        } else {
+          this.updateEnemyAnimation(enemy, 'idle');
+        }
+      }
+    });
+    
+    // Create hit spark effect
+    const spark = this.scene.add.circle(enemy.x, enemy.y, 8, 0xffff00, 0.8);
+    this.scene.tweens.add({
+      targets: spark,
+      scaleX: 2,
+      scaleY: 2,
+      alpha: 0,
+      duration: 200,
+      onComplete: () => spark.destroy()
+    });
+  }
+
   createSoulDrop(x, y) {
-    // Create a simple aqua blue circle soul
+    console.log(`Creating soul drop at (${x}, ${y})`);
+    
     const soul = this.scene.add.circle(x, y, 8, 0x00ffcc, 0.9);
     soul.setStrokeStyle(2, 0x00ffff, 0.8);
     
-    // Add physics for collection with proper collision box
     this.scene.physics.add.existing(soul);
-    soul.body.setSize(32, 32); // Larger collision box for easier pickup
-    soul.body.setImmovable(true); // Soul doesn't move when touched
+    soul.body.setSize(32, 32);
+    soul.body.setImmovable(true);
     
-    // Add to souls group for collection
+    // Ensure souls group exists
     if (!this.scene.souls) {
       this.scene.souls = this.scene.physics.add.group();
+      console.log('Created souls group');
     }
     this.scene.souls.add(soul);
     
-    // Set soul properties
     soul.soulValue = 1;
     soul.isSoul = true;
     soul.isCollectable = true;
+    
+    console.log(`Soul created successfully. Total souls: ${this.scene.souls.children.size}`);
     
     // Gentle pulsing glow effect
     this.scene.tweens.add({
@@ -382,6 +623,20 @@ class EnemyManager {
     });
     
     return soul;
+  }
+
+  // Cleanup method to remove all GIF elements
+  destroy() {
+    // Create array copy to avoid modification during iteration
+    const entries = Array.from(this.activeGifs.entries());
+    
+    entries.forEach(([enemy, gifElement]) => {
+      this.removeEnemyGif(enemy);
+    });
+    
+    this.activeGifs.clear();
+    
+    console.log('EnemyManager destroyed, all GIF elements cleaned up');
   }
 }
 

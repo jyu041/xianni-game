@@ -1,227 +1,357 @@
-// frontend/src/components/game/config/EnemyTypes.js
+// frontend/src/components/GameLevel/config/EnemyTypes.js
 
 export const ENEMY_TYPES = {
   boyFighter: {
     key: 'boyFighter',
-    texture: 'enemy_boyFighter_idle',
+    path: 'misc/boyFighter',
     size: 70,
     health: 50,
     speedRange: [50, 70],
     damage: 10,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   evilWizard1: {
     key: 'evilWizard1',
-    texture: 'enemy_evilWizard1_idle',
-    size: 96, // Increased by 20% from 80
+    path: 'evilWizards/evilWizard1',
+    size: 96,
     health: 75,
     speedRange: [40, 60],
     damage: 15,
-    frameSize: { width: 150, height: 150 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Move.gif'],
+      attack: ['Attack.gif'],
+      death: ['Death.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
   
   evilWizard2: {
     key: 'evilWizard2',
-    texture: 'enemy_evilWizard2_idle',
-    size: 102, // Increased by 20% from 85
+    path: 'evilWizards/evilWizard2',
+    size: 102,
     health: 100,
     speedRange: [35, 55],
     damage: 20,
-    frameSize: { width: 250, height: 250 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
   
   evilWizard3: {
     key: 'evilWizard3',
-    texture: 'enemy_evilWizard3_idle',
-    size: 108, // Increased by 20% from 90
+    path: 'evilWizards/evilWizard3',
+    size: 108,
     health: 120,
     speedRange: [30, 50],
     damage: 25,
-    frameSize: { width: 140, height: 140 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Cast.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   girlKitsune: {
     key: 'girlKitsune',
-    texture: 'enemy_girlKitsune_idle',
+    path: 'misc/girlKitsune',
     size: 70,
     health: 50,
     speedRange: [50, 70],
     damage: 10,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack.gif', 'Cast_1.gif', 'Cast_2.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   girlKunoichi: {
     key: 'girlKunoichi',
-    texture: 'enemy_girlKunoichi_idle',
+    path: 'misc/girlKunoichi',
     size: 70,
     health: 50,
     speedRange: [50, 70],
     damage: 10,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   girlShinobi: {
     key: 'girlShinobi',
-    texture: 'enemy_girlShinobi_idle',
+    path: 'misc/girlShinobi',
     size: 70,
     health: 50,
     speedRange: [50, 70],
     damage: 10,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   gorgon1: {
     key: 'gorgon1',
-    texture: 'enemy_gorgon1_idle',
-    size: 75, // Increased by 15% from 65
+    path: 'gorgons/gorgon1',
+    size: 75,
     health: 45,
     speedRange: [60, 80],
     damage: 15,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif', 'Idle_2.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   gorgon2: {
     key: 'gorgon2',
-    texture: 'enemy_gorgon2_idle',
-    size: 75, // Increased by 15% from 65
+    path: 'gorgons/gorgon2',
+    size: 75,
     health: 45,
     speedRange: [60, 80],
     damage: 15,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif', 'Idle_2.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
     
   martialHero1: {
     key: 'martialHero1',
-    texture: 'enemy_martialHero1_idle',
-    size: 113, // Increased by 50% from 75
+    path: 'martialHeros/martialHero1',
+    size: 113,
     health: 60,
     speedRange: [45, 65],
     damage: 12,
-    frameSize: { width: 200, height: 200 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
   
   martialHero2: {
     key: 'martialHero2',
-    texture: 'enemy_martialHero2_idle',
-    size: 113, // Increased by 50% from 75
+    path: 'martialHeros/martialHero2',
+    size: 113,
     health: 65,
     speedRange: [45, 65],
     damage: 14,
-    frameSize: { width: 200, height: 200 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
   
   martialHero3: {
     key: 'martialHero3',
-    texture: 'enemy_martialHero3_idle',
-    size: 105, // Increased by 50% from 70
+    path: 'martialHeros/martialHero3',
+    size: 105,
     health: 70,
     speedRange: [40, 60],
     damage: 16,
-    frameSize: { width: 126, height: 126 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Death.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   samurai1: {
     key: 'samurai1',
-    texture: 'enemy_samurai1_idle',
-    size: 91, // Increased by 40% from 65
+    path: 'samurais/samurai1',
+    size: 91,
     health: 55,
     speedRange: [50, 70],
     damage: 18,
-    frameSize: { width: 96, height: 96 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif'],
+      attack: ['Attack.gif'],
+      death: null, // No death animation
+      hurt: ['Hurt.gif']
+    }
   },
   
   samurai2: {
     key: 'samurai2',
-    texture: 'enemy_samurai2_idle',
-    size: 98, // Increased by 40% from 70
+    path: 'samurais/samurai2',
+    size: 98,
     health: 65,
     speedRange: [45, 65],
     damage: 20,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
   
   skeletonArcher: {
     key: 'skeletonArcher',
-    texture: 'enemy_skeletonArcher_idle',
-    size: 75, // Increased by 15% from 65
+    path: 'skeletons/skeletonArcher',
+    size: 75,
     health: 45,
     speedRange: [60, 80],
     damage: 15,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   skeletonSpearman: {
     key: 'skeletonSpearman',
-    texture: 'enemy_skeletonSpearman_idle',
-    size: 75, // Increased by 15% from 65
+    path: 'skeletons/skeletonSpearman',
+    size: 75,
     health: 45,
     speedRange: [60, 80],
     damage: 15,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   skeletonWarrior: {
     key: 'skeletonWarrior',
-    texture: 'enemy_skeletonWarrior_idle',
-    size: 75, // Increased by 15% from 65
+    path: 'skeletons/skeletonWarrior',
+    size: 75,
     health: 45,
     speedRange: [60, 80],
     damage: 15,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   tenguKarasu: {
     key: 'tenguKarasu',
-    texture: 'enemy_tenguKarasu_idle',
-    size: 75, // Increased by 15% from 65
+    path: 'tengus/tenguKarasu',
+    size: 75,
     health: 45,
     speedRange: [60, 80],
     damage: 15,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif', 'Idle_2.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   tenguYamabushi: {
     key: 'tenguYamabushi',
-    texture: 'enemy_tenguYamabushi_idle',
-    size: 75, // Increased by 15% from 65
+    path: 'tengus/tenguYamabushi',
+    size: 75,
     health: 45,
     speedRange: [60, 80],
     damage: 15,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif', 'Idle_2.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   werewolf1: {
     key: 'werewolf1',
-    texture: 'enemy_werewolf1_idle',
-    size: 75, // Increased by 15% from 65
+    path: 'werewolfs/werewolf1',
+    size: 75,
     health: 45,
     speedRange: [60, 80],
     damage: 15,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   werewolf2: {
     key: 'werewolf2',
-    texture: 'enemy_werewolf2_idle',
-    size: 75, // Increased by 15% from 65
+    path: 'werewolfs/werewolf2',
+    size: 75,
     health: 45,
     speedRange: [60, 80],
     damage: 15,
-    frameSize: { width: 128, height: 128 }
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
   },
 
   werewolf3: {
     key: 'werewolf3',
-    texture: 'enemy_werewolf3_idle',
-    size: 75, // Increased by 15% from 65
+    path: 'werewolfs/werewolf3',
+    size: 75,
     health: 45,
     speedRange: [60, 80],
     damage: 15,
-    frameSize: { width: 128, height: 128 }
-  },
-
-
+    animations: {
+      idle: ['Idle.gif'],
+      move: ['Run.gif', 'Walk.gif'],
+      attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
+      death: ['Dead.gif'],
+      hurt: ['Hurt.gif']
+    }
+  }
 };
 
 // Get array of all enemy types for random selection
@@ -234,4 +364,16 @@ export const getEnemyType = (key) => ENEMY_TYPES[key];
 export const getRandomEnemyType = () => {
   const types = getAllEnemyTypes();
   return types[Math.floor(Math.random() * types.length)];
+};
+
+// Get random animation for enemy action
+export const getRandomAnimation = (enemyType, action) => {
+  const animations = enemyType.animations[action];
+  if (!animations || animations.length === 0) return null;
+  return animations[Math.floor(Math.random() * animations.length)];
+};
+
+// Get full path to enemy animation
+export const getEnemyAnimationPath = (enemyType, animationFile) => {
+  return `/assets/characters/enemies/${enemyType.path}/${animationFile}`;
 };

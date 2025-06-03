@@ -1,5 +1,5 @@
-// frontend/src/components/game/scripts/AnimationManager.js
-import { getMainCharacterAnimations, ENEMY_ANIMATIONS } from '../config/AnimationConfigs.js';
+// frontend/src/components/GameLevel/scripts/AnimationManager.js
+import { getMainCharacterAnimations } from '../config/AnimationConfigs.js';
 
 class AnimationManager {
   constructor(scene) {
@@ -8,8 +8,8 @@ class AnimationManager {
 
   createAllAnimations() {
     this.createMainCharacterAnimations();
-    this.createEnemyAnimations();
-    console.log('All animations created');
+    // No longer need to create enemy animations - they use GIF system
+    console.log('Main character animations created (enemies now use GIF system)');
   }
 
   createMainCharacterAnimations() {
@@ -17,14 +17,6 @@ class AnimationManager {
     
     Object.entries(animations).forEach(([key, config]) => {
       this.createAnimation(key, config);
-    });
-  }
-
-  createEnemyAnimations() {
-    Object.entries(ENEMY_ANIMATIONS).forEach(([enemyType, animations]) => {
-      Object.entries(animations).forEach(([key, config]) => {
-        this.createAnimation(key, config);
-      });
     });
   }
 
