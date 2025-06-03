@@ -32,13 +32,13 @@ def get_gif_metadata(gif_path):
                 pass
             
             return {
-                "type": "gif",
+                # "type": "gif",
                 "dimensions": [width, height],
                 "frame_count": frame_count,
-                "total_duration_ms": total_duration,
-                "avg_duration_per_frame_ms": avg_duration,
-                "looping": bool(img.info.get('loop', 0)),
-                "notes": "duration_calculated" if total_duration > 0 else "duration_estimated"
+                # "total_duration_ms": total_duration,
+                # "avg_duration_per_frame_ms": avg_duration,
+                # "looping": bool(img.info.get('loop', 0)),
+                # "notes": "duration_calculated" if total_duration > 0 else "duration_estimated"
             }
             
     except Exception as e:
@@ -75,8 +75,8 @@ def scan_gifs_directory(root_dir):
     return gifs_data
 
 if __name__ == "__main__":
-    gifs_dir = "assets/vfx"
-    output_file = "vfx_metadata.json"
+    gifs_dir = "assets/characters/enemies/"
+    output_file = "characters_enemies_metadata.json"
     
     print(f"Scanning {gifs_dir} with enhanced GIF analysis...")
     gifs_data = scan_gifs_directory(gifs_dir)

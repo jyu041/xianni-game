@@ -1,0 +1,1439 @@
+{
+  "_metadata": {
+    "scanning_errors": 0
+  },
+  "evilWizards": {
+    "evilWizard1": {
+      "Attack.gif": {
+        "dimensions": [
+          150,
+          150
+        ],
+        "frame_count": 8
+      },
+      "Death.gif": {
+        "dimensions": [
+          150,
+          150
+        ],
+        "frame_count": 5
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          150,
+          150
+        ],
+        "frame_count": 4
+      },
+      "Idle.gif": {
+        "dimensions": [
+          150,
+          150
+        ],
+        "frame_count": 8
+      },
+      "Move.gif": {
+        "dimensions": [
+          150,
+          150
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "evilWizard2": {
+      "Attack_1.gif": {
+        "dimensions": [
+          250,
+          250
+        ],
+        "frame_count": 8
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          250,
+          250
+        ],
+        "frame_count": 8
+      },
+      "Dead.gif": {
+        "dimensions": [
+          250,
+          250
+        ],
+        "frame_count": 7
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          250,
+          250
+        ],
+        "frame_count": 3
+      },
+      "Idle.gif": {
+        "dimensions": [
+          250,
+          250
+        ],
+        "frame_count": 8
+      },
+      "Run.gif": {
+        "dimensions": [
+          250,
+          250
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "evilWizard3": {
+      "Cast.gif": {
+        "dimensions": [
+          140,
+          140
+        ],
+        "frame_count": 13
+      },
+      "Dead.gif": {
+        "dimensions": [
+          140,
+          140
+        ],
+        "frame_count": 18
+      },
+      "Fall.gif": {
+        "dimensions": [
+          140,
+          140
+        ],
+        "frame_count": 3
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          140,
+          140
+        ],
+        "frame_count": 3
+      },
+      "Idle.gif": {
+        "dimensions": [
+          140,
+          140
+        ],
+        "frame_count": 10
+      },
+      "Jump.gif": {
+        "dimensions": [
+          140,
+          140
+        ],
+        "frame_count": 3
+      },
+      "Projectile.gif": {
+        "dimensions": [
+          50,
+          50
+        ],
+        "frame_count": 4
+      },
+      "Run.gif": {
+        "dimensions": [
+          140,
+          140
+        ],
+        "frame_count": 8
+      },
+      "Walk.gif": {
+        "dimensions": [
+          140,
+          140
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "type": "folder"
+  },
+  "gorgons": {
+    "gorgon1": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 16
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 10
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Idle_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Special.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 13
+      },
+      "type": "folder"
+    },
+    "gorgon2": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 16
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 10
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Idle_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Special.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 13
+      },
+      "type": "folder"
+    },
+    "type": "folder"
+  },
+  "martialHeros": {
+    "martialHero1": {
+      "Attack_1.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 6
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 6
+      },
+      "Dead.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 6
+      },
+      "Fall.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 2
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 4
+      },
+      "Idle.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 8
+      },
+      "Jump.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 2
+      },
+      "Run.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "martialHero2": {
+      "Attack_1.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 4
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 4
+      },
+      "Dead.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 7
+      },
+      "Fall.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 2
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 3
+      },
+      "Idle.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 4
+      },
+      "Jump.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 2
+      },
+      "Run.gif": {
+        "dimensions": [
+          200,
+          200
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "martialHero3": {
+      "Attack_1.gif": {
+        "dimensions": [
+          126,
+          126
+        ],
+        "frame_count": 7
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          126,
+          126
+        ],
+        "frame_count": 6
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          126,
+          126
+        ],
+        "frame_count": 9
+      },
+      "Death.gif": {
+        "dimensions": [
+          126,
+          126
+        ],
+        "frame_count": 11
+      },
+      "Fall.gif": {
+        "dimensions": [
+          126,
+          126
+        ],
+        "frame_count": 3
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          126,
+          126
+        ],
+        "frame_count": 3
+      },
+      "Idle.gif": {
+        "dimensions": [
+          126,
+          126
+        ],
+        "frame_count": 9
+      },
+      "Jump.gif": {
+        "dimensions": [
+          126,
+          126
+        ],
+        "frame_count": 3
+      },
+      "Run.gif": {
+        "dimensions": [
+          126,
+          126
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "type": "folder"
+  },
+  "misc": {
+    "boyFighter": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Jump.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 10
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "girlKitsune": {
+      "Attack.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 10
+      },
+      "Cast_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 10
+      },
+      "Cast_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 10
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 2
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Jump.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 10
+      },
+      "Projectile_1.gif": {
+        "dimensions": [
+          64,
+          64
+        ],
+        "frame_count": 14
+      },
+      "Projectile_2.gif": {
+        "dimensions": [
+          64,
+          64
+        ],
+        "frame_count": 11
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "girlKunoichi": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Cast.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 2
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Jump.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 10
+      },
+      "Projectile.gif": {
+        "dimensions": [
+          10,
+          10
+        ],
+        "frame_count": 1
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "girlShinobi": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 2
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Jump.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 12
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "type": "folder"
+  },
+  "samurais": {
+    "samurai1": {
+      "Attack.gif": {
+        "dimensions": [
+          96,
+          96
+        ],
+        "frame_count": 7
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          96,
+          96
+        ],
+        "frame_count": 4
+      },
+      "Idle.gif": {
+        "dimensions": [
+          96,
+          96
+        ],
+        "frame_count": 10
+      },
+      "Run.gif": {
+        "dimensions": [
+          96,
+          96
+        ],
+        "frame_count": 16
+      },
+      "type": "folder"
+    },
+    "samurai2": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 2
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Jump.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 12
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "type": "folder"
+  },
+  "skeletons": {
+    "skeletonArcher": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 2
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "skeletonSpearman": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Run_attack.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "type": "folder"
+    },
+    "skeletonWarrior": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 2
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Run_attack.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "type": "folder"
+    },
+    "type": "folder"
+  },
+  "tengus": {
+    "tenguKarasu": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Idle_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Jump.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 15
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "tenguYamabushi": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 3
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Idle_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Jump.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 15
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "type": "folder"
+    },
+    "type": "folder"
+  },
+  "werewolfs": {
+    "type": "folder",
+    "werewolf1": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 2
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 2
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Jump.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 11
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 9
+      },
+      "Run_Attack.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 11
+      },
+      "type": "folder"
+    },
+    "werewolf2": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 2
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 2
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Jump.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 11
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 9
+      },
+      "Run_Attack.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 11
+      },
+      "type": "folder"
+    },
+    "werewolf3": {
+      "Attack_1.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 6
+      },
+      "Attack_2.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 4
+      },
+      "Attack_3.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 5
+      },
+      "Dead.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 2
+      },
+      "Hurt.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 2
+      },
+      "Idle.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 8
+      },
+      "Jump.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 11
+      },
+      "Run.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 9
+      },
+      "Run_Attack.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 7
+      },
+      "Walk.gif": {
+        "dimensions": [
+          128,
+          128
+        ],
+        "frame_count": 11
+      },
+      "type": "folder"
+    }
+  }
+}
