@@ -38,7 +38,7 @@ class ProjectileManager {
   }
 
   hitEnemy(projectile, enemy) {
-    if (enemy.isDead) return;
+    if (enemy.isDead || this.scene.enemyManager.dyingEnemies.has(enemy)) return;
     
     projectile.destroy();
     
@@ -78,12 +78,9 @@ class ProjectileManager {
   }
 
   destroyEnemy(enemy) {
-    if (enemy.isDead) return;
+    if (enemy.isDead || this.scene.enemyManager.dyingEnemies.has(enemy)) return;
     
-    // Mark as dead immediately to prevent multiple hits
-    enemy.isDead = true;
-    enemy.setVelocity(0, 0);
-    enemy.isAttacking = false;
+    console.log(`Enemy destroyed via projectile hit at (${enemy.x}, ${enemy.y})`);
     
     // Add score and experience immediately
     if (this.scene.gameStateRef) {
@@ -99,33 +96,28 @@ class ProjectileManager {
       this.scene.gameStateRef.experience += baseExp;
     }
 
-    // Hide health bar if it exists
-    if (this.scene.enemyManager && this.scene.enemyManager.hideEnemyHealthBar) {
-      this.scene.enemyManager.hideEnemyHealthBar(enemy);
-    }
-
     // Notify health regen manager of enemy kill
     if (this.scene.onEnemyKilled) {
       this.scene.onEnemyKilled();
     }
 
-    // Use enemy manager's death sequence for proper soul drop animation
+    // Use enemy manager's proper death sequence
     if (this.scene.enemyManager && this.scene.enemyManager.startDeathSequence) {
       this.scene.enemyManager.startDeathSequence(enemy);
     } else {
-      // Fallback to old death sequence
-      this.startDeathSequence(enemy);
+      console.warn('EnemyManager not available, using fallback death sequence');
+      this.fallbackDeathSequence(enemy);
     }
   }
 
   playEnemyHitAnimation(enemy) {
-    // For GIF enemies, delegate to enemy manager
+    // Delegate to enemy manager for proper GIF animation handling
     if (this.scene.enemyManager && this.scene.enemyManager.updateEnemyAnimation) {
       this.scene.enemyManager.updateEnemyAnimation(enemy, 'hurt');
       
       // Return to appropriate animation after hit
       this.scene.time.delayedCall(400, () => {
-        if (!enemy.isDead && enemy.active) {
+        if (!enemy.isDead && enemy.active && !this.scene.enemyManager.dyingEnemies.has(enemy)) {
           if (enemy.isAttacking) {
             this.scene.enemyManager.updateEnemyAnimation(enemy, 'attack');
           } else {
@@ -136,93 +128,12 @@ class ProjectileManager {
     }
   }
 
-  startDeathSequence(enemy) {
-    // Fallback death sequence if enemy manager doesn't handle it
-    enemy.setVelocity(0, 0);
-    
-    // Phase 1: Glow effect
-    enemy.setTint(0x00ffcc);
-    
-    const glowTween = this.scene.tweens.add({
-      targets: enemy,
-      alpha: 0.7,
-      scaleX: enemy.scaleX * 1.1,
-      scaleY: enemy.scaleY * 1.1,
-      duration: 100,
-      yoyo: true,
-      repeat: 4,
-      ease: 'Sine.easeInOut'
-    });
-
-    this.scene.time.delayedCall(500, () => {
-      if (!enemy.active) return;
-      
-      this.createDeathParticles(enemy);
-      
-      this.scene.tweens.add({
-        targets: enemy,
-        scaleX: 0.1,
-        scaleY: 0.1,
-        alpha: 0.8,
-        duration: 300,
-        ease: 'Power2.easeIn',
-        onComplete: () => {
-          if (this.scene.enemyManager) {
-            this.scene.enemyManager.createSoulDrop(enemy.x, enemy.y);
-          }
-          
-          // Remove GIF if it exists
-          if (this.scene.enemyManager && this.scene.enemyManager.removeEnemyGif) {
-            this.scene.enemyManager.removeEnemyGif(enemy);
-          }
-          
-          enemy.destroy();
-        }
-      });
-    });
-  }
-
-  createDeathParticles(enemy) {
-    for (let i = 0; i < 8; i++) {
-      const angle = (Math.PI * 2 * i) / 8;
-      const particle = this.scene.add.circle(
-        enemy.x,
-        enemy.y,
-        Phaser.Math.Between(2, 4),
-        0x00ffcc,
-        0.8
-      );
-
-      this.scene.tweens.add({
-        targets: particle,
-        x: enemy.x + Math.cos(angle) * Phaser.Math.Between(20, 40),
-        y: enemy.y + Math.sin(angle) * Phaser.Math.Between(20, 40),
-        alpha: 0,
-        scaleX: 0.1,
-        scaleY: 0.1,
-        duration: Phaser.Math.Between(200, 400),
-        ease: 'Power2.easeOut',
-        onComplete: () => particle.destroy()
-      });
-    }
-
-    this.scene.cameras.main.shake(100, 0.01);
-  }
-
-  createDeathEffect(enemy) {
-    // Legacy method - now handled by startDeathSequence
-    this.startDeathSequence(enemy);
-  }
-
   showEnemyHitEffect(enemy) {
-    // Delegate to enemy manager for GIF enemies
+    // Delegate to enemy manager for proper hit effect
     if (this.scene.enemyManager && this.scene.enemyManager.showEnemyHitEffect) {
       this.scene.enemyManager.showEnemyHitEffect(enemy);
     } else {
-      // Fallback for non-GIF enemies
-      const originalScale = { x: enemy.scaleX, y: enemy.scaleY };
-      enemy.setScale(enemy.scaleX * 1.2, enemy.scaleY * 1.2);
-      
+      // Fallback for hit effect
       const spark = this.scene.add.circle(enemy.x, enemy.y, 8, 0xffff00, 0.8);
       this.scene.tweens.add({
         targets: spark,
@@ -232,13 +143,52 @@ class ProjectileManager {
         duration: 200,
         onComplete: () => spark.destroy()
       });
-      
-      this.scene.time.delayedCall(100, () => {
-        if (enemy.active && !enemy.isDead) {
-          enemy.setScale(originalScale.x, originalScale.y);
-        }
-      });
     }
+  }
+
+  // Fallback death sequence if enemy manager is not available
+  fallbackDeathSequence(enemy) {
+    enemy.isDead = true;
+    enemy.setVelocity(0, 0);
+    enemy.isAttacking = false;
+    
+    // Simple fade out and create soul
+    this.scene.tweens.add({
+      targets: enemy,
+      alpha: 0,
+      scaleX: 0.1,
+      scaleY: 0.1,
+      duration: 500,
+      onComplete: () => {
+        // Create soul drop
+        if (this.scene.enemyManager && this.scene.enemyManager.createSoulDrop) {
+          this.scene.enemyManager.createSoulDrop(enemy.x, enemy.y);
+        }
+        enemy.destroy();
+      }
+    });
+  }
+
+  // Legacy methods kept for compatibility
+  createDeathParticles(enemy) {
+    // Delegate to enemy manager
+    if (this.scene.enemyManager && this.scene.enemyManager.createDeathParticles) {
+      this.scene.enemyManager.createDeathParticles(enemy);
+    }
+  }
+
+  startDeathSequence(enemy) {
+    // Delegate to enemy manager
+    if (this.scene.enemyManager && this.scene.enemyManager.startDeathSequence) {
+      this.scene.enemyManager.startDeathSequence(enemy);
+    } else {
+      this.fallbackDeathSequence(enemy);
+    }
+  }
+
+  createDeathEffect(enemy) {
+    // Legacy method - redirect to proper death sequence
+    this.startDeathSequence(enemy);
   }
 }
 

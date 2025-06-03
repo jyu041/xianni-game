@@ -85,8 +85,8 @@ const LandingPage = ({ onNavigate }) => {
               <div className={styles.gameDescription}>
                 <h2>修仙之路</h2>
                 <p>
-                  在这个充满危险的修仙世界中，你将扮演一位逆天修士，
-                  掌握五行之力，斩杀无数妖魔，最终逆天改命！
+                  在这个充满危险的修仙世界中，你，一位逆天修士，
+                  将掌握五行之力，斩杀无数妖魔，最终逆天改命！
                 </p>
 
                 {latestSave && (

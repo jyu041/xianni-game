@@ -384,7 +384,7 @@ class GameScene extends Phaser.Scene {
       
       if (this.stageData.enemySpawns) {
         const spawns = this.stageData.enemySpawns;
-        this.enemyManager.maxEnemies = spawns.maxEnemies || 15;
+        this.enemyManager.maxEnemies = spawns.maxEnemies || 25;
         this.enemySpawnRate = spawns.baseSpawnRate * 1000 || 2000;
       }
       
@@ -424,13 +424,13 @@ class GameScene extends Phaser.Scene {
 
   setupCollisions() {
     this.physics.add.overlap(this.projectiles, this.enemies, (projectile, enemy) => {
-      if (!enemy.isDead) {
+      if (!enemy.isDead && !this.enemyManager.dyingEnemies.has(enemy)) {
         this.projectileManager.hitEnemy(projectile, enemy);
       }
     });
 
     this.physics.add.overlap(this.playerController.player, this.enemies, (player, enemy) => {
-      if (!enemy.isDead) {
+      if (!enemy.isDead && !this.enemyManager.dyingEnemies.has(enemy)) {
         const distance = Phaser.Math.Distance.Between(player.x, player.y, enemy.x, enemy.y);
         if (distance <= this.enemyManager.attackRange) {
           // Enemy will handle attack through its update cycle
@@ -495,7 +495,7 @@ class GameScene extends Phaser.Scene {
   }
 
   updateDebugStats() {
-    this.debugSettings.activeEnemies = this.enemies.children.entries.filter(e => e.active && !e.isDead).length;
+    this.debugSettings.activeEnemies = this.enemyManager.getActiveEnemyCount();
     this.debugSettings.playerHealth = this.gameStateRef?.player?.health || 0;
     this.debugSettings.soulCount = this.gameStateRef?.soulCount || 0;
   }
@@ -503,7 +503,9 @@ class GameScene extends Phaser.Scene {
   updateGameStateData() {
     if (this.gameStateRef && this.updateGameState) {
       this.gameStateRef.time += 1/60;
-      this.gameStateRef.enemies = this.enemies.children.entries.filter(e => e.active && !e.isDead);
+      this.gameStateRef.enemies = this.enemies.children.entries.filter(e => 
+        e.active && !e.isDead && !this.enemyManager.dyingEnemies.has(e)
+      );
       this.gameStateRef.projectiles = this.projectiles.children.entries;
 
       const stageSettings = this.stageData?.stageSettings;
@@ -530,7 +532,7 @@ class GameScene extends Phaser.Scene {
         if (this.difficultyTimer) this.difficultyTimer.paused = true;
         
         this.enemies.children.entries.forEach(enemy => {
-          if (enemy.active) {
+          if (enemy.active && !enemy.isDead) {
             enemy.setVelocity(0, 0);
             enemy.isAttacking = false;
           }

@@ -10,7 +10,7 @@ export const ENEMY_TYPES = {
     damage: 10,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Only use Run.gif for movement
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -26,7 +26,7 @@ export const ENEMY_TYPES = {
     damage: 15,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Move.gif'],
+      move: ['Move.gif'], // Use Move.gif as run equivalent
       attack: ['Attack.gif'],
       death: ['Death.gif'],
       hurt: ['Hurt.gif']
@@ -42,7 +42,7 @@ export const ENEMY_TYPES = {
     damage: 20,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -58,7 +58,7 @@ export const ENEMY_TYPES = {
     damage: 25,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Cast.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -74,7 +74,7 @@ export const ENEMY_TYPES = {
     damage: 10,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack.gif', 'Cast_1.gif', 'Cast_2.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -90,7 +90,7 @@ export const ENEMY_TYPES = {
     damage: 10,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -106,7 +106,7 @@ export const ENEMY_TYPES = {
     damage: 10,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -122,7 +122,7 @@ export const ENEMY_TYPES = {
     damage: 15,
     animations: {
       idle: ['Idle.gif', 'Idle_2.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -138,7 +138,7 @@ export const ENEMY_TYPES = {
     damage: 15,
     animations: {
       idle: ['Idle.gif', 'Idle_2.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -154,7 +154,7 @@ export const ENEMY_TYPES = {
     damage: 12,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -170,7 +170,7 @@ export const ENEMY_TYPES = {
     damage: 14,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -186,7 +186,7 @@ export const ENEMY_TYPES = {
     damage: 16,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Death.gif'],
       hurt: ['Hurt.gif']
@@ -202,7 +202,7 @@ export const ENEMY_TYPES = {
     damage: 18,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack.gif'],
       death: null, // No death animation
       hurt: ['Hurt.gif']
@@ -218,7 +218,7 @@ export const ENEMY_TYPES = {
     damage: 20,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -234,7 +234,7 @@ export const ENEMY_TYPES = {
     damage: 15,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Walk.gif'],
+      move: ['Walk.gif'], // Only Walk available for this enemy
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -250,7 +250,7 @@ export const ENEMY_TYPES = {
     damage: 15,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -266,7 +266,7 @@ export const ENEMY_TYPES = {
     damage: 15,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -282,7 +282,7 @@ export const ENEMY_TYPES = {
     damage: 15,
     animations: {
       idle: ['Idle.gif', 'Idle_2.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -298,7 +298,7 @@ export const ENEMY_TYPES = {
     damage: 15,
     animations: {
       idle: ['Idle.gif', 'Idle_2.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -314,7 +314,7 @@ export const ENEMY_TYPES = {
     damage: 15,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -330,7 +330,7 @@ export const ENEMY_TYPES = {
     damage: 15,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -346,7 +346,7 @@ export const ENEMY_TYPES = {
     damage: 15,
     animations: {
       idle: ['Idle.gif'],
-      move: ['Run.gif', 'Walk.gif'],
+      move: ['Run.gif'], // Use only Run.gif
       attack: ['Attack_1.gif', 'Attack_2.gif', 'Attack_3.gif'],
       death: ['Dead.gif'],
       hurt: ['Hurt.gif']
@@ -366,10 +366,20 @@ export const getRandomEnemyType = () => {
   return types[Math.floor(Math.random() * types.length)];
 };
 
-// Get random animation for enemy action
+// Get random animation for enemy action - FIXED for consistent movement
 export const getRandomAnimation = (enemyType, action) => {
   const animations = enemyType.animations[action];
   if (!animations || animations.length === 0) return null;
+  
+  // For movement, always prefer Run.gif if available
+  if (action === 'move') {
+    const runAnimation = animations.find(anim => anim.includes('Run.gif'));
+    if (runAnimation) return runAnimation;
+    // Fallback to first available movement animation
+    return animations[0];
+  }
+  
+  // For other actions, pick randomly
   return animations[Math.floor(Math.random() * animations.length)];
 };
 

@@ -124,7 +124,7 @@ const TreasureInventory = ({ playerData, onTreasureUpgrade }) => {
       id: "tianniSword",
       name: "天逆剑",
       description:
-        "一剑出，时流滞，五行寂灭；再剑落，天机断，轮回逆生。——此剑，为悖逆之道。",
+        "一剑出，时流滞，五行寂灭。再剑落，天机断，轮回逆生。————此剑，为悖逆之道。",
       level: playerData?.tianniSwordLevel || 1,
       maxLevel: 10,
       rarity: "legendary",
